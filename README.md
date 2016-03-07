@@ -1,10 +1,10 @@
 # micro-finger
 
-<li>1.config-service
+<li>1.config-service done
   config for cloud.
   application.yml---spring.cloud.config.server.git.uri:https://github.com/flint9ban/micro-finger-config.git location of config files
   </li>
-<li>2.eureka-service</li>
+<li>2.eureka-service done</li>
 <li>3.tag-service
   manage of tag and container</li>
 <li>4.fans-service</li>
