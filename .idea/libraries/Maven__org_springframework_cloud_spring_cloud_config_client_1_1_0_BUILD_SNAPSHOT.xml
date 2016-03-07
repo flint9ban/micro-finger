@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.springframework.cloud:spring-cloud-config-client:1.1.0.BUILD-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-config-client/1.1.0.BUILD-SNAPSHOT/spring-cloud-config-client-1.1.0.BUILD-20160302.174059-117.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-config-client/1.1.0.BUILD-SNAPSHOT/spring-cloud-config-client-1.1.0.BUILD-20160302.174059-117-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/cloud/spring-cloud-config-client/1.1.0.BUILD-SNAPSHOT/spring-cloud-config-client-1.1.0.BUILD-20160302.174059-117-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
