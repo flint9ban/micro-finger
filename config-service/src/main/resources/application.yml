@@ -5,7 +5,7 @@ spring:
         #native:
          # search-locations: file:E:\2016\workspace\micro-finger-config
         git:
-          uri: https://github.com/flint9ban/micro-finger-config.git
+          uri: https://github.com/9ban/micro-finger-config.git
   #profiles:
   #  active: native
 
