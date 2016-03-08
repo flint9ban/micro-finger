@@ -1,5 +1,7 @@
 package com.ttsales.microf.client.tag.web;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -45,44 +48,23 @@ public class TagController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/name")
     @ResponseBody
-    public String getReservationName1() {
-        String cout = restTemplate
-                .getForObject("http://tag-service/tags",String.class);
-
-        return cout;
+    public List<Tag> getReservationName1() {
+        List<Tag> tags= restTemplate
+                .exchange("http://tag-service/tags", HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
+                }).getBody().getContent().stream().collect(Collectors.toList());
+        return tags;
     }
 
 
 
 
 }
+
+@Data
 class  Tag{
+
     private Long id;
     private String name;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-
-    }
-
-    public Tag(){
-
-    }
-
-    public Tag(Long id,String name){
-        setId(id);
-        setName(name);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
