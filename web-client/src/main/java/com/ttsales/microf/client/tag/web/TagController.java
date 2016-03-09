@@ -27,6 +27,7 @@ public class TagController {
 
     @RequestMapping(value = "init")
     public String init(){
+    	System.out.println("======");
         return "tag";
     }
 
