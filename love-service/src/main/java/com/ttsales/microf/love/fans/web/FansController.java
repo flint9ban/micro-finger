@@ -29,11 +29,9 @@ public class FansController {
 //    @Autowired
 //    private FansTagRepository fansTagRepository;
 
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
 
-    @Autowired
-    private TagClient tagClient;
 
 //    @RequestMapping(method = RequestMethod.GET)
 //    public List<Fans> getAll(){
@@ -43,10 +41,11 @@ public class FansController {
 
     @RequestMapping(method = RequestMethod.GET,name="tag")
     public List<Tag> getTag(){
-        List<Tag> tags= restTemplate
-                .exchange("http://tag-domain/tags", HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
-                }).getBody().getContent().stream().collect(Collectors.toList());
-        return tags;
+//        List<Tag> tags= restTemplate
+//                .exchange("http://tag-domain/tags", HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
+//                }).getBody().getContent().stream().collect(Collectors.toList());
+//        return tags;
+        return null;
     }
 
 //    private Fans getFans(FansInfo info){

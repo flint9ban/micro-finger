@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.fans.domain;
 
+import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,9 +10,7 @@ import javax.persistence.Entity;
  */
 @Data
 @Entity
-public class FansInfoTag {
-
-    private Long id;
+public class FansInfoTag extends SuperEntity{
 
     private Long fansId;
 
