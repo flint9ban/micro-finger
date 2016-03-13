@@ -22,7 +22,7 @@ public class NewsMaterial{
 
     private String firstContent;
 
-    private String updateTime;
+    private Long updateTime;
 
     public static List<NewsMaterial> convert(JSONObject json){
         JSONObject jsonValue = JSONObject.fromObject(json);
@@ -33,12 +33,13 @@ public class NewsMaterial{
     private static NewsMaterial newMaterial(Object item){
         JSONObject json = JSONObject.fromObject(item);
         String mediaId = json.getString("media_id");
-        String updateTime = json.getString("update_time");
-        JSONArray newItemes=  json.getJSONArray("news_item");
+        Long updateTime = json.getLong("update_time");
+        JSONObject content = json.getJSONObject("content");
+        JSONArray newItemes=  content.getJSONArray("news_item");
         JSONObject newItem = newItemes.getJSONObject(0);
         if (newItem != null) {
             String firstTitle = newItem.getString("title");
-            String firstContent = newItem.getString("content");
+            String firstContent = newItem.getString("digest");
             if(firstContent.length()>20){
                 firstContent = firstContent.substring(0,20);
             }
