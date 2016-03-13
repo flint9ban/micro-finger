@@ -18,6 +18,9 @@ public class Article extends SuperEntity{
 
     private String title,content;
 
+    @Column(name = "qrcode_ticket")
+    private String qrcodeTicket;
+
     @Column(name="send_time")
     private LocalDateTime sendTime;
 

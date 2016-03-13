@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.tag.domain;
 
+import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,12 +11,12 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name="cf_tag_container")
-public class Container {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Container extends SuperEntity{
 
     @Column
     private String name;
+
+    @Column(name = "qrcode_ticket")
+    private String qrcodeTicket;
+
 }
