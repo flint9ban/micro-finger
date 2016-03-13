@@ -28,30 +28,30 @@ public class TagController {
         return "tag";
     }
 
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+//    private RestTemplate restTemplate;
+//
+//    @RequestMapping(method = RequestMethod.GET, value = "/names")
+//    @ResponseBody
+//    public Collection<String> getReservationNames() {
+//        return restTemplate
+//                .exchange("http://tag-domain/tagController/tags", HttpMethod.GET, null, new ParameterizedTypeReference<List<Tag>>() {
+//                })
+//                .getBody()
+//                .stream()
+//                .map(Tag::getName)
+//                .collect(Collectors.toList());
+//
+//    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/names")
-    @ResponseBody
-    public Collection<String> getReservationNames() {
-        return restTemplate
-                .exchange("http://tag-domain/tagController/tags", HttpMethod.GET, null, new ParameterizedTypeReference<List<Tag>>() {
-                })
-                .getBody()
-                .stream()
-                .map(Tag::getName)
-                .collect(Collectors.toList());
-
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/name")
-    @ResponseBody
-    public List<Tag> getReservationName1() {
-        List<Tag> tags= restTemplate
-                .exchange("http://tag-domain/tags", HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
-                }).getBody().getContent().stream().collect(Collectors.toList());
-        return tags;
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "/name")
+//    @ResponseBody
+//    public List<Tag> getReservationName1() {
+//        List<Tag> tags= restTemplate
+//                .exchange("http://tag-domain/tags", HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
+//                }).getBody().getContent().stream().collect(Collectors.toList());
+//        return tags;
+//    }
 
 
 

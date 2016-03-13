@@ -5,6 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -45,6 +46,28 @@ public class HttpUtil {
 
     public String post(String url, JSONObject json) throws HttpException{
         return post(url,json.toString());
+    }
+
+    public String get(String url) throws HttpException{
+        try {
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpGet get = new HttpGet(url);
+
+            CloseableHttpResponse response = client.execute(get);
+
+            String back = EntityUtils.toString(response.getEntity());
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                return  back;
+            } else {
+                log.error(url+":" + back);
+                throw new HttpException(url+response.getStatusLine().getStatusCode());
+//                return String.valueOf(response.getStatusLine().getStatusCode());
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            return "failed";
+        }
     }
 
 }

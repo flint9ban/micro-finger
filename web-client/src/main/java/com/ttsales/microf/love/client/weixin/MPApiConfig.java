@@ -17,6 +17,11 @@ public class MPApiConfig {
     @Value("${wx.token}")
     private String token;
 
+    @Value("${app.url}")
+    private String appUrl;
+
+    public static  final String QRCODE_SHOW_URL = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
+
     public String getSendCustomerMessageApi(){
         return apiUrl+"/api/message-custom-send";
     }
@@ -25,8 +30,21 @@ public class MPApiConfig {
         return apiUrl+"/api/material-batchget-material";
     }
 
+    public String getCreateQrCodeTicketApi(){
+        return apiUrl+"/api/qrcode-create";
+    }
+
     public String getToken(){
         return  token;
     }
 
+    public String getOauthCodeApi(){
+        return apiUrl+"/code/connect-oauth2-authorize";
+    }
+
+    public String getOathAccessToken(){ return apiUrl+"/auth/sns-oauth2-access_token";}
+
+    public String getAppUrl() {
+        return appUrl;
+    }
 }
