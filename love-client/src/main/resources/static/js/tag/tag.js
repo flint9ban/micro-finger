@@ -8,7 +8,8 @@
 	}
 
 	function saveCategory() {
-		$('#category-dlg').dialog('close');
+		var categoryName = $("#dlgCategoryName").val();
+		postAjax('createType',{name:categoryName},function(){$('#category-dlg').dialog('close');});
 	}
 
 	function onClickCell(index, field, value) {
@@ -94,4 +95,28 @@
 	}
 	function fmtDelIcon(value, row, index) {
 		return "<span  style='cursor: pointer;font-size:24px;' class=\"icon-cancel\";\">&nbsp;&nbsp;&nbsp;</span>";
+	}
+
+	function postAjax(postUrl,postData,successCallback){
+		$.ajax({
+			type : "POST",
+			url :postUrl,
+			dataType : "json",
+			data : postData,
+			success : function(data) {
+				if(data.error){
+					showError(data.error);
+					//$.messager.alert('错误',data.error,'error');
+				}else{
+					successCallback()
+				}
+			},
+			error:function(){
+				$.messager.alert('错误','系统错误，请联系管理员','error');
+			}
+		});
+	}
+
+	function showError(error){
+		$.messager.alert('错误',error,'error');
 	}

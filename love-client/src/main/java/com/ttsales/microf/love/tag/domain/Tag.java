@@ -2,20 +2,22 @@ package com.ttsales.microf.love.tag.domain;
 
 import lombok.Data;
 
-import java.util.List;
+import javax.persistence.*;
 
 /**
- * Created by liyi on 16/3/13.
+ * Created by liyi on 2016/3/4.
  */
-
 @Data
+@Entity
+@Table(name ="dat_tag")
 public class Tag {
 
+    @Id
+    @GeneratedValue
     private Long id;
 
+    @Column
     private String name;
 
-    private String containerNames;
 
-    private List<Long> containerIds;
 }
