@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>推送管理</title>
+   <link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/color.css">
+    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/article.js"></script>
+ <style type="text/css">
+   .queryDiv{
+		 margin: 10px;
+	}
+	.querySpan{
+		 margin-right: 20px;
+	}
+	</style>
+</head>
+<body>
+	<div class="easyui-layout" fit="true">
+		<div data-options="region:'south',split:true" style="height: 50px;"></div>
+		<div
+			data-options="region:'center'">
+			<table id="tagTable" title="文章" class="easyui-datagrid"
+				url="get_users.php" toolbar="#toolbar" pagination="true"
+				rownumbers="true" fitColumns="true" singleSelect="true" fit="true"
+				data-options="onClickCell:onClickCell">
+				<thead>
+					<tr>
+						<th field="title" width="50">标题</th>
+						<th field="context" width="50">内容</th>
+						<th field="createTime" width="50">创建时间</th>
+						<th field="sendTime" width="50">发送时间</th>
+						<th
+							data-options="field:'qrcode',width:55,align:'center',formatter:fmtQrcodeIcon">二维码</th>
+						<th
+							data-options="field:'update',width:55,align:'center',formatter:fmtUpdateIcon">编辑</th>
+						<th
+							data-options="field:'send',width:55,align:'center',formatter:fmtSendIcon">发送</th>
+					</tr>
+				</thead>
+			</table>
+			<div id="toolbar">
+				<div class="queryDiv">
+					<span class="querySpan"> 
+					<input name="title"
+						class="easyui-textbox" data-options="prompt:'文章标题'"></span> <span
+						class="querySpan">  发送时间：  <input class="easyui-datebox" id="beginDate"></input>——  <input class="easyui-datebox" id="endDate"></input></span> <a href="#"
+						class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

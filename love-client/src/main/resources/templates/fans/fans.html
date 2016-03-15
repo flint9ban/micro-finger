@@ -1,0 +1,81 @@
+<!DOCTYPE html >
+<html>
+<title>粉丝管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <title>粉丝管理</title>
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/color.css">
+    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+    <style type="text/css">
+        .fansDiv{
+            margin: 10px;
+        }
+        .querySpan{
+            margin-right: 20px;
+        }</style>
+
+</head>
+<body  >
+	<div class="easyui-layout" fit="true">
+	<div data-options="region:'south',split:true" style="height: 50px;"></div>
+		<div data-options="region:'center'">
+        <table id="fansTable" title="粉丝管理" class="easyui-datagrid"
+               url="get_users.php"
+               toolbar="#toolbar" pagination="true"
+               rownumbers="true" fitColumns="true" singleSelect="true" fit="true" >
+            <thead>
+            <tr>
+                <th field="fansName" width="25" align="center">姓名</th>
+                <th field="phone" width="25" align="center">手机</th>
+                <th field="wechat" width="25" align="center">微信号</th>
+                <th field="area" width="25" align="center">地区</th>
+                <th field="organization" width="25" align="center">组织</th>
+                <th field="position" width="25" align="center">职位</th>
+                <th field="interest" width="25" align="center">兴趣点</th>
+            </tr>
+
+            </thead>
+        </table>
+        <div id="toolbar">
+            <div class="fansDiv">
+                <p>身份信息</p>
+                <span class="fansSpan"> <input name="fpwName" class="easyui-textbox" data-options="prompt:'姓名/手机/微信号'"  ></span>
+                <span class="fansSpan"> <input name="storeName" class="easyui-textbox" data-options="prompt:'门店'"></span>
+                <span class="fansSpan"> <input name="fpwName" class="easyui-textbox" data-options="prompt:'组织'"  ></span>
+                <span class="fansSpan"> <input name="storeName" class="easyui-textbox" data-options="prompt:'职位'"></span>
+            </div>
+
+            <div class="fansDiv">
+                <p>兴趣点</p>
+                <select  class="easyui-combobox" name="intrest" style="width:200px;">
+                <option value="1">金庸</option>
+                <option value="2">古龙</option>
+                <option value="3">黄奕</option>
+                </select>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+                <div class="fansDiv"></div>
+                <div  class="queryDiv">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo"  onclick="$('#allsend').window('open')">群发</a>
+                </div>
+                </div>
+				</div>
+            <div id="allsend" class="easyui-dialog" style="width:1000px;height:450px;padding:10px 20px" type="hidden" title="发送文章"
+                 closed="true" >
+                <table id="sendcontent" class="easyui-datagrid" style="width:100%;height:100%" fitColumns="true" pagination="true">
+                    <thead>
+                    <tr>
+                        <th field="contentt" width="100" align="center">标题</th>
+                        <th field="contentc" width="100" align="center">内容</th>
+                        <th field="contentl" width="100" align="center">标签</th>
+                    </tr>
+                    </thead>
+                </table>
+                </div>
+        </div>
+     </div>
+</body>
+</html>

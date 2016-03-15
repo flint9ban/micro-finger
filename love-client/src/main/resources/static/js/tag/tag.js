@@ -8,27 +8,7 @@
 	}
 
 	function saveCategory() {
-		postAjax('tag/tagController/createType',{name:categoryName},function(){$('#category-dlg').dialog('close');});
-	}
-
-	function postAjax(postUrl,postData,successCallback){
-		var categoryName = $('#dlgCategoryName').val();
-		$.ajax({
-			type : "POST",
-			url :postUrl,
-			dataType : "json",
-			data : postData,
-			success : function(data) {
-				if(data.error){
-					$.messager.alert('错误',data.error,'error');
-				}else{
-					successCallback()
-				}
-			},
-			error:function(){
-				$.messager.alert('错误','系统错误，请联系管理员','error');
-			}
-		});
+		$('#category-dlg').dialog('close');
 	}
 
 	function onClickCell(index, field, value) {
