@@ -1,21 +1,21 @@
 package com.ttsales.microf.love.tag.domain;
 
+import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
-import java.util.List;
+import javax.persistence.*;
 
 /**
- * Created by liyi on 16/3/13.
+ * Created by liyi on 2016/3/4.
  */
-
 @Data
-public class Tag {
+@Entity
+@Table(name ="dat_tag")
+public class Tag extends SuperEntity{
 
-    private Long id;
 
+    @Column
     private String name;
 
-    private String containerNames;
 
-    private List<Long> containerIds;
 }
