@@ -1,129 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style"
-	content="black-translucent">
-<meta name="format-detection" content="telephone=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<style type="text/css">
-.item {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-justify-content: space-between;
-	justify-content: space-between;
-	-webkit-box-pack: justify;
-	position: relative;
-	padding:16px;
-	font-size:24px;
-}
-
-select {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	opacity: 0;
-	line-height: 20px;
-	font-size: 24px;
-}
-
-hr {
-	border-color: #f1f0f6;
-	border-top: 1rem;
-}
-
-.right_div {
-	text-align: right;
-}
-.myInfo{
-	background:#ebebed;
-	font-size:24px;
-	padding:10px;;
-}
-.save-btn{
-background:#4570e6;
-color:#ffffff;
-font-size:24px;
-padding:30px;
-text-align:center;
-}
-input{
-font-size:24px;
-text-align:right;
-}
-.select-placeholder{
-	color:#a1a1a1;
-}
-</style>
-<title>微手指</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style"
+		  content="black-translucent">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" type="text/css" href="css/leaveInfo.css">
+	<script type="application/javascript" src="../../static/easyui/jquery.min.js"></script>
+	<script type="application/javascript" src="js/leaveInfo.js"></script>
+	<title>微手指</title>
 </head>
 <body>
-	<div class="myInfo">我的资料</div>
-	<div class="item">
-		<div>姓名</div>
-		<div class="right_div">
-			<input type="text" placeholder="输入">
-		</div>
+<div class="myInfo">我的资料</div>
+<div class="item">
+	<div>姓名</div>
+	<div class="right_div">
+		<input type="text" placeholder="输入">
 	</div>
-	<hr />
-	<div class="item">
-		<div>手机</div>
-		<div>
-			<input type="text" placeholder="输入">
-		</div>
+</div>
+<hr />
+<div class="item">
+	<div>手机</div>
+	<div  class="right_div">
+		<input type="text" placeholder="输入">
 	</div>
-	<hr />
-	<div class="item">
-		<div>组织类型</div>
-		<select id="sameHistory" onchange="changeChoice('sameHistory')">
-			<option value="0">4S店</option>
-			<option value="1">主机厂</option>
-		</select>
-		<div class="select-placeholder">选择&nbsp;></div>
+</div>
+<hr />
+<div class="item">
+	<div>组织类型</div>
+	<select id="orgType" onchange="changeChoice('orgType')">
+		<option value="0">4S店</option>
+		<option value="1">主机厂</option>
+	</select>
+	<div class="select-placeholder" id="orgType_div">选择&nbsp;></div>
+</div>
+<hr />
+<div class="item">
+	<div>职位</div>
+	<select id="orgDept" onchange="changeChoice('orgDept')">
+		<option value="0">店长</option>
+		<option value="1">销售主管</option>
+	</select>
+	<div class="select-placeholder" id="orgDept_div">选择&nbsp;></div>
+</div>
+<hr />
+<div class="item">
+	<div>服务品牌</div>
+	<select id="orgBrand" onchange="changeChoice('orgBrand')">
+		<option value="0">东风日产</option>
+		<option value="1">广汽三菱</option>
+	</select>
+	<div class="select-placeholder" id="orgBrand_div">选择&nbsp;></div>
+</div>
+<hr />
+<div class="item">
+	<div>地区</div>
+	<div class="item-area">
+		选择&nbsp;>
 	</div>
-	<hr />
-	<div class="item">
-		<div>职位</div>
-		<select id="sameHistory" onchange="changeChoice('sameHistory')">
-			<option value="0">店长</option>
-			<option value="1">销售主管</option>
-		</select>
-		<div class="select-placeholder">选择&nbsp;></div>
-	</div>
-	<hr />
-	<div class="item">
-		<div>服务品牌</div>
-		<select id="sameHistory" onchange="changeChoice('sameHistory')">
-			<option value="0">XX4s店1</option>
-			<option value="1">XX4S店2</option>
-		</select>
-		<div class="select-placeholder">选择&nbsp;></div>
-	</div>
-	<hr />
-	<div class="item">
-		<div>地区</div>
-		<div>
-			<input type="text" placeholder="输入">
-		</div>
-	</div>
-	<hr />
-	<div class="item">
-		<div>组织名称</div>
-		<select id="sameHistory" onchange="changeChoice('sameHistory')">
-			<option value="0">XX4s店1</option>
-			<option value="1">XX4S店2</option>
-		</select>
-		<div class="select-placeholder">选择&nbsp;></div>
-	</div>
-	<div class="save-btn">保存</div>
+</div>
+<hr />
+<div class="item">
+	<div>门店</div>
+	<select id="orgStore" onchange="changeChoice('orgStore')">
+		<option value="0">XX4s店1</option>
+		<option value="1">XX4S店2</option>
+	</select>
+	<div class="select-placeholder" id="orgStore_div">选择&nbsp;></div>
+</div>
+<div class="save-btn">保存</div>
 </body>
 </html>
