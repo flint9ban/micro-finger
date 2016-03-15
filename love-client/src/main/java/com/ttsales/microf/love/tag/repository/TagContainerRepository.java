@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 
@@ -13,8 +14,9 @@ import java.util.Collection;
  */
 
 @RepositoryRestResource
+@Repository
 public interface TagContainerRepository extends JpaRepository<TagContainer,Long>{
 
     @RestResource(path = "find-containerId")
-    Collection<TagContainer> findAllByContainerId(@Param("containerId") String containerId);
+    Collection<TagContainer> findAllByContainerId(@Param("containerId") Long containerId);
 }

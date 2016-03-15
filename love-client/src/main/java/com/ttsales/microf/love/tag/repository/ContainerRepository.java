@@ -5,12 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by liyi on 2016/3/4.
  */
 
 @RepositoryRestResource
+@Repository
 public interface ContainerRepository extends JpaRepository<Container,Long>{
 
     @RestResource(path = "find-qrcodeTicket")

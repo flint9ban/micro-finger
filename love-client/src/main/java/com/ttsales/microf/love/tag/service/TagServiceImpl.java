@@ -6,16 +6,16 @@ import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.domain.TagContainer;
+import com.ttsales.microf.love.tag.repository.ContainerRepository;
+import com.ttsales.microf.love.tag.repository.TagContainerRepository;
+import com.ttsales.microf.love.tag.repository.TagRepository;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.QrCodeActionType;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,19 +25,19 @@ import java.util.stream.Collectors;
 @Service
 public class TagServiceImpl implements TagService {
 
+
     @Autowired
-    private RestTemplate restTemplate;
+    private TagRepository tagRepository;
+
+    @Autowired
+    private TagContainerRepository tagContainerRepository;
+
+    @Autowired
+    private ContainerRepository containerRepository;
 
     @Autowired
     private QrcodeService qrcodeService;
 
-    private String loveServiceUrl = "http://love-service";
-
-    private String tagUrl = loveServiceUrl+"/tags";
-
-    private String containerUrl=loveServiceUrl+"/containers";
-
-    private String tagContainerUrl = loveServiceUrl + "tagContainers";
 
     @Override
     public String createQrcodeTicket(Long containerId) throws WXApiException, HttpException {
@@ -51,13 +51,11 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagContainer> getTagContainer(String qrcodeTicket) {
-        Container container = restTemplate.getForObject(containerUrl+"/search/find-qrcodeTicket?qrcodeTicket="+qrcodeTicket,Container.class);
+        Container container = containerRepository.findByQrcodeTicket(qrcodeTicket);
         if (container != null) {
-            return restTemplate.exchange(tagContainerUrl+"/search/find-containerId?containerId="+container.getId(),
-                    HttpMethod.GET,null, new ParameterizedTypeReference< Resources<TagContainer>>(){})
-                    .getBody().getContent().stream().collect(Collectors.toList());
+            return tagContainerRepository.findAllByContainerId(container.getId()).stream().collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<TagContainer>();
     }
 
     @Override
@@ -106,51 +104,48 @@ public class TagServiceImpl implements TagService {
     }
 
     private List<Tag> queryTagByNameLike(String tagName){
-        return restTemplate.exchange(tagUrl+"/search/find-name-like?name=%"+tagName+"%",HttpMethod.GET,null,new ParameterizedTypeReference<Resources<Tag>>(){})
-                .getBody().getContent().stream().collect(Collectors.toList());
+        return tagRepository.findByNameContaining("%"+tagName+"%").stream().collect(Collectors.toList());
 
     }
 
     private List<Tag> queryTags(String tagName,Long containerId){
-        return restTemplate.exchange(tagUrl + "/search/find-container-name?containerId=" + containerId + "&tagName=%" + tagName + "%",
-                HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Tag>>() {
-                }).getBody().getContent().stream().collect(Collectors.toList());
+        return tagRepository.findByContainerIdAndName(containerId,"%"+tagName+"%").stream().collect(Collectors.toList());
     }
 
 
     private void putContainer(Container container){
-        restTemplate.put(containerUrl+"/"+container.getId(),container);
+       containerRepository.save(container);
     }
 
     private void postContainer(Container container){
-        restTemplate.postForObject(containerUrl,container,Container.class);
+        containerRepository.save(container);
     }
 
     private Container getContainerByName(String name){
-        return  restTemplate.getForObject(containerUrl+"/search/find-name?name="+name,Container.class);
+        return  containerRepository.findByName(name);
     }
 
     private Container getContainer(Long containerId){
-        return restTemplate.getForObject(containerUrl+"/"+containerId,Container.class);
+        return containerRepository.findOne(containerId);
     }
 
     private Tag getTagByName(String name){
-        return restTemplate.getForObject(tagUrl+"/search/find-name?name="+name,Tag.class);
+        return tagRepository.findByName(name);
     }
 
     private Tag postTag(Tag tag){
-       return restTemplate.postForObject(tagUrl,tag,Tag.class);
+       return tagRepository.save(tag);
     }
 
     private void deleteTag(Long tagId){
-        restTemplate.delete(tagUrl+"/"+tagId);
+        tagRepository.delete(tagId);
     }
 
     private TagContainer postTagContainer(Long tagId,Long containerId){
         TagContainer tagContainer = new TagContainer();
         tagContainer.setTagId(tagId);
         tagContainer.setContainerId(containerId);
-        return restTemplate.postForObject(tagContainerUrl,tagContainer,TagContainer.class);
+        return tagContainerRepository.save(tagContainer);
     }
 
     private void deleteTagContainer(Long tagId){

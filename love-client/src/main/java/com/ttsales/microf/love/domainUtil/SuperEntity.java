@@ -16,11 +16,11 @@ public class SuperEntity {
     private Long id;
 
     @Column(name = "create_at")
-    @Convert(converter = LongDateTimeAttrConvertor.class)
+//    @Convert(converter = LongDateTimeAttrConvertor.class)
     private Long creatAt;
 
     @Column(name="last_update_at",updatable =false )
-    @Convert(converter = LongDateTimeAttrConvertor.class)
+//    @Convert(converter = LongDateTimeAttrConvertor.class)
     private Long lastUpdateAt;
 
     @Column
