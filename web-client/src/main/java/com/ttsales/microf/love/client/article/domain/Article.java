@@ -2,7 +2,6 @@ package com.ttsales.microf.love.client.article.domain;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 /**

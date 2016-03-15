@@ -1,15 +1,12 @@
 package com.ttsales.microf.love.client.weixin.handler;
 
 
-import com.netflix.discovery.converters.Auto;
-import com.sun.tools.javac.tree.JCTree;
 import com.ttsales.microf.love.client.article.domain.Article;
 import com.ttsales.microf.love.client.article.domain.ArticleTag;
 import com.ttsales.microf.love.client.article.service.ArticleService;
 import com.ttsales.microf.love.client.fans.service.FansService;
 import com.ttsales.microf.love.client.qrcode.Qrcode;
 import com.ttsales.microf.love.client.qrcode.service.QrcodeService;
-import com.ttsales.microf.love.client.tag.domain.Tag;
 import com.ttsales.microf.love.client.tag.domain.TagContainer;
 import com.ttsales.microf.love.client.tag.service.TagService;
 import com.ttsales.microf.love.client.weixin.web.support.WXCallbackContext;
@@ -17,7 +14,6 @@ import com.ttsales.microf.love.client.weixin.web.support.WXCallbackHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Table;
 import java.util.List;
 import java.util.stream.Collectors;
 

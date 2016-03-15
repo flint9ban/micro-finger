@@ -10,6 +10,8 @@ public class Container {
 
     private Long id;
 
+    private String name;
+
     private String qrcodeTicket;
 
 }

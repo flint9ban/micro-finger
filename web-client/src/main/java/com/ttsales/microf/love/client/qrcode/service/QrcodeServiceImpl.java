@@ -6,6 +6,7 @@ import com.ttsales.microf.love.client.weixin.QrCodeActionType;
 import com.ttsales.microf.love.util.WXApiException;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 /**
  * Created by liyi on 16/3/13.
  */
+@Service
 public class QrcodeServiceImpl implements QrcodeService {
 
     @Autowired
