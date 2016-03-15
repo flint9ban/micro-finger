@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.tag.domain;
 
+import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,11 +11,8 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name ="dat_tag")
-public class Tag {
+public class Tag extends SuperEntity{
 
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Column
     private String name;

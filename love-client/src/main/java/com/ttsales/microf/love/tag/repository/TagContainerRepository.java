@@ -8,6 +8,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by liyi on 2016/3/4.
@@ -19,4 +20,8 @@ public interface TagContainerRepository extends JpaRepository<TagContainer,Long>
 
     @RestResource(path = "find-containerId")
     Collection<TagContainer> findAllByContainerId(@Param("containerId") Long containerId);
+
+    List<TagContainer> findAllByTagId(Long tagId);
+
 }
+

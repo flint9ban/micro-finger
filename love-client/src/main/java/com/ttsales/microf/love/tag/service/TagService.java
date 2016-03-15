@@ -18,15 +18,21 @@ public interface TagService {
 
     List<TagContainer> getTagContainer(String qrcodeTicket);
 
+    List<Container> getTagContainerByTagId(Long tagId);
+
+    List<Container> findContainerByName(String name);
+
     void createContainer(Container container);
 
     boolean isContainerExist(Container container);
 
-    void createTag(Tag tag, List<Container> containers);
+    Tag findTagByName(String name);
 
-    void updateTag(Tag tag, List<Container> containers);
+    Long createTag(Tag tag, List<Long> containers);
 
-    void removeTag(Tag tag);
+    void updateTag(Tag tag, List<Long> containers);
+
+    void removeTag(Long tagId);
 
     List<Tag> queryTags(String tagName, List<Long> containerIds);
 

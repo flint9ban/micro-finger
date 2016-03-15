@@ -11,6 +11,7 @@ import com.ttsales.microf.love.tag.repository.TagContainerRepository;
 import com.ttsales.microf.love.tag.repository.TagRepository;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.QrCodeActionType;
+import net.sf.json.JSONObject;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,16 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Container> getTagContainerByTagId(Long tagId) {
+        return containerRepository.findAllByTagId(tagId);
+    }
+
+    @Override
+    public List<Container> findContainerByName(String name) {
+        return containerRepository.findByNameContaining(name);
+    }
+
+    @Override
     public void createContainer(Container container) {
         postContainer(container);
     }
@@ -69,24 +80,30 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void createTag(Tag tag, List<Container> containers) {
+    public Tag findTagByName(String name) {
+        return tagRepository.findByName(name);
+    }
+
+    @Override
+    public Long createTag(Tag tag, List<Long> containers) {
         Tag tag1 =getTagByName(tag.getName());
         if (tag1 != null) {
             // TODO: 2016/3/14
         }
         tag = postTag(tag);
         Long tagId=tag.getId();
-        containers.forEach(container->postTagContainer(tagId,container.getId()));
+        containers.forEach(container->postTagContainer(tagId,container));
+        return tagId;
     }
 
     @Override
-    public void updateTag(Tag tag, List<Container> containers) {
+    public void updateTag(Tag tag, List<Long> containers) {
 
     }
 
     @Override
-    public void removeTag(Tag tag) {
-        deleteTag(tag.getId());
+    public void removeTag(Long tagId) {
+        deleteTag(tagId);
     }
 
     @Override
@@ -102,6 +119,7 @@ public class TagServiceImpl implements TagService {
             return queryTagByNameLike(tagName);
         }
     }
+
 
     private List<Tag> queryTagByNameLike(String tagName){
         return tagRepository.findByNameContaining("%"+tagName+"%").stream().collect(Collectors.toList());
