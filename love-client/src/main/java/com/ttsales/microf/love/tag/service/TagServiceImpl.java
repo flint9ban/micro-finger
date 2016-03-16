@@ -85,10 +85,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Long createTag(Tag tag, List<Long> containers) {
-        Tag tag1 =getTagByName(tag.getName());
-        if (tag1 != null) {
-            // TODO: 2016/3/14
-        }
         tag = postTag(tag);
         Long tagId=tag.getId();
         containers.forEach(container->postTagContainer(tagId,container));
@@ -97,12 +93,15 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void updateTag(Tag tag, List<Long> containers) {
-
+        tagRepository.save(tag);
+        tagContainerRepository.removeByTagId(tag.getId());
+        containers.stream().forEach(containerId->postTagContainer(tag.getId(),containerId));
     }
 
     @Override
     public void removeTag(Long tagId) {
         deleteTag(tagId);
+        tagContainerRepository.removeByTagId(tagId);
     }
 
     @Override

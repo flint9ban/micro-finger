@@ -38,7 +38,7 @@
             <thead>
             <tr>
                 <th field="name" width="50">名称</th>
-                <th field="types" width="50">类别</th>
+                <th field="typeNames" width="50">类别</th>
                 <th
                         data-options="field:'update',width:55,align:'center',formatter:fmtUpdateIcon">编辑
                 </th>
@@ -85,7 +85,7 @@
              closed="true" buttons="#dlg-buttons">
             <input id="rowIndex" type="hidden"/>
             <div><input
-                    id="tagName" placeholder="名称" class="easyui-textbox" style="width: 200px;"/></div>
+                    id="tagName" placeholder="名称" data-options="prompt:'标签名称'" class="easyui-textbox" style="width: 200px;"/></div>
             <div>
                 <div id="search1" class="taggroup-div">
                     <input id="search1-text" type="text"

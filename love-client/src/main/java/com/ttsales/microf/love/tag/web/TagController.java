@@ -83,9 +83,6 @@ public class TagController {
         return json;
     }
 
-
-
-
     @RequestMapping(value = "/createTag",method = RequestMethod.POST)
     public JSONObject createTag(Tag tag,String typeIds){
         JSONObject json = new JSONObject();
@@ -103,9 +100,10 @@ public class TagController {
     public JSONObject updateTag(Tag tag,String typeIds){
         JSONObject json = new JSONObject();
         Tag oldTag = tagService.findTagByName(tag.getName());
-        if(oldTag!=null&&oldTag.getId().equals(tag)){
+        if(oldTag==null||oldTag.getId().equals(tag.getId())){
             List<Long> ids = getTypeIds(typeIds);
-            tagService.updateTag(tag,ids);
+            oldTag.setName(tag.getName());
+            tagService.updateTag(oldTag,ids);
         }else {
             json.put("error","兴趣点已存在！");
         }

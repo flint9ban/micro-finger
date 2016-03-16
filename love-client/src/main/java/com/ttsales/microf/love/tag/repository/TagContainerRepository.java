@@ -23,5 +23,7 @@ public interface TagContainerRepository extends JpaRepository<TagContainer,Long>
 
     List<TagContainer> findAllByTagId(Long tagId);
 
+    public void removeByTagId(Long tagId);
+
 }
 

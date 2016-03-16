@@ -11,7 +11,7 @@ function query() {
 }
 
 function getTypes(id){
-    var tags = $(id).tagGroup(getTags);
+    var tags = $(id).tagGroup('getTags');
     var typeIds = "";
     if(tags.length>0){
         for(var tag in tags){
@@ -22,7 +22,7 @@ function getTypes(id){
 }
 
 function getTypeNames(id){
-    var tags = $(id).tagGroup(getTags);
+    var tags = $(id).tagGroup('getTags');
     var typeIds = "";
     if(tags.length>0){
         for(var tag in tags){
