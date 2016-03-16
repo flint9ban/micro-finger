@@ -3,6 +3,7 @@ package com.ttsales.microf.love.domainUtil;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * Created by liyi on 2016/3/9.
@@ -16,12 +17,12 @@ public class SuperEntity {
     private Long id;
 
     @Column(name = "create_at")
-//    @Convert(converter = LongDateTimeAttrConvertor.class)
-    private Long creatAt;
+    @Convert(converter = LongDateTimeAttrConvertor.class)
+    private LocalDateTime creatAt;
 
     @Column(name="last_update_at",updatable =false )
-//    @Convert(converter = LongDateTimeAttrConvertor.class)
-    private Long lastUpdateAt;
+    @Convert(converter = LongDateTimeAttrConvertor.class)
+    private LocalDateTime lastUpdateAt;
 
     @Column
     private Integer isdel;
@@ -30,14 +31,14 @@ public class SuperEntity {
 
     @PrePersist
     void onCreate(){
-        this.setCreatAt(System.currentTimeMillis());
-        this.setLastUpdateAt(System.currentTimeMillis());
+        this.setCreatAt(LocalDateTime.now());
+        this.setLastUpdateAt(LocalDateTime.now());
         this.setIsdel(ISDEL_N);
     }
 
     @PreUpdate
     void onUpdate(){
-        this.setLastUpdateAt(System.currentTimeMillis());
+        this.setLastUpdateAt(LocalDateTime.now());
     }
 
 }
