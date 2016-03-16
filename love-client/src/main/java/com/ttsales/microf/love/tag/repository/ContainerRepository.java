@@ -27,6 +27,6 @@ public interface ContainerRepository extends JpaRepository<Container,Long>{
     @RestResource(path = "find-name-like")
     List<Container> findByNameContaining(String name);
 
-    @Query("select c from Container c join TagContainer t on c.id=t.containerId where t.tagId=:tagId")
+    @Query(value = "select c from dat_tag_container c join  dat_tag_container_ref t on c.id=t.container_id where t.tag_id=:tagId",nativeQuery = true)
     List<Container> findAllByTagId(Long tagId);
 }

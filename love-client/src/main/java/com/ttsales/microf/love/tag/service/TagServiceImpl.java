@@ -1,7 +1,8 @@
 package com.ttsales.microf.love.tag.service;
 
 
-import com.ttsales.microf.love.qrcode.Qrcode;
+import com.ttsales.microf.love.qrcode.domain.QrCode;
+import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.Tag;
@@ -10,8 +11,6 @@ import com.ttsales.microf.love.tag.repository.ContainerRepository;
 import com.ttsales.microf.love.tag.repository.TagContainerRepository;
 import com.ttsales.microf.love.tag.repository.TagRepository;
 import com.ttsales.microf.love.util.WXApiException;
-import com.ttsales.microf.love.weixin.QrCodeActionType;
-import net.sf.json.JSONObject;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public String createQrcodeTicket(Long containerId) throws WXApiException, HttpException {
-        Qrcode qrcode = qrcodeService.createQrCode(QrCodeActionType.QR_LIMIT_STR_SCENE, Qrcode.REF_TYPE_TAG_CONTAINER);
+        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_LIMIT_STR_SCENE, QrCode.REF_TYPE_TAG_CONTAINER);
         String ticket = qrcode.getTicket();
         Container container = getContainer(containerId);
         container.setQrcodeTicket(ticket);
