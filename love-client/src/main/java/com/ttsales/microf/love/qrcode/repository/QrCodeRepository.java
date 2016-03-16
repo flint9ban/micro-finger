@@ -10,4 +10,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface QrCodeRepository extends JpaRepository<QrCode,Long>{
 
+    QrCode findBySceneId(String sceneId);
 }

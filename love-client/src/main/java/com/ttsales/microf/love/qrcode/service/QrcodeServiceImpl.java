@@ -1,10 +1,11 @@
 package com.ttsales.microf.love.qrcode.service;
 
 
-import com.ttsales.microf.love.qrcode.Qrcode;
+import com.ttsales.microf.love.qrcode.domain.QrCode;
+import com.ttsales.microf.love.qrcode.domain.QrCodeType;
+import com.ttsales.microf.love.qrcode.repository.QrCodeRepository;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.MPApi;
-import com.ttsales.microf.love.weixin.QrCodeActionType;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,35 +23,35 @@ public class QrcodeServiceImpl implements QrcodeService {
     private MPApi mpApi;
 
     @Autowired
-    private RestTemplate restTemplate;
+    private QrCodeRepository qrCodeRepository;
 
     @Override
-    public String getQrCodeTicket(String qrcodeId) {
-        Qrcode qrcode = restTemplate.getForObject("http://love-service/qrCodes/"+qrcodeId, Qrcode.class);
+    public String getQrCodeTicket(Long qrcodeId) {
+        QrCode qrcode = qrCodeRepository.findOne(qrcodeId);
         return qrcode.getTicket();
     }
 
     @Override
-    public Qrcode createQrCode(QrCodeActionType qrCodeActionType,Integer refType) throws WXApiException, HttpException {
+    public QrCode createQrCode(QrCodeType qrCodeType, Integer refType) throws WXApiException, HttpException {
         String sceneId = UUID.randomUUID().toString();
         String ticketId = null;
-        if(QrCodeActionType.QR_LIMIT_STR_SCENE.equals(qrCodeActionType)){
-            ticketId = mpApi.getQrCodeTicket(null,qrCodeActionType,null,sceneId);
+        if(QrCodeType.QR_LIMIT_STR_SCENE.equals(qrCodeType)){
+            ticketId = mpApi.getQrCodeTicket(null,qrCodeType,null,sceneId);
         }else{
-            ticketId = mpApi.getQrCodeTicket(2592000l,qrCodeActionType,null,sceneId);
+            ticketId = mpApi.getQrCodeTicket(2592000l,qrCodeType,null,sceneId);
         }
-        Qrcode qrcode = new Qrcode();
+        QrCode qrcode = new QrCode();
         qrcode.setSceneId(sceneId);
         qrcode.setTicket(ticketId);
-        qrcode.setQrcodeType(qrCodeActionType);
+        qrcode.setQrCodeType(qrCodeType);
         qrcode.setRefType(refType);
-        qrcode = restTemplate.postForObject("http://love-service/qrCodes",qrcode,Qrcode.class);
+        qrcode = qrCodeRepository.save(qrcode);
         return qrcode;
     }
 
     @Override
-    public Qrcode getQrcode(String sceneId) {
-        return restTemplate.getForObject("http://love-service/qrCodes/search/find-sceneId?sceneId="+sceneId,Qrcode.class);
+    public QrCode getQrcode(String sceneId) {
+        return  qrCodeRepository.findBySceneId(sceneId);
     }
 
 

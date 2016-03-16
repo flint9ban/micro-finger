@@ -1,7 +1,7 @@
 package com.ttsales.microf.love.qrcode.service;
 
-import com.ttsales.microf.love.qrcode.Qrcode;
-import com.ttsales.microf.love.weixin.QrCodeActionType;
+import com.ttsales.microf.love.qrcode.domain.QrCode;
+import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.util.WXApiException;
 import org.apache.http.HttpException;
 
@@ -10,9 +10,9 @@ import org.apache.http.HttpException;
  */
 public interface QrcodeService {
 
-    String getQrCodeTicket(String qrcodeId);
+    String getQrCodeTicket(Long qrcodeId);
 
-    Qrcode createQrCode(QrCodeActionType qrCodeActionType, Integer refType) throws WXApiException, HttpException;
+    QrCode createQrCode(QrCodeType qrCodeType, Integer refType) throws WXApiException, HttpException;
 
-    Qrcode getQrcode(String sceneId);
+    QrCode getQrcode(String sceneId);
 }
