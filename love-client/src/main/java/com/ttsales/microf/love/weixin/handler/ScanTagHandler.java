@@ -1,12 +1,11 @@
 package com.ttsales.microf.love.weixin.handler;
 
 
-
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.article.service.ArticleService;
 import com.ttsales.microf.love.fans.service.FansService;
-import com.ttsales.microf.love.qrcode.Qrcode;
+import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
@@ -47,14 +46,14 @@ public class ScanTagHandler implements WXCallbackHandler {
         if(eventKey.startsWith("qrscene_")){
             eventKey = eventKey.substring("qrscene_".length());
         }
-        Qrcode qrcode = qrcodeService.getQrcode(eventKey);
+        QrCode qrcode = qrcodeService.getQrcode(eventKey);
         if (qrcode != null) {
-            if(Qrcode.REF_TYPE_ARTICLE.equals(qrcode.getRefType())){
+            if(QrCode.REF_TYPE_ARTICLE.equals(qrcode.getRefType())){
                 Article article = articleService.getArticleByTicket(ticket);
                 tags = articleService.getArticleTags(article.getId())
                                 .stream().map(ArticleTag::getTagId).collect(Collectors.toList());
 
-            }else if(Qrcode.REF_TYPE_TAG_CONTAINER.equals(qrcode.getRefType())){
+            }else if(QrCode.REF_TYPE_TAG_CONTAINER.equals(qrcode.getRefType())){
                 tags = tagService.getTagContainer(ticket).stream().map(TagContainer::getTagId)
                         .collect(Collectors.toList());
             }

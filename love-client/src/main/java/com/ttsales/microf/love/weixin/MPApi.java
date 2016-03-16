@@ -1,6 +1,7 @@
 package com.ttsales.microf.love.weixin;
 
 
+import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.util.HttpUtil;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.dto.Material;
@@ -55,16 +56,16 @@ public class MPApi {
     }
 
 
-    public String getQrCodeTicket(Long expireSeconds,QrCodeActionType actionType,Integer sceneId,String sceneStr) throws WXApiException, HttpException {
+    public String getQrCodeTicket(Long expireSeconds, QrCodeType actionType, Integer sceneId, String sceneStr) throws WXApiException, HttpException {
         return createQrCodeTicket(expireSeconds,actionType,sceneId,sceneStr);
     }
 
-    public String createQrCodeTicket(Long expireSeconds,QrCodeActionType actionType,Integer sceneId,String sceneStr) throws HttpException, WXApiException {
+    public String createQrCodeTicket(Long expireSeconds,QrCodeType actionType,Integer sceneId,String sceneStr) throws HttpException, WXApiException {
         String requestWithParam = null;
-        if (QrCodeActionType.QR_SCENE.equals(actionType)){
+        if (QrCodeType.QR_SCENE.equals(actionType)){
             String request = "{\"expire_seconds\": %d, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": %d}}}";
             requestWithParam = String.format(request, expireSeconds,sceneId);
-        }else if(QrCodeActionType.QR_LIMIT_STR_SCENE.equals(actionType)){
+        }else if(QrCodeType.QR_LIMIT_STR_SCENE.equals(actionType)){
             String request = "{\"action_name\": \"QR_LIMIT_STR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\": \"%s\"}}}";
             requestWithParam = String.format(request,sceneStr);
         }else{
