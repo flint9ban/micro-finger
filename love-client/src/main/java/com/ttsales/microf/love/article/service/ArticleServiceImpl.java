@@ -1,30 +1,27 @@
 package com.ttsales.microf.love.article.service;
 
 
-
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.article.domain.SendArticleLog;
-import com.ttsales.microf.love.article.repository.*;
+import com.ttsales.microf.love.article.repository.ArticleRepository;
+import com.ttsales.microf.love.article.repository.ArticleTagRepository;
+import com.ttsales.microf.love.article.repository.SendArticleLogRepository;
 import com.ttsales.microf.love.domainUtil.LocalDateTimeUtil;
 import com.ttsales.microf.love.fans.service.FansService;
-import com.ttsales.microf.love.qrcode.Qrcode;
+import com.ttsales.microf.love.qrcode.domain.QrCode;
+import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.MPApi;
-import com.ttsales.microf.love.weixin.QrCodeActionType;
 import com.ttsales.microf.love.weixin.dto.NewsMaterial;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -35,7 +32,6 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by liyi on 2016/3/11.
@@ -156,7 +152,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public String createQrcodeTicket(Long articleId) throws WXApiException, HttpException {
-        Qrcode qrcode = qrcodeService.createQrCode(QrCodeActionType.QR_LIMIT_STR_SCENE, Qrcode.REF_TYPE_ARTICLE);
+        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_LIMIT_STR_SCENE, QrCode.REF_TYPE_ARTICLE);
         Article article = getArticle(articleId);
         article.setQrcodeTicket(qrcode.getTicket());
         putArticle(article);
