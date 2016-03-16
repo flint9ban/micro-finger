@@ -7,6 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by liyi on 16/3/13.
@@ -15,6 +16,8 @@ import java.util.Collection;
 public interface ArticleTagRepository extends JpaRepository<ArticleTag,Long>{
 
     @RestResource(path = "find-articleId")
-    Collection<ArticleTag> findByArticleId(@Param("articleId") Long articleId);
+    List<ArticleTag> findByArticleId(@Param("articleId") Long articleId);
+
+    void removeByArticleId(Long articleId);
 
 }

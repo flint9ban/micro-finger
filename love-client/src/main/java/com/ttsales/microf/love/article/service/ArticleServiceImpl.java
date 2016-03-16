@@ -5,6 +5,8 @@ package com.ttsales.microf.love.article.service;
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.article.domain.SendArticleLog;
+import com.ttsales.microf.love.article.repository.*;
+import com.ttsales.microf.love.domainUtil.LocalDateTimeUtil;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.qrcode.Qrcode;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
@@ -16,14 +18,22 @@ import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +49,19 @@ public class ArticleServiceImpl implements ArticleService {
     private MPApi mpApi;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private QrcodeService qrcodeService;
 
     @Autowired
     private FansService fansService;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private ArticleTagRepository articleTagRepository;
+
+    @Autowired
+    private SendArticleLogRepository sendArticleLogRepository;
 
     @Override
     public void sychnoizeArticle() throws WXApiException, HttpException {
@@ -53,14 +69,38 @@ public class ArticleServiceImpl implements ArticleService {
         materials.forEach(material -> mergeArticle2DB(material));
     }
 
+    @Override
+    public Page<Article> queryArticle(PageRequest pageRequest, String title, Date startDate, Date endTime) {
+        Specification<Article> specification = (Root<Article> root, CriteriaQuery<?> query, CriteriaBuilder builder)->{
+            Predicate predicate = null;
+            if (title != null) {
+                predicate = builder.like(root.get("title"),"%"+title+"%");
+            }
+            if (startDate!=null){
+                Predicate predicate1 = builder.greaterThanOrEqualTo(root.<LocalDateTime>get("sendTime"), LocalDateTimeUtil.convertToDateTime(startDate.getTime()));
+                if (predicate != null) {
+                    predicate = builder.and(predicate,predicate1);
+                }else{
+                    predicate = predicate1;
+                }
+            }
+            if (endTime != null) {
+                Predicate predicate1 = builder.lessThanOrEqualTo(root.<LocalDateTime>get("sendTime"), LocalDateTimeUtil.convertToDateTime(endTime.getTime()));
+                if (predicate != null) {
+                    predicate = builder.and(predicate,predicate1);
+                }else{
+                    predicate = predicate1;
+                }
+            }
+            return predicate;
+        };
+        return articleRepository.findAll(specification,pageRequest);
+    }
+
     private void mergeArticle2DB(NewsMaterial material) {
         String mediaId = material.getMediaId();
         Collection<Article> articles =
-                restTemplate.
-                        exchange("http://love-service/articles/search/find-by-meidaId?mediaId"+mediaId,
-                                HttpMethod.GET, null, new ParameterizedTypeReference<Resources<Article>>() {
-        })
-                .getBody().getContent();
+                articleRepository.findAllByMediaId(mediaId);
         if (articles.isEmpty()) {
             addArticle(material);
         } else {
@@ -85,7 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setContent(material.getFirstContent());
         article.setMediaId(material.getMediaId());
         article.setReloadTime(LocalDateTime.now());
-        restTemplate.postForObject("http://love-service/articles",article,Article.class);
+        articleRepository.save(article);
     }
 
     public static void main(String[] args) {
@@ -110,9 +150,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleTag> getArticleTags(Long articleId) {
-        return restTemplate.exchange("http://love-service/articleTags/search/find-articleId?articleId="+articleId
-                , HttpMethod.GET,null,new ParameterizedTypeReference<Resources<ArticleTag>>(){})
-                .getBody().getContent().stream().collect(Collectors.toList());
+        return articleTagRepository.findByArticleId(articleId);
     }
 
 
@@ -127,21 +165,31 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article getArticleByTicket(String qrcodeTicket) {
-        Article article = restTemplate.getForObject("http://love-service/articles/search/find-qrcodeTicket?qrcodeTicket="+qrcodeTicket,Article.class);
-        return article;
+        return articleRepository.findByQrcodeTicket(qrcodeTicket);
     }
 
-    private Article getArticle(Long articleId){
-        Article article = restTemplate.getForObject("http://love-service/articles/"+articleId,Article.class);
-        return article;
+    @Override
+    public void updateArticleTags(Long articleId,List<Long> tagIds) {
+        articleTagRepository.removeByArticleId(articleId);
+        tagIds.forEach(tagId->{
+            ArticleTag articleTag = new ArticleTag();
+            articleTag.setArticleId(articleId);
+            articleTag.setTagId(tagId);
+            articleTagRepository.save(articleTag);
+        });
+    }
+
+    @Override
+    public Article getArticle(Long articleId){
+        return articleRepository.findOne(articleId);
     }
 
     private void putArticle(Article article){
-        restTemplate.put("http://love-service/articles/"+article.getId(),article);
+        articleRepository.save(article);
     }
 
     private boolean isArticleSended(String mediaId,String openId){
-        SendArticleLog log = restTemplate.getForObject("http://love-service/sendArticleLogs/find-mediaId-openId?mId="+mediaId+"&openId="+openId, SendArticleLog.class);
+        SendArticleLog log = sendArticleLogRepository.findByMediaIdAndOpenId(mediaId,openId);
         return log!=null;
     }
 
@@ -152,7 +200,7 @@ public class ArticleServiceImpl implements ArticleService {
                     = new SendArticleLog();
             log.setMediaId(mediaId);
             log.setOpenId(openId);
-            restTemplate.postForObject("http://love-service/sendArticleLogs",log,SendArticleLog.class);
+            sendArticleLogRepository.save(log);
         }catch (Exception e){
             logger.error("send article fail:"+e.getMessage());
         }

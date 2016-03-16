@@ -19,7 +19,7 @@ public class Article extends SuperEntity{
     @Column(name="media_id")
     private String mediaId;
 
-    private String title,content;
+    private String title,content,url,tip;
 
     @Column(name = "qrcode_ticket")
     private String qrcodeTicket;
