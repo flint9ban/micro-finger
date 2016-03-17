@@ -140,8 +140,22 @@ public class TagServiceImpl implements TagService {
     @Override
     public Long createCotnainerWithTags(Container container, List<Long> tagIds) {
         Container newContainer = postContainer(container);
-        tagIds.forEach(tagId->{postTagContainer(tagId,newContainer.getId());});
+        if (tagIds != null) {
+            tagIds.forEach(tagId->{postTagContainer(tagId,newContainer.getId());});
+        }
         return newContainer.getId();
+    }
+
+    @Override
+    @Transactional
+    public void removeContainer(Long containerId) {
+        containerRepository.delete(containerId);
+        tagContainerRepository.deleteByContainerId(containerId);
+    }
+
+    @Override
+    public Tag getTag(Long tagId) {
+        return tagRepository.findOne(tagId);
     }
 
 

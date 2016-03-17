@@ -174,12 +174,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void updateArticleTags(Long articleId,List<Long> tagIds) {
         articleTagRepository.removeByArticleId(articleId);
-        tagIds.forEach(tagId->{
-            ArticleTag articleTag = new ArticleTag();
-            articleTag.setArticleId(articleId);
-            articleTag.setTagId(tagId);
-            articleTagRepository.save(articleTag);
-        });
+        if (tagIds != null) {
+            tagIds.forEach(tagId->{
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setArticleId(articleId);
+                articleTag.setTagId(tagId);
+                articleTagRepository.save(articleTag);
+            });
+        }
     }
 
     @Override

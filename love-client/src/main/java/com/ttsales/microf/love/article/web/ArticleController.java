@@ -63,6 +63,25 @@ public class ArticleController {
         return "article/editArticle";
     }
 
+    @RequestMapping("/getArticle")
+    @ResponseBody
+    public JSONObject getArticle(Long articleId){
+        Article article = articleService.getArticle(articleId);
+
+        List<ArticleTag> articleTags = articleService.getArticleTags(articleId);
+        List<JSONObject> tags = articleTags.stream().map(articleTag -> {
+            JSONObject jsonObject = new JSONObject();
+            Tag tag = tagService.getTag(articleTag.getTagId());
+            jsonObject.put("text",tag.getName());
+            jsonObject.put("value",tag.getId());
+            return jsonObject;
+        }).collect(Collectors.toList());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("article",article);
+        jsonObject.put("tags",tags);
+        return jsonObject;
+    }
+
     @RequestMapping("/query")
     @ResponseBody
     public JSONObject query(Integer page,Integer rows,String title,Date startDate,Date endDate){
@@ -125,8 +144,14 @@ public class ArticleController {
 
     @RequestMapping(value = "findTagByName")
     @ResponseBody
-    public List<Tag> findTagByName(String name){
-        return tagService.queryTags(name,null);
+    public List<JSONObject> findTagByName(String name){
+        return tagService.queryTags(name,null).stream()
+                .map(tag->{
+                    JSONObject json = new JSONObject();
+                    json.put("text",tag.getName());
+                    json.put("value",tag.getId());
+                    return json;
+                }).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "setCommon",method =RequestMethod.POST)
@@ -146,7 +171,8 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
-    public void update(Long articleId,String tagIds,String tip,String url){
+    @ResponseBody
+    public JSONObject update(Long articleId,String tagIds,String tip,String url){
         Article article = articleService.getArticle(articleId);
         article.setTip(tip);
         article.setUrl(url);
@@ -155,6 +181,14 @@ public class ArticleController {
             tags = Arrays.asList(tagIds.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
         }
         articleService.updateArticleTags(articleId,tags);
+        return new JSONObject();
+    }
+
+    @RequestMapping(value = "removeContainer",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject removeContainer(Long containerId){
+        tagService.removeContainer(containerId);
+        return new JSONObject();
     }
 
     public static void main(String[] args) {

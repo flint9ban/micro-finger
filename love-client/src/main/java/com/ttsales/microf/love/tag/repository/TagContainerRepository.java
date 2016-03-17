@@ -24,5 +24,7 @@ public interface TagContainerRepository extends JpaRepository<TagContainer,Long>
 
     void deleteByTagId(Long tagId);
 
+    void deleteByContainerId(Long containerId);
+
 }
 

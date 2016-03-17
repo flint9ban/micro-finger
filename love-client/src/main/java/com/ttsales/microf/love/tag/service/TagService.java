@@ -42,4 +42,8 @@ public interface TagService {
 
     Long createCotnainerWithTags(Container container,List<Long> tagIds);
 
+    void removeContainer(Long containerId);
+
+    Tag getTag(Long tagId);
+
 }
