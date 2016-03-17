@@ -9,9 +9,10 @@ $(function () {
 });
 
 function init(){
+    $('#articleId').hide();
     var param = {}
-    param.articleId = $('#articleId').text();
-    getAjax('getArticle',articleId,initPG);
+    param.articleId = $('#articleId').val();
+    getAjax('getArticle',param,initPG);
 }
 
 function initPG(data){
@@ -19,9 +20,9 @@ function initPG(data){
         $('#tip').textbox('setValue',data.article.tip);
     }
     if(data.article.url){
-        $('#url').textbox('setValue',data.article.url);
+        $('#linkText').textbox('setValue',data.article.url);
     }
-    $("#search").restAutocomplete(data.tags);
+    $("#search").resetAutoComplete(data.tags);
 }
 
 function save(){
