@@ -32,7 +32,7 @@
     <div data-options="region:'south',split:true" style="height: 50px;"></div>
     <div data-options="region:'center'">
         <table id="tagTable" title="文章" class="easyui-datagrid"
-               url="get_users.php" toolbar="#toolbar" pagination="true"
+               toolbar="#toolbar" pagination="true"
                rownumbers="true" fitColumns="true" singleSelect="true" fit="true"
                data-options="onClickCell:onClickCell">
             <thead>
@@ -51,7 +51,7 @@
         </table>
         <div id="toolbar">
             <div class="queryDiv">
-					<span class="querySpan"> <input name="queryTagName"
+					<span class="querySpan"> <input id="queryTagName" name="queryTagName"
                                                     class="easyui-textbox" data-options="prompt:'标签名称'"/></span>
                 <!--<span-->
                 <!--class="querySpan"> <select id="queryTagCategory"-->
@@ -83,6 +83,7 @@
         <div id="dlg" class="easyui-dialog"
              style="width: 400px; height: 360px; padding: 10px 20px"
              closed="true" buttons="#dlg-buttons">
+            <input id="tagId" type="hidden"/>
             <input id="rowIndex" type="hidden"/>
             <div><input
                     id="tagName" placeholder="名称" data-options="prompt:'标签名称'" class="easyui-textbox" style="width: 200px;"/></div>
@@ -102,7 +103,7 @@
         <div id="category-dlg" class="easyui-dialog"
              style="width: 400px; height: 150px; padding: 10px 20px"
              closed="true" buttons="#cty-dlg-buttons">
-            <input id="rowIndex" type="hidden"/>
+            <!--<input id="rowIndex" type="hidden"/>-->
             <table style="width: 100%">
                 <tr>
                     <td style="width: 30%; text-align: center; padding: 10px;">

@@ -53,8 +53,11 @@
         	deleteTag(this,index);
         },
         getTags:function(){
-        	return  getTags();
-        }
+        	return  getTags(this);
+        },
+		reset:function(tags){
+			return reset(this,tags);
+		}
     };
 
 	function setCurrTags(component){
@@ -73,9 +76,9 @@
 			currTags = allTags[currentIndex];
 		}
 	}
-    function getTags(){
+    function getTags(_jq){
     	var tags=[];
-    	$('.tagSpan').each(function(index) {
+		_jq.next().find('.tagSpan').each(function(index) {
     		var tag={
     				value:$(this).data('value'),
     				text:$(this).html()
@@ -84,6 +87,14 @@
     	  });
     	return tags;
     }
+
+	function  reset(_jq,tags){
+		_jq.html("");
+		currTags = tags;
+		allTags[currentIndex]=currTags;
+		initTags(_jq,currTags);
+	}
+
     function initTags(_jq,tags){
     	for(var i=0;i<tags.length;i++){
 			 appendTag(_jq,tags[i])

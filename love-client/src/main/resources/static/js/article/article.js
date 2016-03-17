@@ -1,14 +1,22 @@
 $(function(){
-	insertRow();
-	//doSearch();
+	//insertRow();
+	doSearch();
 });
 
+
 function doSearch(){
-	$('#tagTable').datagrid('load',{
-		title:$('#search-title').val(),
-		startDate:$('#beginDate').datebox('getValue')?$('#beginDate').datebox('getValue'):null,
-		endDate:$('#endDate').datebox('getValue')?$('#endDate').datebox('getValue'):null
-	})
+	var param = {};
+	var startDate=getDate('#beginDate');
+	var endDate = getDate('#endDate');
+	var title=$('#search-title').textbox('getValue');
+	param.title = title;
+	if(startDate){
+		param.startDate = startDate;
+	}
+	if(endDate){
+		param.endDate = endDate;
+	}
+	$('#tagTable').datagrid('load',param);
 }
 
 function onClickCell(index,field,value){
@@ -25,6 +33,21 @@ function onClickCell(index,field,value){
 	}
 }
 
+function getDate(id){
+	var value = $(id).datebox('getValue');
+	if(value){
+		var part = value.split('-');
+		if(part.length==3){
+			var date = new Date();
+			date.setYear(part[0]);
+			date.setMonth(part[1]);
+			date.setDate(part[2]);
+			return date;
+		}
+	}
+	return null;
+}
+
 function getClickData(index){
 	return $('#tagTable').datagrid('getRows')[index];
 }
@@ -35,8 +58,14 @@ function getQrcode(data){
 	}else{
 		var param = {};
 		param.articleId=data.id;
-		postAjax("getQrcodeTicket",param,function(returnData){window.open("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket="+returnData.qrcodeTicket);})
+		param.data = data;
+		postAjax("getQrcodeTicket",param,showQrCodeWindow)
 	}
+}
+
+function showQrCodeWindow(data,param){
+	param.data.qrcodeTicket = data.qrcodeTicket;
+	window.open("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket="+data.qrcodeTicket);
 }
 
 function sendArticle(data,index){
@@ -50,7 +79,7 @@ function sendArticle(data,index){
 }
 
 function toUpdatePG(data,index){
-	window.open("editArticle.html?id="+data.id);
+	window.open("editAritcle?id="+data.id);
 }
 
 function getCurrDate(){
@@ -107,7 +136,7 @@ function postAjax(postUrl, postData, successCallback) {
 				showError(data.error);
 				//$.messager.alert('错误',data.error,'error');
 			} else {
-				successCallback(data)
+				successCallback(data,postData)
 			}
 		},
 		error: function () {

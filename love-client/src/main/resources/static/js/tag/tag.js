@@ -5,44 +5,43 @@ $(function () {
 
 function query() {
     var params = {};
-    params.tagName = $("search-text").val();
-    params.typeIds=getTypes("#search-text")
+    params.tagName = $("#queryTagName").textbox("getValue");
+    params.typeIds=getTypes("#search")
     getAjax("query",params,reloadData);
-}
-
-function getTypes(id){
-    var tags = $(id).tagGroup('getTags');
-    var typeIds = "";
-    if(tags.length>0){
-        for(var tag in tags){
-            typeIds +=tag.value+",";
-        }
-        typeIds.substr(0,params.typeIds.length-1)
-    }
-}
-
-function getTypeNames(id){
-    var tags = $(id).tagGroup('getTags');
-    var typeIds = "";
-    if(tags.length>0){
-        for(var tag in tags){
-            typeIds +=tag.text+",";
-        }
-        typeIds.substr(0,params.typeIds.length-1)
-    }
 }
 
 function reloadData(datas){
     $('#tagTable').datagrid('reload',datas);
 }
 
-function saveTag() {
-    if (operate == "add") {
-        insertRow(getDlgRow());
-    } else {
-        updateRow(getDlgRow());
+function getTypes(id){
+    var tags = $(id).tagGroup('getTags');
+    var typeIds = "";
+    if(tags.length>0){
+        for(var i=0;i<tags.length;i++){
+            typeIds +=tags[i].value+",";
+        }
+        typeIds = typeIds.substr(0,typeIds.length-1)
     }
-    $('#dlg').dialog('close');
+    return typeIds;
+}
+
+function getTypeNames(id){
+    var tags = $(id).tagGroup('getTags');
+    var typeNames = "";
+    if(tags.length>0){
+        for(var i=0;i<tags.length;i++){
+            typeNames +=tags[i].text+",";
+        }
+        typeNames = typeNames.substr(0,typeNames.length-1)
+    }
+    return typeNames;
+}
+
+function showCtyDlg() {
+    $("#dlgCategoryName").textbox('setValue', '');
+    $('#category-dlg').dialog('open').dialog('center').dialog('setTitle',
+        '新增类型');
 }
 
 function saveCategory() {
@@ -51,6 +50,9 @@ function saveCategory() {
         $('#category-dlg').dialog('close');
     });
 }
+
+
+var operate = "add";
 
 function onClickCell(index, field, value) {
     if ('update' == field) {
@@ -61,99 +63,118 @@ function onClickCell(index, field, value) {
     }
 }
 
-function showCtyDlg() {
-    $("dlgCategoryName").textbox('setValue', '');
-    $('#category-dlg').dialog('open').dialog('center').dialog('setTitle',
-        '修改兴趣点');
-}
-
 function updateTag(index) {
     showDeatilDlg(index);
-
 }
-var operate = "add";
+
+function deleteRow(index) {
+    var rows = $('#tagTable').datagrid('getRows');
+    var row = rows[index];
+    var param = {};
+    param.id = row.id;
+    postAjax("deleteTag",param);
+    $('#tagTable').datagrid('deleteRow',index);
+}
+
+
 function showDeatilDlg(index) {
     operate = "add";
     if (index || index == '0') {
         operate = "edit";
         var rows = $('#tagTable').datagrid('getRows');
         var row = rows[index];
-        $("#tagName").textbox('setValue', row.tagName);
-        $("#tagCategory").combobox('setValue', row.categoryName);
+        $("#tagName").textbox('setValue', row.name);
+        $('#search1').resetAutoComplete(getTagsByString(row.typeIds,row.typeNames));
+        $("#tagId").val(row.id);
         $("#rowIndex").val(index);
         $('#dlg').dialog('open').dialog('center').dialog('setTitle',
             '修改兴趣点');
     } else {
-        $("#rowIndex").val('')
+        $("#rowIndex").val('');
+        $("#tagId").val('')
         $("#tagName").textbox('setValue', '');
-        $("#tagCategory").combobox('setValue', '');
+        $('#search1').resetAutoComplete([]);
         $('#dlg').dialog('open').dialog('center').dialog('setTitle',
             '新增兴趣点');
     }
 
 }
 
-function getAddOrEdit() {
-    return operate;
-}
-
-function getDlgRow() {
-    var tagName = $("#tagName").textbox('getValue');
-    var tagCategory = $("#tagCategory").textbox('getValue');
-    var row = {
-        index: $("#rowIndex").val(),
-        tagName: tagName,
-        categoryName: tagCategory
+function saveTag() {
+    var param = getTagData();
+    if (operate == "add") {
+        postAjax("createTag",param,insertRow);
+    } else {
+        postAjax("updateTag",param,updateRow);
     }
-    return row;
+    $('#dlg').dialog('close');
 }
 
-function updateRow(row) {
 
-    var params = {};
-    params.name = $("#search1-text").val();
-    params.typeIds = getTypes("#search1-text");
-    params.typeNames = getTypeNames("#search1-text");
-    postAjax("updateTag",params,afterUpdateRow);
-}
-
-function afterUpdateRow(row){
-    $('#tagTable').datagrid('updateRow', {
-        index: row.index,
-        row: {
-            name: row.name,
-            types: row.types
+function insertRow(param,data) {
+    $('#tagTable').datagrid('insertRow', {
+        index:1,
+        row:{
+            name: param.tagName,
+            typeNames: param.typeNames,
+            typeIds:param.typeIds,
+            id:data.id,
+            update: '',
+            del: ''
         }
     });
 }
 
-function insertRow(row) {
-    var params = {};
-    params.name = $("#search1-text").val();
-    params.typeIds = getTypes("#search1-text");
-    params.typeNames = getTypeNames("#search1-text");
-    postAjax("createTag",params,afterInsertRow);
-}
-
-function afterInsertRow(param,data){
-    $('#tagTable').datagrid('appendRow', {
-        name: param.name,
-        types: param.types,
-        id:data.id,
-        update: '',
-        del: ''
+function updateRow(param,data) {
+    $('#tagTable').datagrid('updateRow', {
+        index: param.index,
+        row: {
+            name: param.tagName,
+            typeNames: param.typeNames,
+            typeIds:param.typeIds,
+            id: param.tagId
+        }
     });
 }
 
-function deleteRow(index) {
-    var param = {};
-    param.id = id;
-    postAjax("deleteTag",param,afterDeleteRow);
 
+function getTagData() {
+    var tagName = $("#tagName").textbox('getValue');
+    var typeIds = getTypes("#search1");
+    var typeNames = getTypeNames("#search1");
+    var params= {};
+    params.tagName = tagName;
+    if(operate=='edit'){
+        params.tagId=$("#tagId").val();
+        params.index = $("#rowIndex").val();
+    }
+    params.typeIds = typeIds;
+    params.typeNames = typeNames;
+    return params;
 }
 
-function afterDeleteRow(index){
-    $('#tagTable').datagrid('deleteRow', index)
+
+
+
+function getTagsByString(tagIds,tagNames){
+    var tags = [];
+    if(tagIds){
+        var tagIdArray = tagIds.split(",");
+        var tagNameArray = tagNames.split(",");
+        for(var i=0;i<tagIdArray.length;i++){
+            var tagId = tagIdArray[i];
+            var tagName = tagNameArray[i];
+            var tag = {};
+            tag.text = tagName;
+            tag.value = tagId;
+            tags.push(tag);
+        }
+    }
+    return tags;
+}
+
+function getAddOrEdit() {
+    return operate;
 }
 
 function fmtUpdateIcon(value, row, index) {
@@ -174,8 +195,11 @@ function postAjax(postUrl, postData, successCallback) {
                 showError(data.error);
                 //$.messager.alert('错误',data.error,'error');
             } else {
-                successCallback(data)
+                if(successCallback){
+                    successCallback(postData,data);
+                }
             }
+
         },
         error: function () {
             $.messager.alert('错误', '系统错误，请联系管理员', 'error');
@@ -205,7 +229,7 @@ function postAjaxText(postUrl, postData, successCallback) {
 
 function getAjax(getUrl, getData, successCallback) {
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: getUrl,
         dataType: "json",
         data: getData,

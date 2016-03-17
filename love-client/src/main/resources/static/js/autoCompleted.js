@@ -4,6 +4,13 @@
 //});
 
 (function ($) {
+    $.fn.resetAutoComplete = function(tags){
+        var $search = $(this);
+        var $searchInput = $search.find('.search-text');
+        $searchInput.val('');
+        $search.next().find(".taggroup").tagGroup('reset',tags);
+    };
+
     $.fn.autocomplete = function (ajaxUrl) {
         var $search = $(this);
         // 取得输入框JQuery对象
@@ -15,7 +22,7 @@
             .insertAfter($searchInput);
         // 清空下拉列表的内容并且隐藏下拉列表区
         var clear = function () {
-            $autocomplete.empty().hide();
+           $autocomplete.empty().hide();
         };
         // 注册事件，当输入框失去焦点的时候清空下拉列表并隐藏
         $searchInput.blur(function () {
@@ -65,7 +72,7 @@
                 var value = $autocomplete.find('li').eq(selectedItem).data('value');
                 $searchInput.val(text);
                 //TODO
-                $search.find(".taggroup").tagGroup('appendTag', {
+                $search.next().find(".taggroup").tagGroup('appendTag', {
                     value: value,
                     text: text
                 });
@@ -173,7 +180,7 @@
                         // 遍历data，添加到自动完成区
                         $.each(data, function (index, term) {
                             // 创建li标签,添加到下拉列表中
-                            $('<li></li>').text(term).appendTo($autocomplete)
+                            $('<li></li>').text(term.text).data("value",term.value).appendTo($autocomplete)
                                 .addClass('clickable').hover(
                                 function () {
                                     // 下拉列表每一项的事件，鼠标移进去的操作
@@ -188,7 +195,12 @@
                                     selectedItem = -1;
                                 }).click(function () {
                                 // 鼠标单击下拉列表的这一项的话，就将这一项的值添加到输入框中
-                                $searchInput.val(term);
+                                    $searchInput.val(term.text);
+                                    $search.next().find('.taggroup').tagGroup('appendTag',{
+                                        value:term.value,
+                                        text:term.text
+                                    });
+                                //$searchInput.val(term);
                                 // 清空并隐藏下拉列表
                                 $autocomplete.empty().hide();
                             });
