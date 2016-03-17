@@ -78,7 +78,7 @@ public class ArticleController {
             return jsonObject;
         }).collect(Collectors.toList());
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("article",article);
+        jsonObject.put("article",convertToJSON(article));
         jsonObject.put("tags",tags);
         return jsonObject;
     }
