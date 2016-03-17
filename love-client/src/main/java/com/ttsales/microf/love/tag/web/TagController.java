@@ -63,33 +63,54 @@ public class TagController {
     
     //// TODO: 2016/3/15 fenye
     @RequestMapping(value = "/query",method = RequestMethod.GET)
+    @ResponseBody
     public List<JSONObject> query(String tagName,String typeIds){
-        List<Long> ids = new ArrayList<Long>();
-        if(typeIds!=null){
-            ids = Arrays.asList(typeIds.split(",")).stream()
-                    .map(Long::parseLong).collect(Collectors.toList());
-        }
+        List<Long> ids = getTypeIds(typeIds);
         return tagService.queryTags(tagName,ids).stream().map(this::getTagWithType)
                 .collect(Collectors.toList());
     }
 
     private JSONObject getTagWithType(Tag tag){
-        String types = tagService.getTagContainerByTagId(tag.getId()).stream().map(Container::getName)
-                .reduce(String::concat).get();
+        String[] types = tagService.getTagContainerByTagId(tag.getId()).stream().map(container -> {
+                                            return new String[]{container.getId().toString(),container.getName()};})
+                .reduce(
+                        (prePair,pair) -> {
+                            prePair[0]+=pair[0]+",";
+                            prePair[1]+=pair[1]+",";
+                            return  prePair;
+                        }
+                ).get();
         JSONObject json = new JSONObject();
         json.put("id",tag.getId());
         json.put("name",tag.getName());
-        json.put("types",types);
+        String typeIds = "";
+        String typeNames = "";
+        if(types!=null&&types.length==2){
+            String typeIds1 = types[0];
+            String typeNames1= types[1];
+            if (typeIds1 != null&&typeIds1.endsWith(",")) {
+                typeIds = typeIds1.substring(0,typeIds1.length()-1);
+                typeNames = typeNames1.substring(0,typeNames1.length()-1);
+            }else if(typeIds!=null){
+                typeIds = typeIds1;
+                typeNames =typeNames1;
+            }
+        }
+        json.put("typeIds",typeIds);
+        json.put("typeNames",typeNames);
         return json;
     }
 
     @RequestMapping(value = "/createTag",method = RequestMethod.POST)
-    public JSONObject createTag(Tag tag,String typeIds){
+    @ResponseBody
+    public JSONObject createTag(String tagName,String typeIds){
         JSONObject json = new JSONObject();
-        if(tagService.findTagByName(tag.getName())!=null){
+        if(tagService.findTagByName(tagName)!=null){
             json.put("error","兴趣点已存在！");
         }else{
             List<Long> ids = getTypeIds(typeIds);
+            Tag tag = new Tag();
+            tag.setName(tagName);
             Long id = tagService.createTag(tag,ids);
             json.put("id",id);
         }
@@ -97,13 +118,16 @@ public class TagController {
     }
 
     @RequestMapping(value = "/updateTag",method = RequestMethod.POST)
-    public JSONObject updateTag(Tag tag,String typeIds){
+    @ResponseBody
+    public JSONObject updateTag(String tagName,Long tagId,String typeIds){
         JSONObject json = new JSONObject();
-        Tag oldTag = tagService.findTagByName(tag.getName());
-        if(oldTag==null||oldTag.getId().equals(tag.getId())){
+        Tag oldTag = tagService.findTagByName(tagName);
+        if(oldTag==null||oldTag.getId().equals(tagId)){
             List<Long> ids = getTypeIds(typeIds);
-            oldTag.setName(tag.getName());
-            tagService.updateTag(oldTag,ids);
+            Tag tag =  new Tag();
+            tag.setName(tagName);
+            tag.setId(tagId);
+            tagService.updateTag(tag,ids);
         }else {
             json.put("error","兴趣点已存在！");
         }
@@ -112,7 +136,7 @@ public class TagController {
 
     private List<Long> getTypeIds(String typeIds){
         List<Long> ids = new ArrayList<Long>();
-        if(typeIds!=null){
+        if(typeIds!=null&&typeIds.length()>0){
             ids = Arrays.asList(typeIds.split(",")).stream()
                     .map(Long::parseLong).collect(Collectors.toList());
         }
@@ -120,8 +144,10 @@ public class TagController {
     }
 
     @RequestMapping(value = "/deleteTag",method = RequestMethod.POST)
-    public void updateTag(Long id){
+    @ResponseBody
+    public JSONObject updateTag(Long id){
        tagService.removeTag(id);
+        return new JSONObject();
     }
 
 

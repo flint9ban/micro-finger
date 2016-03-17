@@ -18,12 +18,11 @@ import java.util.List;
 @Repository
 public interface TagContainerRepository extends JpaRepository<TagContainer,Long>{
 
-    @RestResource(path = "find-containerId")
-    Collection<TagContainer> findAllByContainerId(@Param("containerId") Long containerId);
+    Collection<TagContainer> findAllByContainerId(Long containerId);
 
     List<TagContainer> findAllByTagId(Long tagId);
 
-    public void removeByTagId(Long tagId);
+    void deleteByTagId(Long tagId);
 
 }
 

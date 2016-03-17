@@ -5,6 +5,7 @@ import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.repository.ContainerRepository;
@@ -14,6 +15,7 @@ import com.ttsales.microf.love.util.WXApiException;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class TagServiceImpl implements TagService {
 
 
     @Override
+    @Transactional
     public String createQrcodeTicket(Long containerId) throws WXApiException, HttpException {
         QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_LIMIT_STR_SCENE, QrCode.REF_TYPE_TAG_CONTAINER);
         String ticket = qrcode.getTicket();
@@ -69,6 +72,17 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Container> findCommonContainer() {
+        return containerRepository.findAllByContainerType(ContainerType.COMMON);
+    }
+
+    @Override
+    public List<Tag> findTagByContainerId(Container container) {
+        return tagRepository.findByContainerId(container.getId());
+    }
+
+    @Override
+    @Transactional
     public void createContainer(Container container) {
         postContainer(container);
     }
@@ -84,6 +98,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public Long createTag(Tag tag, List<Long> containers) {
         tag = postTag(tag);
         Long tagId=tag.getId();
@@ -92,16 +107,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Transactional
     public void updateTag(Tag tag, List<Long> containers) {
-        tagRepository.save(tag);
-        tagContainerRepository.removeByTagId(tag.getId());
+        Tag updateTag = tagRepository.findOne(tag.getId());
+        updateTag.setName(tag.getName());
+        tagRepository.save(updateTag);
+        tagContainerRepository.deleteByTagId(tag.getId());
         containers.stream().forEach(containerId->postTagContainer(tag.getId(),containerId));
     }
 
     @Override
+    @Transactional
     public void removeTag(Long tagId) {
         deleteTag(tagId);
-        tagContainerRepository.removeByTagId(tagId);
+        tagContainerRepository.deleteByTagId(tagId);
     }
 
     @Override
@@ -116,6 +135,13 @@ public class TagServiceImpl implements TagService {
         }else{
             return queryTagByNameLike(tagName);
         }
+    }
+
+    @Override
+    public Long createCotnainerWithTags(Container container, List<Long> tagIds) {
+        Container newContainer = postContainer(container);
+        tagIds.forEach(tagId->{postTagContainer(tagId,newContainer.getId());});
+        return newContainer.getId();
     }
 
 
@@ -133,8 +159,8 @@ public class TagServiceImpl implements TagService {
        containerRepository.save(container);
     }
 
-    private void postContainer(Container container){
-        containerRepository.save(container);
+    private Container postContainer(Container container){
+        return containerRepository.save(container);
     }
 
     private Container getContainerByName(String name){

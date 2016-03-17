@@ -1,6 +1,7 @@
 package com.ttsales.microf.love.tag.repository;
 
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,15 +19,16 @@ import java.util.List;
 @Repository
 public interface ContainerRepository extends JpaRepository<Container,Long>{
 
-    @RestResource(path = "find-qrcodeTicket")
-    Container findByQrcodeTicket(@Param("qrcodeTicket") String qrcodeTicket);
+    Container findByQrcodeTicket(String qrcodeTicket);
 
     @RestResource(path = "find-name")
-    Container findByName(@Param("name") String name);
+    Container findByName(String name);
 
     @RestResource(path = "find-name-like")
     List<Container> findByNameContaining(String name);
 
-    @Query(value = "select c from dat_tag_container c join  dat_tag_container_ref t on c.id=t.container_id where t.tag_id=:tagId",nativeQuery = true)
+    @Query(value = "select c.* from dat_tag_container c join  dat_tag_container_ref t on c.id=t.container_id where t.tag_id=?1",nativeQuery = true)
     List<Container> findAllByTagId(Long tagId);
+
+    List<Container> findAllByContainerType(ContainerType containerType);
 }

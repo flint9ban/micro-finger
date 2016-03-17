@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -133,15 +134,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 
-    public void sendArticleByTags(String mediaId,List<Long> tags){
+    @Override
+    public void sendArticleByTags(Long articleId,String mediaId,List<Long> tags){
         List<String> openIds = fansService.getOpenIdsByTags(tags);
-        sendArticle(mediaId,openIds);
+        sendArticle(articleId,mediaId,openIds);
     }
 
-    public void sendArticle(String mediaId,List<String> openIds){
+    @Override
+    @Transactional
+    public void sendArticle(Long articleId,String mediaId,List<String> openIds){
         openIds.stream()
                 .filter(openId->!isArticleSended(mediaId,openId))
                 .forEach(openId->sendArticle(mediaId,openId));
+        Article article = getArticle(articleId);
+        article.setSendTime(LocalDateTime.now());
+        putArticle(article);
     }
 
     @Override
@@ -152,7 +159,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public String createQrcodeTicket(Long articleId) throws WXApiException, HttpException {
-        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_LIMIT_STR_SCENE, QrCode.REF_TYPE_ARTICLE);
+        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_SCENE, QrCode.REF_TYPE_ARTICLE);
         Article article = getArticle(articleId);
         article.setQrcodeTicket(qrcode.getTicket());
         putArticle(article);

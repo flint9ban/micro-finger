@@ -20,11 +20,13 @@ public interface TagRepository extends JpaRepository<Tag,Long>{
     @RestResource(path = "find-name")
     Tag findByName(@Param("name") String name);
 
-    @Query(value="select t from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id=:containerId and t.name like :name",nativeQuery = true)
-    @RestResource(path = "find-container-name")
-    List<Tag> findByContainerIdAndName(@Param("containerId") Long containerId, @Param("name") String name);
+    @Query(value="select t.* from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id=?1 and t.name like ?2",nativeQuery = true)
+    List<Tag> findByContainerIdAndName(Long containerId,String name);
 
-    @RestResource(path = "find-name-like")
-    List<Tag> findByNameContaining(@Param("name") String name);
+
+    @Query(value="select t.* from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id=?1",nativeQuery = true)
+    List<Tag> findByContainerId(Long containerId);
+
+    List<Tag> findByNameContaining(String name);
 
 }

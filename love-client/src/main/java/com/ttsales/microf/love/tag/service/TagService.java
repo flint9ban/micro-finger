@@ -22,6 +22,10 @@ public interface TagService {
 
     List<Container> findContainerByName(String name);
 
+    List<Container> findCommonContainer();
+
+    List<Tag> findTagByContainerId(Container container);
+
     void createContainer(Container container);
 
     boolean isContainerExist(Container container);
@@ -35,5 +39,7 @@ public interface TagService {
     void removeTag(Long tagId);
 
     List<Tag> queryTags(String tagName, List<Long> containerIds);
+
+    Long createCotnainerWithTags(Container container,List<Long> tagIds);
 
 }

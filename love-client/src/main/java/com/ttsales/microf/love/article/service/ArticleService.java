@@ -19,9 +19,9 @@ public interface ArticleService {
 
     Page<Article> queryArticle(PageRequest pageRequest, String title, Date startDate, Date endTime);
 
-    void sendArticleByTags(String mediaId, List<Long> tags);
+    void sendArticleByTags(Long articleId,String mediaId, List<Long> tags);
 
-    void sendArticle(String mediaId, List<String> openIds);
+    void sendArticle(Long articleId,String mediaId, List<String> openIds);
 
     List<ArticleTag> getArticleTags(Long articleId);
 

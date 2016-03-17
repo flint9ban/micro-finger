@@ -21,4 +21,7 @@ public class Container extends SuperEntity{
     @Column(name = "qrcode_ticket")
     private String qrcodeTicket;
 
+    @Column(name = "container_type")
+    private ContainerType containerType;
+
 }
