@@ -2,7 +2,6 @@ package com.ttsales.microf.love;
 
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.repository.ArticleRepository;
-import com.ttsales.microf.love.article.service.ArticleService;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
@@ -13,8 +12,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.web.WebApplicationInitializer;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,15 +22,20 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @SpringBootApplication
-@EnableDiscoveryClient
-public class LoveClientApplication {
+//@EnableDiscoveryClient
+public class LoveClientApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LoveClientApplication.class, args);
 	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(LoveClientApplication.class);
+	}
 }
 
-@Component
+//@Component
 class DummyAR implements ApplicationRunner {
 
 	@Autowired

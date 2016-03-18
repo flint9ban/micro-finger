@@ -11,7 +11,7 @@ function query() {
 }
 
 function reloadData(datas){
-    $('#tagTable').datagrid('reload',datas);
+    $('#tagTable').datagrid('loadData',datas);
 }
 
 function getTypes(id){
