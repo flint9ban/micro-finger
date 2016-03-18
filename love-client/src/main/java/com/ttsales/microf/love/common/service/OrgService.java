@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.common.service;
 
+import com.ttsales.microf.love.common.domain.OrgBrand;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
 import com.ttsales.microf.love.util.WXApiException;
@@ -18,5 +19,7 @@ public interface OrgService {
 
     OrgRegion findRegionById(String regionId);
 
-    void  creatTestData();
+   List<OrgBrand>   getAllBrands();
+
+    List<OrgRegion> findByLevel(Integer level);
 }

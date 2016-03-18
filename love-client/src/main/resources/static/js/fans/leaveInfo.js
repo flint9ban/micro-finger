@@ -17,7 +17,7 @@ function initData() {
 function  initAJaxData(){
     $.ajax({
         type: 'POST',
-        url: 'getFanInfo.do',
+        url: '../leaveInfo/getFanInfo.do',
         data: {
             'openId':getParamOfUrl('openId')
         },
@@ -40,7 +40,7 @@ function  initAJaxData(){
 function  initSessionData(){
     $.ajax({
         type: 'POST',
-        url: 'getStores.do',
+        url: '../leaveInfo/getStores.do',
         data: {
             'city': sessionStorage.cityId
         },
@@ -92,7 +92,7 @@ function setStoreSet(store) {
 function saveInfo() {
     $.ajax({
         type: 'POST',
-        url: 'editFanInfo.do',
+        url: '../leaveInfo/editFanInfo.do',
         data: {
             'openId': "123",
             'name': $("#name").val(),

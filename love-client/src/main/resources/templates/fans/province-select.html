@@ -22,7 +22,7 @@
 <div class="context">
 <div  th:each="region:${regions}" >
 	<div class="item" th:id="${region.id}" th:value="${region.regionCode}">
-		<div th:text="${region.name}"></div>
+		<div th:text="${region.fullname}"></div>
 		<div class="icon-select"  style="display: none;" >√</div>
 	</div>
 	<div class="line"></div>

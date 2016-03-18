@@ -64,6 +64,10 @@ function queryFans(){
     $('#fansTable').datagrid('load',param);
 }
 
+function  showAticleDlg(){
+    $('#allsend').window('open');
+    $("#articleTb").datagrid("unselectAll");
+}
 
 function getTagIds(){
     var tags = $("#search-text").tagGroup('getTags');
@@ -75,4 +79,35 @@ function getTagIds(){
         typeIds = typeIds.substr(0,typeIds.length-1)
     }
     return typeIds;
+}
+
+function sendAticle(){
+    var row=$("#articleTb").datagrid("getSelected");
+    if(!row){
+        $.messager.alert('警告','请选择要发送的文章','error');
+    }
+    $.ajax({
+        type : 'POST',
+        url : 'sendArticles.do',
+        data : {
+            mediaId:row.mediaId,
+            articleId:row.id,
+            name: $("#fpwName").textbox('getValue'),
+            orgType: $("#orgType").combobox('getValue'),
+            orgBrand: $("#orgBrand").combobox('getValue'),
+            orgPosition: $("#orgPosition").combobox('getValue'),
+            orgProvince: $("#province").combobox('getValue'),
+            orgCity: $("#city").combobox('getValue'),
+            orgStore: $("#store").combobox('getValue'),
+            tagIds:getTagIds()
+        },
+        dataType : 'json',
+        success : function(data, textStatus, jqXHR) {
+           if(data.errMsg){
+               $.messager.alert('失败',data.errMsg,'error');
+           }
+            $('#allsend').dialog('close');
+        }
+    });
+
 }

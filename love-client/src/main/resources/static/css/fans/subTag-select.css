@@ -1,11 +1,11 @@
 body{
     background: #ebebed;
-    font-size: 24px;
+    font-size: 18px;
     color:#2b2b2b;
 }
 .title{
     background:#ebebed;
-    font-size:24px;
+    font-size:18px;
     padding:10px;;
 }
 .context{
@@ -46,7 +46,7 @@ body{
 .save-btn{
     background:#4570e6;
     color:#ffffff;
-    font-size:24px;
+    font-size:18px;
     padding:30px;
     text-align:center;
     letter-spacing: 10px;

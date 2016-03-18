@@ -23,14 +23,14 @@ function jumpChoosePg(param){
     sessionStorage.jump=true;
     if(param=="dataType"){
         var tagIds=$("#dataType").data("ids");
-        location.href="linkPage.do?url=fans/subTag-type&type=dataType&tagIds="+tagIds;
+        location.href="../subTag/linkPage.do?url=fans/subTag-type&type=dataType&tagIds="+tagIds;
     }
     if(param=="dataBrand"){
         var tagIds=$("#brand").data("ids");
-        location.href="linkPage.do?url=fans/subTag-brand&type=brand&tagIds="+tagIds;
+        location.href="../subTag/linkPage.do?url=fans/subTag-brand&type=brand&tagIds="+tagIds;
     }
     if(param=="dataArea"){
-        location.href="linkPage.do?url=fans/sub-province-select&type=province";
+        location.href="../subTag/linkPage.do?url=fans/sub-province-select&type=province";
     }
 }
 var ids=""
@@ -86,15 +86,15 @@ function fmtItemData(data){
 function editFansTag(){
     $.ajax({
         type : 'POST',
-        url : 'editFanTags.do',
+        url : '../subTag/editFanTags.do',
         data : {
-            'openId':"123",
+            'openId':getParamOfUrl("openId"),
             'tagIds':ids
 
         },
         dataType : 'json',
         success : function(data, textStatus, jqXHR) {
-            alert("保存成功");
+           // alert("保存成功");
         }
     });
 

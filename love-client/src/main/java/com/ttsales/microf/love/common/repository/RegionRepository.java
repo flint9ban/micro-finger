@@ -18,4 +18,5 @@ public interface RegionRepository extends JpaRepository<OrgRegion,String> {
 
     List<OrgRegion> findByParentRegionCode(@Param("parentRegionCode") String parentRegionCode);
 
+    List<OrgRegion> findByLevel(@Param("level")  Integer level);
 }

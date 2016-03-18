@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.fans.web;
 
+import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.service.ArticleService;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
@@ -12,6 +13,7 @@ import com.ttsales.microf.love.tag.service.TagService;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.apache.catalina.Session;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,120 +50,15 @@ public class FansController {
     @Autowired
     private ArticleService articleService;
 
-    @RequestMapping(value = "/initLeaveInfo")
-    public String initLeaveInfo(HttpServletRequest request) {
 
-        return "fans/leaveInfo";
-    }
+
 
     @RequestMapping(value = "/init")
-    public String init() {
-        return "abc";
-    }
-
-    @RequestMapping(value = "/initSubTags")
-    public String initSubTags() {
-        return "fans/subTags";
-    }
-
-    @RequestMapping(value = "/initFans")
     public String initFans() {
         return "fans/fans";
     }
 
 
-    @RequestMapping(value = "/linkPage")
-    public String linkPage(HttpServletRequest request,
-                           HttpServletResponse response, String type, String url, String tagIds) {
-        if ("dataType".equals(type)) {
-            request.setAttribute("tags", getTypeTags(tagIds, Long.parseLong("5")));
-        }
-        if ("brand".equals(type)) {
-            request.setAttribute("tags", getTypeTags(tagIds, Long.parseLong("6")));
-        }
-        if ("province".equals(type)) {
-            request.setAttribute("regions", getRegion("00"));
-        }
-        if ("tag-city".equals(type)) {
-            request.setAttribute("tags", getRegionTags(tagIds));
-        }
-        if ("city".equals(type)) {
-            request.setAttribute("regions", getRegion(tagIds));
-        }
-        return url;
-    }
-
-    private JSONArray getRegionTags(String tagIds) {
-        return JSONArray.fromObject(fansService.findCityTags(tagIds));
-    }
-
-    private JSONArray getTypeTags(String tagIds, Long containerId) {
-        List<Tag> tags = fansService.findbyContainerId(containerId);
-        if (StringUtils.isEmpty(tagIds)) {
-            return getTags(tags, null);
-        }
-        String[] tagId = tagIds.split(",");
-        return getTags(tags, tagId);
-    }
-
-    private JSONArray getTags(List<Tag> tags, String[] tagIds) {
-        JSONArray array = new JSONArray();
-        for (Tag tag : tags) {
-            JSONObject json = new JSONObject();
-            json.put("name", tag.getName());
-            json.put("id", tag.getId());
-            String state = "unselect";
-            if (tagIds == null) {
-                json.put("state", state);
-                array.add(json);
-                continue;
-            }
-            for (String id : tagIds) {
-                if (Long.parseLong(id) == tag.getId()) {
-                    state = "select";
-                    break;
-                }
-            }
-            json.put("state", state);
-            array.add(json);
-        }
-        return array;
-
-    }
-
-
-    @RequestMapping(value = "/getFanInfo", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject getFanInfo(String openId) {
-        FansInfo fansInfo = fansService.getFansInfoByOpenId(openId);
-//        if (fansInfo == null) {
-//            fansService.initTestData();
-//            orgService.creatTestData();
-//            fansInfo = fansService.getFansInfoByOpenId(openId);
-//        }///TODO
-        //   FansInfo fansInfo= fansService.getFansInfoByOpenId(openId);
-        JSONObject json = new JSONObject();
-        json.put("fansInfo", fansInfo);
-        json.put("brands", cloneBrandData());
-        if (!StringUtils.isEmpty(fansInfo.getOrgCity())) {
-            json.put("stores", orgService.findByCity(fansInfo.getOrgCity()));
-        }
-        return json;
-
-    }
-
-    private JSONArray cloneBrandData() {
-        JSONArray array = new JSONArray();
-        JSONObject brand = new JSONObject();
-        brand.put("id", "100");
-        brand.put("name", "东风日产");
-        JSONObject brand2 = new JSONObject();
-        brand2.put("id", "101");
-        brand2.put("name", "广汽三菱");
-        array.add(brand);
-        array.add(brand2);
-        return array;
-    }
 
 
     @RequestMapping(value = "/getRegions", method = RequestMethod.POST)
@@ -172,7 +69,6 @@ public class FansController {
 
     private JSONArray getRegion(String paraentCod) {
         List<OrgRegion> regions = orgService.findByParentRegionCode(paraentCod);
-
         return JSONArray.fromObject(regions);
     }
 
@@ -193,14 +89,13 @@ public class FansController {
     @RequestMapping(value = "/getFansQueryParms", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray getFansQueryParms(String type, String id) {
-        //  orgService.creatTestData();
         JSONArray jsonArray = new JSONArray();
         if ("store".equals(type)) {
             List<OrgStore> orgStores = orgService.findByCity(id);
             jsonArray = JSONArray.fromObject(orgStores);
         }
         if ("brand".equals(type)) {
-            return cloneBrandData();
+            return  JSONArray.fromObject(orgService.getAllBrands());
         }
         if ("province".equals(type)) {
             List<OrgRegion> orgRegions = orgService.findByParentRegionCode("00");
@@ -261,66 +156,34 @@ public class FansController {
     @RequestMapping(value = "/getArticles", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray getArticles() {
-        JSONArray array = JSONArray.fromObject(articleService.getAllArricles());
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.setExcludes(new String[]{"sendTime","creatAt","lastUpdateAt","reloadTime"});
+        JSONArray array = JSONArray.fromObject(articleService.getAllArricles(),jsonConfig);
         return array;
     }
 
+
     @RequestMapping(value = "/sendArticles", method = RequestMethod.POST)
     @ResponseBody
-    public void sendArticles(FansInfo fansInfo, String tagIds, String mediaId, Long articleId) {
+    public JSONObject sendArticles(FansInfo fansInfo, String tagIds, String mediaId, Long articleId) {
         List<FansInfo> fansInfos = fansService.queryFans(fansInfo,  getTypeIds(tagIds));
         List<String> openIds = new ArrayList<String>();
         for (FansInfo fanInfo : fansInfos) {
             openIds.add(fanInfo.getOpenId());
         }
+        JSONObject json=new JSONObject();
+        if(openIds.size()==0){
+            json.put("errMsg","没有可发送的用户");
+            return json;
+        }
         articleService.sendArticle(articleId, mediaId, openIds);
-    }
-
-
-    @RequestMapping(value = "/editFanInfo", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject editFanInfo(FansInfo fansInfo) {
-        JSONObject json = new JSONObject();
-        if (fansInfo == null) {
-            json.put("errMsg", "参数错误");
-        }
-        fansService.editFansInfo(fansInfo);
         return json;
     }
 
-    @RequestMapping(value = "/queryFanTags", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONArray queryFanTags(String openId) {
-        FansInfo fansInfo = fansService.getFansInfoByOpenId(openId);
-//        if (fansInfo == null) {
-//            fansService.initTestData();
-//            orgService.creatTestData();
-//            fansInfo = fansService.getFansInfoByOpenId(openId);
-//        }
-        List<Tag> tags = fansService.getTagsByOpenId(openId);
-        JSONArray array = new JSONArray();
-        for (Tag tag : tags) {
-            JSONObject json = new JSONObject();
-            json.put("id", tag.getId());
-            json.put("name", tag.getName());
-            List<Container> containers = tagService.getTagContainerByTagId(tag.getId());
-            if (containers != null) {
-                json.put("categoryId", containers.get(0).getId());
-            }
-            array.add(json);
-        }
-        return array;
-    }
 
-    @RequestMapping(value = "/editFanTags", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject editFanTags(String openId, String tagIds) {
-        List<Long> idList = Arrays.asList(tagIds.split(",")).stream()
-                .map(Long::parseLong).collect(Collectors.toList());
-        JSONObject json = new JSONObject();
-        fansService.editFansTags(openId, idList);
-        return json;
-    }
+
+
+
 
 
 }

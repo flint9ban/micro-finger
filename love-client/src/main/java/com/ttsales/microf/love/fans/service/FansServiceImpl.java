@@ -207,92 +207,19 @@ public class FansServiceImpl implements FansService {
     }
 
     public void initTestData(){
-        fansTagRepository.deleteAll();
-        tagContainerRepository.deleteAll();;
-        tagRepository.deleteAll();;
-        fansRepository.deleteAll();
-        containerRepository.deleteAll();;
-
         FansInfo currFansInfo=new FansInfo();
         currFansInfo.setOpenId("123");
         currFansInfo.setName("张三");
         currFansInfo.setMobile("18357194946");
         currFansInfo.setOrgType("4S店");
         currFansInfo.setOrgBrand("东风日产");
-        currFansInfo.setOrgArea("浙江，杭州");
+        currFansInfo.setOrgArea("浙江-杭州");
         currFansInfo.setOrgProvince("1001");
         currFansInfo.setOrgCity("100121");
         currFansInfo.setOrgPosition("店长");
         currFansInfo.setOrgStore("杭州奥迪4S店");
         currFansInfo=fansRepository.save(currFansInfo);
 
-        Tag tag =new  Tag();
-        tag.setName("市场分析");
-        tag=tagRepository.save(tag);
-        Tag tag2 =new  Tag();
-        tag2.setName("公众号影响力");
-        tag2= tagRepository.save(tag2);
-        Tag tag3=new  Tag();
-        tag3.setName("东风日产");
-        tag3= tagRepository.save(tag3);
-        Tag tag4=new  Tag();
-        tag4.setName("广汽三菱");
-        tag4= tagRepository.save(tag4);
-        Tag tag5=new  Tag();
-        tag5.setName("杭州市");
-        tag5= tagRepository.save(tag5);
-        Tag tag6=new  Tag();
-        tag6.setName("合肥市");
-        tag6= tagRepository.save(tag6);
 
-
-        Container   container=new Container();
-        container.setName("数据");
-        container= containerRepository.save(container);
-        Container   container2=new Container();
-        container2.setName("品牌");
-        container2=  containerRepository.save(container2);
-        Container   container3=new Container();
-        container3.setName("地区");
-        container3= containerRepository.save(container3);
-
-        TagContainer tagContainer=new TagContainer();
-        tagContainer.setContainerId(container.getId());
-        tagContainer.setTagId(tag.getId());
-        tagContainerRepository.save(tagContainer);
-        TagContainer tagContainer2=new TagContainer();
-        tagContainer2.setContainerId(container.getId());
-        tagContainer2.setTagId(tag2.getId());
-        tagContainerRepository.save(tagContainer2);
-        TagContainer tagContainer3=new TagContainer();
-        tagContainer3.setContainerId(container2.getId());
-        tagContainer3.setTagId(tag3.getId());
-        tagContainerRepository.save(tagContainer3);
-        TagContainer tagContainer4=new TagContainer();
-        tagContainer4.setContainerId(container2.getId());
-        tagContainer4.setTagId(tag4.getId());
-        tagContainerRepository.save(tagContainer4);
-        TagContainer tagContainer5=new TagContainer();
-        tagContainer5.setContainerId(container3.getId());
-        tagContainer5.setTagId(tag5.getId());
-        tagContainerRepository.save(tagContainer5);
-        TagContainer tagContainer6=new TagContainer();
-        tagContainer6.setContainerId(container3.getId());
-        tagContainer6.setTagId(tag6.getId());
-        tagContainerRepository.save(tagContainer6);
-
-
-        FansInfoTag fansInfoTag=new FansInfoTag();
-        fansInfoTag.setTagId(tag.getId());
-        fansInfoTag.setFansId(currFansInfo.getId());
-        fansTagRepository.save(fansInfoTag);
-        FansInfoTag fansInfoTag2=new FansInfoTag();
-        fansInfoTag2.setTagId(tag2.getId());
-        fansInfoTag2.setFansId(currFansInfo.getId());
-        fansTagRepository.save(fansInfoTag2);
-        FansInfoTag fansInfoTag3=new FansInfoTag();
-        fansInfoTag3.setTagId(tag3.getId());
-        fansInfoTag3.setFansId(currFansInfo.getId());
-        fansTagRepository.save(fansInfoTag3);
     }
 }
