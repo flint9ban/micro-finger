@@ -1,81 +1,125 @@
 <!DOCTYPE html >
 <html>
 <title>粉丝管理</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>粉丝管理</title>
-    <link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="../easyui/themes/color.css">
-    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="../../static/easyui/themes/default/easyui.css" th:href="@{/easyui/themes/default/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/easyui/themes/icon.css"
+          th:href="@{/easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/easyui/themes/color.css"
+          th:href="@{/easyui/themes/color.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/jquery.tag-group.css"
+          th:href="@{/css/jquery.tag-group.css}"/>
+    <script type="text/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"
+            th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" src="../../staticeasyui/easyui-lang-zh_CN.js"
+            th:src="@{/easyui/easyui-lang-zh_CN.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery.tag-group.js"
+            th:src="@{/js/jquery.tag-group.js}"></script>
+    <script type="text/javascript" src="../../static/js/autocompleted.js" th:src="@{/js/autocompleted.js}"></script>
+    <script type="text/javascript" src="../../static/js/fans/fans.js" th:src="@{/js/fans/fans.js}"></script>
     <style type="text/css">
-        .fansDiv{
+        .fansDiv {
             margin: 10px;
         }
-        .querySpan{
+
+        .fansSpan {
             margin-right: 20px;
-        }</style>
+        }
+
+        .head-title {
+            margin: 10px 0px;
+        }
+
+        .dlg-title {
+            font-size: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 
 </head>
-<body  >
-	<div class="easyui-layout" fit="true">
-	<div data-options="region:'south',split:true" style="height: 50px;"></div>
-		<div data-options="region:'center'">
+<body>
+<div class="easyui-layout" fit="true">
+    <div data-options="region:'south',split:true" style="height: 50px;"></div>
+    <div data-options="region:'center'">
         <table id="fansTable" title="粉丝管理" class="easyui-datagrid"
-               url="get_users.php"
+               url="queryFans.do"
                toolbar="#toolbar" pagination="true"
-               rownumbers="true" fitColumns="true" singleSelect="true" fit="true" >
+               rownumbers="true" fitColumns="true" singleSelect="true" fit="true">
             <thead>
             <tr>
-                <th field="fansName" width="25" align="center">姓名</th>
-                <th field="phone" width="25" align="center">手机</th>
-                <th field="wechat" width="25" align="center">微信号</th>
-                <th field="area" width="25" align="center">地区</th>
-                <th field="organization" width="25" align="center">组织</th>
-                <th field="position" width="25" align="center">职位</th>
-                <th field="interest" width="25" align="center">兴趣点</th>
+                <th field="name" width="25" align="center">姓名</th>
+                <th field="mobile" width="25" align="center">手机</th>
+                <th field="orgType" width="25" align="center">类型</th>
+                <th field="orgBrand" width="25" align="center">品牌</th>
+                <th field="orgArea" width="25" align="center">地区</th>
+                <th field="orgPosition" width="25" align="center">职位</th>
+                <th field="tags" width="25" align="center">兴趣点</th>
             </tr>
 
             </thead>
         </table>
         <div id="toolbar">
             <div class="fansDiv">
-                <p>身份信息</p>
-                <span class="fansSpan"> <input name="fpwName" class="easyui-textbox" data-options="prompt:'姓名/手机/微信号'"  ></span>
-                <span class="fansSpan"> <input name="storeName" class="easyui-textbox" data-options="prompt:'门店'"></span>
-                <span class="fansSpan"> <input name="fpwName" class="easyui-textbox" data-options="prompt:'组织'"  ></span>
-                <span class="fansSpan"> <input name="storeName" class="easyui-textbox" data-options="prompt:'职位'"></span>
-            </div>
+                <div class="head-title">身份信息</div>
+                <span class="fansSpan"> <input name="fpwName" id="fpwName" class="easyui-textbox" data-options="prompt:'姓名/手机/微信号'"/> </span>
+                  <span class="fansSpan">组织类型：
+                    <input class="easyui-combobox" id ="orgType" data-options="valueField: 'label',  textField: 'value',data:
+                    [{   label: '4S店',   value: '4S店'  },{label: '主机厂',value: '主机厂' }]"/>
+                  </span>
+                <span class="fansSpan" >品牌：<input id="orgBrand" class="easyui-combobox"/></span>
+                <span class="fansSpan">职位：
+                    <input class="easyui-combobox" id ="orgPosition"  data-options="valueField: 'label',  textField: 'value',data:
+                            [{   label: '店长',   value: '店长'  },{label: '销售主管',value: '销售主管' }]"/>
+                </span>
+                <span class="fansSpan" id="province_span">省：<input id="province" class="easyui-combobox"/></span>
+                <span class="fansSpan" id="city_span">市：<input id="city" class="easyui-combobox"/></span>
+                <span class="fansSpan" id="store_span">门店：<input id="store" class="easyui-combobox"/></span>
+                <div class="head-title">兴趣点</div>
+                        	<span class="querySpan">
+					<div id="search" class="taggroup-div">
+                        <input type="text"
+                               id="search-text" name="search-text" placeholder="名称" class="selectInput search-text"/>
+                        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search"
+                           onclick="queryFans()">查询</a>
+                    </div>
+					<div style="margin:20px 0px;" class="taggroup-next-div">
+                        <span id="myTagGroup" class="taggroup"></span>
+                    </div></span>
 
-            <div class="fansDiv">
-                <p>兴趣点</p>
-                <select  class="easyui-combobox" name="intrest" style="width:200px;">
-                <option value="1">金庸</option>
-                <option value="2">古龙</option>
-                <option value="3">黄奕</option>
-                </select>
-                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
-                <div class="fansDiv"></div>
-                <div  class="queryDiv">
-                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo"  onclick="$('#allsend').window('open')">群发</a>
+                <div class="queryDiv">
+                    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-redo"
+                       onclick="$('#allsend').window('open')">群发</a>
                 </div>
-                </div>
-				</div>
-            <div id="allsend" class="easyui-dialog" style="width:1000px;height:450px;padding:10px 20px" type="hidden" title="发送文章"
-                 closed="true" >
-                <table id="sendcontent" class="easyui-datagrid" style="width:100%;height:100%" fitColumns="true" pagination="true">
-                    <thead>
-                    <tr>
-                        <th field="contentt" width="100" align="center">标题</th>
-                        <th field="contentc" width="100" align="center">内容</th>
-                        <th field="contentl" width="100" align="center">标签</th>
-                    </tr>
-                    </thead>
-                </table>
-                </div>
+            </div>
         </div>
-     </div>
+        <div id="allsend" class="easyui-dialog" style="width:1000px;height:450px;padding:0px 0px" type="hidden"
+             title="发送文章"
+             closed="true" buttons="#dlg-buttons">
+            <!--   <div class="dlg-title"> 群发文章</div>-->
+            <table id="sendcontent" class="easyui-datagrid" style="width:100%;height:100%" fitColumns="true"
+                   pagination="true" url="getArticles.do">
+                <thead>
+                <tr>
+                    <th field="contentt" width="100" align="center">标题</th>
+                    <th field="contentc" width="100" align="center">内容</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="dlg-buttons">
+            <a href="javascript:void(0)" class="easyui-linkbutton c6"
+               iconCls="icon-ok" onclick="sendAticle()" style="width: 90px">发送</a> <a
+                href="javascript:void(0)" class="easyui-linkbutton"
+                iconCls="icon-cancel"
+                onclick="javascript:$('#allsend').dialog('close')" style="width: 90px">取消</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

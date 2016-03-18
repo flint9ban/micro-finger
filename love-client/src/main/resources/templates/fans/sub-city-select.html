@@ -14,15 +14,15 @@
 	<meta name="author" content=""/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
-	<script type="application/javascript" src="../../static/js/fans/province-select.js"  th:src="@{/js/fans/city-select.js}"></script>
+	<script type="application/javascript" src="../../static/js/fans/sub-city-select.js"  th:src="@{/js/fans/sub-city-select.js}"></script>
 	<title>地区</title>
 </head>
 <body >
 <div class="title">选择地区</div>
 <div class="context">
-	<div  th:each="region:${regions}" >
-		<div class="item" th:id="${region.id}" th:value="${region.regionCode}" >
-			<div th:text="${region.name}"></div>
+	<div th:each="tag:${tags}" >
+		<div class="item" th:id="${tag.id}" >
+			<div th:text="${tag.name}"></div>
 			<div class="icon-select"  style="display: none;" >√</div>
 		</div>
 		<div class="line"></div>

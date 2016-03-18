@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN" xmlns:th="http://www.springframework.org/schema/mvc">
 <head>
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -14,20 +14,19 @@
 <meta name="author" content=""/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
-	<script type="application/javascript" src="../../static/js/fans/subTag-brand.js"  th:src="@{/js/fans/subTag-brand.js}"></script>
-<title>我要订阅</title>
+	<script type="application/javascript" src="../../static/js/fans/sub-province-select.js"  th:src="@{/js/fans/sub-province-select.js}"></script>
+<title>地区</title>
 </head>
 <body >
-<div class="title">服务类型</div>
-<div class="context" id="context">
-	<div  th:each="tag:${tags}" >
-		<div class="item"  th:value="${tag.state}"  th:id="${tag.id}">
-			<div th:text="${tag.name}"></div>
-			<div class="icon-select"   ><span th:if="${tag.state eq 'select'}">√</span></div>
-		</div>
-		<div class="line"></div>
+<div class="title">选择地区</div>
+<div class="context">
+<div  th:each="region:${regions}" >
+	<div class="item" th:value="${region.regionCode}">
+		<div th:text="${region.name}"></div>
+		<div class="icon-select"  style="display: none;" >√</div>
 	</div>
+	<div class="line"></div>
 </div>
-<div class="save-btn" onclick="getSelectValues()">保存</div>
+</div>
 </body>
 </html>

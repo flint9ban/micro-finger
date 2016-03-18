@@ -211,4 +211,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
     }
+    public List<Article> getAllArricles(){
+        return articleRepository.findAll();
+    }
 }
