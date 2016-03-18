@@ -23,7 +23,7 @@ public interface FansService {
 
     void  editFansTags(String openId,List<Long> tagIds);
 
-    List<FansInfo> queryFans(FansInfo fansInfo,String[] tagIds);
+    List<FansInfo> queryFans(FansInfo fansInfo, List<Long> tagIdList);
 
     List<Tag> findbyContainerId(Long containerId);
 

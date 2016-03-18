@@ -1,8 +1,10 @@
 package com.ttsales.microf.love.fans.service;
 
+import com.ttsales.microf.love.common.repository.SpecificationBuilder;
 import com.ttsales.microf.love.common.service.OrgService;
 import com.ttsales.microf.love.fans.domain.FansInfo;
 import com.ttsales.microf.love.fans.domain.FansInfoTag;
+import com.ttsales.microf.love.fans.domain.FansTagView;
 import com.ttsales.microf.love.fans.repository.FansRepository;
 import com.ttsales.microf.love.fans.repository.FansTagRepository;
 import com.ttsales.microf.love.tag.domain.Container;
@@ -22,6 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class FansServiceImpl implements FansService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+
     @Autowired
     private FansRepository fansRepository;
     @Autowired
@@ -75,18 +77,11 @@ public class FansServiceImpl implements FansService {
 
 
     private FansInfo getFansInfoByFansId(Long fansId){
-        return restTemplate.getForObject("http://love-service/fansInfos/"+fansId,FansInfo.class);
+        return fansRepository.findOne(fansId);
     }
 
     private List<FansInfoTag> getFansIdByTag(Long tagId){
-        return restTemplate.exchange("http://love-service/fansInfoTags/search/find-tagId?tagId="+tagId,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Resources<FansInfoTag>>(){})
-                .getBody()
-                .getContent()
-                .stream()
-                .collect(Collectors.toList());
+        return  fansTagRepository.findAllByTagId(tagId);
     }
 
     public FansInfo getFansInfoByOpenId(String openId){
@@ -157,28 +152,50 @@ public class FansServiceImpl implements FansService {
         tagIds.forEach(tagId->addFansInfoTag(tagId,fansInfo.getId()));
     }
 
-    public List<FansInfo> queryFans(FansInfo fansInfo,String[] tagIds){
+    public List<FansInfo> queryFans(FansInfo fansInfo, List<Long> tagIdList){
         if (StringUtils.isEmpty(fansInfo.getName()) &&
+                StringUtils.isEmpty(fansInfo.getMobile()) &&
                 StringUtils.isEmpty(fansInfo.getOrgType()) &&
                 StringUtils.isEmpty(fansInfo.getOrgBrand()) &&
                 StringUtils.isEmpty(fansInfo.getOrgPosition()) &&
                 StringUtils.isEmpty(fansInfo.getOrgProvince()) &&
                 StringUtils.isEmpty(fansInfo.getOrgCity()) &&
                 StringUtils.isEmpty(fansInfo.getOrgStore()) &&
-                tagIds == null) {
+                tagIdList == null) {
             return fansRepository.findAll();
+
         }
-        return fansRepository.findAll();
-//        if(tagIds!=null){
-//
-//        }
-//        if(fansInfo!=null){
-//            return fansRepository.findAll();
-//        }
+        List<FansTagView> fansTagViews=createParamViews(fansInfo ,tagIdList);
+
+        return fansTagViews.stream().map(this::queryFansByView)
+                .flatMap(fansIds->fansIds.stream())
+                .collect(Collectors.groupingBy(FansInfo::getId,Collectors.summingInt(p->1)))
+                .entrySet().stream().filter(entry->entry.getValue().equals(fansTagViews.size()))
+                .map(entry->entry.getKey())
+                .map(this::getFansInfoByFansId)
+                .collect(Collectors.toList());
+    }
 
 
-        //TODO 模糊查询
-    //return null;
+    private List<FansTagView> createParamViews(FansInfo fansInfo ,List<Long> tagIds){
+        List<FansTagView> fansTagViews=new ArrayList<FansTagView>();
+        for (Long tagId:tagIds){
+            FansTagView fansTagView=new FansTagView();
+            fansTagView.setName(fansInfo.getName());
+            fansTagView.setOrgType(fansInfo.getOrgType());
+            fansTagView.setOrgBrand(fansInfo.getOrgBrand());
+            fansTagView.setMobile(fansInfo.getMobile());
+            fansTagView.setOrgPosition(fansInfo.getOrgPosition());
+            fansTagView.setOrgProvince(fansInfo.getOrgProvince());
+            fansTagView.setOrgCity(fansInfo.getOrgCity());
+            fansTagView.setOrgStore(fansInfo.getOrgStore());
+            fansTagView.setTagId(tagId);
+            fansTagViews.add(fansTagView);
+        }
+        return fansTagViews;
+    }
+    private List<FansInfo> queryFansByView(FansTagView fansTagView){
+        return fansRepository.findAll(SpecificationBuilder.build(fansTagView));
     }
 
     public List<Tag> findbyContainerId(Long containerId){

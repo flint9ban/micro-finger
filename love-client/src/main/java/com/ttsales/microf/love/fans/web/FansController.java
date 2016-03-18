@@ -218,20 +218,22 @@ public class FansController {
     @RequestMapping(value = "/queryFans", method = RequestMethod.POST)
     @ResponseBody
     public List<JSONObject> queryFans(FansInfo fansInfo, String tagIds) {
- //       FansInfo fans = fansService.getFansInfoByOpenId("123");
-//        if (fans == null) {
-//            fansService.initTestData();
-//            orgService.creatTestData();
-//            fans = fansService.getFansInfoByOpenId("123");
-//        }//TODO
-        String tagId[]=null;
-        if(!StringUtils.isEmpty(tagIds)){
-            tagId=tagIds.split(",");
-        }
-        List<FansInfo> fansInfos = fansService.queryFans(fansInfo, tagId);
+     List<Long> tagIdList=getTypeIds(tagIds);
+        List<FansInfo> fansInfos = fansService.queryFans(fansInfo, tagIdList);
         return fansInfos.stream().map(this::getFanTags)
                 .collect(Collectors.toList());
     }
+
+    private List<Long> getTypeIds(String typeIds){
+        List<Long> ids = new ArrayList<Long>();
+        if(typeIds!=null&&typeIds.length()>0){
+            ids = Arrays.asList(typeIds.split(",")).stream()
+                    .map(Long::parseLong).collect(Collectors.toList());
+        }
+        return ids;
+    }
+
+
 
     private JSONObject getFanTags(FansInfo fansInfo) {
         List<Tag> tags = fansService.getTagsByOpenId(fansInfo.getOpenId());
@@ -266,8 +268,7 @@ public class FansController {
     @RequestMapping(value = "/sendArticles", method = RequestMethod.POST)
     @ResponseBody
     public void sendArticles(FansInfo fansInfo, String tagIds, String mediaId, Long articleId) {
-        String tagId[] = tagIds.split(",");
-        List<FansInfo> fansInfos = fansService.queryFans(fansInfo, tagId);
+        List<FansInfo> fansInfos = fansService.queryFans(fansInfo,  getTypeIds(tagIds));
         List<String> openIds = new ArrayList<String>();
         for (FansInfo fanInfo : fansInfos) {
             openIds.add(fanInfo.getOpenId());
