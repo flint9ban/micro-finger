@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,7 +78,7 @@ public class ArticleController {
             return jsonObject;
         }).collect(Collectors.toList());
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("article",article);
+        jsonObject.put("article",convertToJSON(article));
         jsonObject.put("tags",tags);
         return jsonObject;
     }
@@ -86,10 +87,11 @@ public class ArticleController {
     @ResponseBody
     public JSONObject query(Integer page,Integer rows,String title,Date startDate,Date endDate){
         if (page == null||rows==null) {
-            page = 0;
+            page = 1;
             rows = 10;
         }
-        PageRequest pageRequest = new PageRequest(page,rows);
+        Sort sort = new Sort(Sort.Direction.DESC,"creatAt");
+        PageRequest pageRequest = new PageRequest(page-1,rows,sort);
         Page<Article> articles = articleService.queryArticle(pageRequest,title,startDate,endDate);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("total",articles.getTotalElements());

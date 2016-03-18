@@ -1,5 +1,7 @@
 package com.ttsales.microf.love;
 
+import com.ttsales.microf.love.article.domain.Article;
+import com.ttsales.microf.love.article.repository.ArticleRepository;
 import com.ttsales.microf.love.article.service.ArticleService;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.ContainerType;
@@ -37,6 +39,9 @@ class DummyAR implements ApplicationRunner {
 	@Autowired
 	private TagService tagService;
 
+	@Autowired
+	private ArticleRepository articleRepository;
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		List<Tag> tags = Stream.of("Josh", "Dave", "Stephane", "Mark", "Phil","Kyle","Tyler")
@@ -50,6 +55,12 @@ class DummyAR implements ApplicationRunner {
 			container.setName("COMMON");
 			container.setContainerType(ContainerType.COMMON);
 			tagService.createCotnainerWithTags(container,tags.subList(i,i+3).stream().map(Tag::getId).collect(Collectors.toList()));
+		});
+
+		IntStream.range(0,4).forEach(i->{
+			Article article = new Article();
+			article.setTitle("abc"+i);
+			articleRepository.save(article);
 		});
 
 	}
