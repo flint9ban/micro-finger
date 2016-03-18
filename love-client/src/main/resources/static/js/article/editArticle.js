@@ -74,7 +74,7 @@ function addCommon(data){
         div+='<span class="tag-span" value="'+tag.value+'">'+tag.text+'</span>';
     }
     div+='<input class="hiddenId" type="hidden" value="'+containerId+'"/>';
-    div+='<a class="easyui-linkbutton" onclick="remove(this)" style="font-size:20px;" data-options="plain:true,iconCls:\'icon-cancel\'">' +
+    div+='<a class="easyui-linkbutton" onclick="removeTags(this)" style="font-size:20px;" data-options="plain:true,iconCls:\'icon-cancel\'">' +
         '<span class="l-btn-left l-btn-icon-left"><span class="l-btn-text l-btn-empty">&nbsp;</span><span class="l-btn-icon icon-cancel">&nbsp;</span></span></a></div>'
     $('#p').append(div);
 }

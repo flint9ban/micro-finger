@@ -22,7 +22,8 @@
 	 initEvent();
 	 });
 	 function initEvent(){
-	  $('#cfmBtn').switchbutton({
+		 $('#linkText').textbox('enable');
+		 $('#cfmBtn').switchbutton({
             checked: true,
             onChange: function(checked){
                 if(checked){
