@@ -50,8 +50,14 @@ public class FansServiceImpl implements FansService {
     @Override
     public void createFansTag(String openId, List<Long> tagIds) {
         FansInfo fansInfo = getFansInfoByOpenId(openId);
+        if (fansInfo == null) {
+            fansInfo = new FansInfo();
+            fansInfo.setOpenId(openId);
+            fansInfo = fansRepository.save(fansInfo);
+        }
         if (fansInfo != null) {
-            tagIds.forEach(tagId->addFansInfoTag(tagId,fansInfo.getId()));
+            Long fansId = fansInfo.getId();
+            tagIds.forEach(tagId->addFansInfoTag(tagId,fansId));
         }
     }
 
