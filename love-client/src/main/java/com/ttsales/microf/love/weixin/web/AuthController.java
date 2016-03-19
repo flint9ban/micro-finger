@@ -51,6 +51,7 @@ public class AuthController {
 		if (StringUtils.isEmpty(targetUri)) {
 			return targetUri;
 		}
+				 System.out.println("check========================");
 		return buildBaseAuthURL(request, targetUri, paramName,
 				redirect != null);
 	}
@@ -58,12 +59,13 @@ public class AuthController {
 	@RequestMapping(value = "reset", params = { "scope=snsapi_base", "code",
 			"target_uri", "param_name" }, method = RequestMethod.GET)
 	public String resetBaseAuth(HttpServletRequest request,
-			HttpServletResponse response, String code,
-			@RequestParam(value = "target_uri") String targetUri,
-			@RequestParam(value = "param_name") String paramName,
-			@RequestParam(value = "redirect", required = false) String redirect)
+								HttpServletResponse response, String code,
+								@RequestParam(value = "target_uri") String targetUri,
+								@RequestParam(value = "param_name") String paramName,
+								@RequestParam(value = "redirect", required = false) String redirect)
 			throws  IOException {
 		try{
+			System.out.println(code);
 			String openId = mpApi.getOpenIdByAccessToken(code);
 			if(StringUtils.isEmpty(openId)){
 				throw new WXApiException("授权失败");
@@ -88,7 +90,7 @@ public class AuthController {
 		if (redirect) {
 			url.append("&redirect");
 		}
-		return "redirect:"+mpApiConfig.getOauthCodeApi()+"?redirect_uri="+url.toString()+"&scope="+SNSAPI_BASE;
+		return "redirect:"+mpApiConfig.getOauthCodeApi()+"?redirect_uri="+URLUtils.encode(url.toString())+"&scope="+SNSAPI_BASE;
 	}
 
 	private String buildTargetURI(String targetUri, String paramName,

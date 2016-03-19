@@ -35,5 +35,5 @@ public interface ContainerRepository extends JpaRepository<Container,Long>{
 
     List<Container> findAllByContainerType(ContainerType containerType);
 
-    List<Container> findTop5ByNameContaining(String name);
+    List<Container> findTop5ByNameContainingAndContainerType(String name,ContainerType containerType);
 }

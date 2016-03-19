@@ -78,7 +78,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Container> findContainerLimit5ByName(String name,ContainerType containerType) {
-        return containerRepository.findTop5ByNameContaining("%"+name+"%");
+        return containerRepository.findTop5ByNameContainingAndContainerType("%"+name+"%",containerType);
     }
 
     @Override
@@ -143,7 +143,9 @@ public class TagServiceImpl implements TagService {
                     .map(entry->entry.getValue().get(0))
                     .collect(Collectors.toList());
         }else{
-            return queryTagByNameLike(tagName);
+             return queryTagByNameLike(tagName).stream().filter(tag->{
+                 return containerRepository.findAllByTagIdAndContainerType(tag.getId(),ContainerType.DEFINED.ordinal()).size()>0;
+             }).collect(Collectors.toList());
         }
     }
 

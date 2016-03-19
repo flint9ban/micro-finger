@@ -69,6 +69,7 @@ public class TagController {
     @RequestMapping(value = "/query")
     @ResponseBody
     public JSONObject query(Integer page,Integer rows,String tagName,String typeIds){
+
         int startRow = 0;
         int endRow = 0;
         if(page==null||rows==null){
