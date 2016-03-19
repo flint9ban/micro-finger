@@ -73,10 +73,13 @@ public class ArticleController {
         List<JSONObject> tags = articleTags.stream().map(articleTag -> {
             JSONObject jsonObject = new JSONObject();
             Tag tag = tagService.getTag(articleTag.getTagId());
-            jsonObject.put("text",tag.getName());
-            jsonObject.put("value",tag.getId());
-            return jsonObject;
-        }).collect(Collectors.toList());
+            if (tag != null) {
+                jsonObject.put("text",tag.getName());
+                jsonObject.put("value",tag.getId());
+                return jsonObject;
+            }
+            return null;
+        }).filter(value->{return value!=null;}).collect(Collectors.toList());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("article",convertToJSON(article));
         jsonObject.put("tags",tags);
@@ -90,7 +93,7 @@ public class ArticleController {
             page = 1;
             rows = 10;
         }
-        Sort sort = new Sort(Sort.Direction.DESC,"creatAt");
+        Sort sort = new Sort(Sort.Direction.DESC,"reloadTime");
         PageRequest pageRequest = new PageRequest(page-1,rows,sort);
         Page<Article> articles = articleService.queryArticle(pageRequest,title,startDate,endDate);
         JSONObject jsonObject = new JSONObject();
@@ -147,7 +150,9 @@ public class ArticleController {
     @RequestMapping(value = "findTagByName")
     @ResponseBody
     public List<JSONObject> findTagByName(String name){
-        return tagService.queryTags(name,null).stream()
+        List<Tag> tags = tagService.queryTagLimit5ByNameLike(name);
+//        tags = tags.subList(0,tags.size()>5?5:tags.size());
+        return tags.stream()
                 .map(tag->{
                     JSONObject json = new JSONObject();
                     json.put("text",tag.getName());
@@ -194,8 +199,7 @@ public class ArticleController {
     }
 
     public static void main(String[] args) {
-        LocalDateTime dateTime = LocalDateTime.now();
-        System.out.print(dateTime.getYear()+"-"+dateTime.getMonthValue()+"-"+dateTime.getDayOfMonth());
+        System.out.println(ContainerType.COMMON.ordinal());
     }
 
 }

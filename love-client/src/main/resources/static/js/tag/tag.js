@@ -7,12 +7,14 @@ function query() {
     var params = {};
     params.tagName = $("#queryTagName").textbox("getValue");
     params.typeIds=getTypes("#search")
-    getAjax("query",params,reloadData);
+    //getAjax("query",params,reloadData);
+
+    $('#tagTable').datagrid('load',params);
 }
 
-function reloadData(datas){
-    $('#tagTable').datagrid('loadData',datas);
-}
+//function reloadData(datas){
+//    $('#tagTable').datagrid('loadData',datas);
+//}
 
 function getTypes(id){
     var tags = $(id).tagGroup('getTags');
@@ -113,7 +115,7 @@ function saveTag() {
 
 function insertRow(param,data) {
     $('#tagTable').datagrid('insertRow', {
-        index:1,
+        index:0,
         row:{
             name: param.tagName,
             typeNames: param.typeNames,

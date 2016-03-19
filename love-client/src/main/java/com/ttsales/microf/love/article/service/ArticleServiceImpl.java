@@ -7,6 +7,7 @@ import com.ttsales.microf.love.article.domain.SendArticleLog;
 import com.ttsales.microf.love.article.repository.ArticleRepository;
 import com.ttsales.microf.love.article.repository.ArticleTagRepository;
 import com.ttsales.microf.love.article.repository.SendArticleLogRepository;
+import com.ttsales.microf.love.domainUtil.LocalDateTimeConvertor;
 import com.ttsales.microf.love.domainUtil.LocalDateTimeUtil;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.qrcode.domain.QrCode;
@@ -110,7 +111,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (material.getUpdateTime() > lastReloadTime) {
             article.setTitle(material.getFirstTitle());
             article.setContent(material.getFirstContent());
-            article.setReloadTime(LocalDateTime.now());
+            article.setReloadTime(LocalDateTimeUtil.convertToDateTime(material.getUpdateTime()*1000));
             //for test other properties will be clear
             putArticle(article);
         }
@@ -121,7 +122,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setTitle(material.getFirstTitle());
         article.setContent(material.getFirstContent());
         article.setMediaId(material.getMediaId());
-        article.setReloadTime(LocalDateTime.now());
+        article.setReloadTime(LocalDateTimeUtil.convertToDateTime(material.getUpdateTime()*1000));
         articleRepository.save(article);
     }
 
