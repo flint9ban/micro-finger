@@ -9,6 +9,7 @@ import com.ttsales.microf.love.fans.repository.FansRepository;
 import com.ttsales.microf.love.fans.repository.FansTagRepository;
 import com.ttsales.microf.love.fans.repository.FansTagViewRepository;
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.tag.domain.TagContainer;
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -153,8 +155,15 @@ public class FansServiceImpl implements FansService {
             fansInfo.setOpenId(openId);
             fansInfo=fansRepository.save(fansInfo);
         }
-        return tagRepository.findByFansId(fansInfo.getId());
+       List<Tag>  tags= tagRepository.findByFansId(fansInfo.getId());
+        return  tags.stream().filter(this::validateSub).collect(Collectors.toList());
     }
+
+    private boolean validateSub(Tag tag){
+      List<Container> containers= containerRepository.findAllByTagIdAndContainerType(tag.getId(), ContainerType.SUBSCRIBE.ordinal());
+       return containers.size()>0;
+    }
+
 
     public void  editFansTags(String openId,List<Long> tagIds){
         FansInfo fansInfo = getFansInfoByOpenId(openId);
