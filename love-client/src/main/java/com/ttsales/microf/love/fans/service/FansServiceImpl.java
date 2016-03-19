@@ -163,24 +163,14 @@ public class FansServiceImpl implements FansService {
     }
 
     public List<FansInfo> queryFans(FansInfo fansInfo, List<Long> tagIdList){
-        if (StringUtils.isEmpty(fansInfo.getName()) &&
-                StringUtils.isEmpty(fansInfo.getMobile()) &&
-                StringUtils.isEmpty(fansInfo.getOrgType()) &&
-                StringUtils.isEmpty(fansInfo.getOrgBrand()) &&
-                StringUtils.isEmpty(fansInfo.getOrgPosition()) &&
-                StringUtils.isEmpty(fansInfo.getOrgProvince()) &&
-                StringUtils.isEmpty(fansInfo.getOrgCity()) &&
-                StringUtils.isEmpty(fansInfo.getOrgStore()) &&
-                tagIdList.size()==0) {
-            return fansRepository.findAll();
-
+        if (tagIdList.size()==0) {
+            return fansRepository.findAll(SpecificationBuilder.build(fansInfo));
         }
         List<FansTagView> fansTagViews=createParamViews(fansInfo ,tagIdList);
-
         return fansTagViews.stream().map(this::queryFansByView)
                 .flatMap(fansIds->fansIds.stream())
                 .collect(Collectors.groupingBy(FansTagView::getFansId,Collectors.summingInt(p->1)))
-                .entrySet().stream().filter(entry->entry.getValue().equals(fansTagViews.size()))
+                .entrySet().stream().filter(entry->entry.getValue().equals(tagIdList.size()))
                 .map(entry->entry.getKey())
                 .map(this::getFansInfoByFansId)
                 .collect(Collectors.toList());

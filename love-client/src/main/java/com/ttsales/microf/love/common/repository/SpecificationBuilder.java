@@ -43,9 +43,11 @@ public class SpecificationBuilder {
 			if(value==null||"".equals(value)){
 				return null;
 			}
-				if(name.equals("mobile")||name.equals("name")){
-					return builder.like(
-							root.get(name),"%"+ value+"%");
+				if(name.equals("name")){
+					return  builder.or(builder.like(
+							root.get(name),"%"+ value+"%"),builder.like(
+							root.get("mobile"),"%"+ value+"%"));
+
 				}else{
 					return builder.equal(
 							root.get(name), value);

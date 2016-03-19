@@ -20,5 +20,5 @@ public interface FansRepository extends JpaRepository<FansInfo,Long> {
     @RestResource(path = "find-openId")
     FansInfo findByOpenId(@Param("openId") String openId);
 
-
+    List<FansInfo> findAll(Specification<FansInfo> spec);
 }
