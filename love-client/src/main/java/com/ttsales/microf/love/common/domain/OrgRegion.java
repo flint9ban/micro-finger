@@ -27,4 +27,6 @@ public class OrgRegion {
     private String fullname;
 
     private int level;
+
+    private  String pinyin;
 }
