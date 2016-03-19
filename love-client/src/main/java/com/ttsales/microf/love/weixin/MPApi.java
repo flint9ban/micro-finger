@@ -83,7 +83,6 @@ public class MPApi {
     public String getOpenIdByAccessToken(String code) throws HttpException, WXApiException {
         HttpUtil util = new HttpUtil();
         String result = util.get(mpApiConfig.getOathAccessToken()+"?code="+code);
-        System.out.println(result);
         JSONObject returnValue = JSONObject.fromObject(result);
         validateWeixinResult(returnValue);
         return returnValue.optString("openid",null);

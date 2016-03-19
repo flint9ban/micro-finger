@@ -65,7 +65,7 @@ public class AuthController {
 								@RequestParam(value = "redirect", required = false) String redirect)
 			throws  IOException {
 		try{
-			System.out.println(code);
+
 			String openId = mpApi.getOpenIdByAccessToken(code);
 			if(StringUtils.isEmpty(openId)){
 				throw new WXApiException("授权失败");
