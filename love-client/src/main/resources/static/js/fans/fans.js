@@ -83,6 +83,13 @@ function  showAticleDlg(){
     $("#articleTb").datagrid("unselectAll");
 }
 
+function  fmtName(value, row, index){
+        if(!value){
+            return  "未留咨用户";
+        }
+    return value;
+}
+
 function getTagIds(){
     var tags = $("#search").tagGroup('getTags');
     var typeIds = "";
