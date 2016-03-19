@@ -34,6 +34,6 @@ public interface TagRepository extends JpaRepository<Tag,Long>{
     @Query(value="select t.* from dat_tag t,dat_fans_tag r where t.id=r.tag_id and r.fans_id=?1",nativeQuery = true)
     List<Tag> findByFansId(Long fansId);
 
-    @Query(value="select t.* from dat_tag t,org_region r where t.name=r.name and r.parent_region_code =?1",nativeQuery = true)
+    @Query(value="select t.* from dat_tag t,org_region r where t.name=r.fullname and r.parent_region_code =?1",nativeQuery = true)
     List<Tag> findCityTags(String parentRegionCode);
 }
