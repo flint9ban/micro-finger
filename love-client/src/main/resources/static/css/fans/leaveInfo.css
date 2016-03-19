@@ -13,6 +13,7 @@
 body{
     color:#4d4d4d;
     background:#ebebed;
+    margin: 0px
 }
 select {
     position: absolute;

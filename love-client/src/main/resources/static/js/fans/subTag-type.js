@@ -31,7 +31,7 @@ function toggleState(obj){
 }
 function  showIcon(obj){
     obj.attr('value','select');
-    obj.find(".icon-select").html("<img src=\"/img/select_confirm.png\" class=\"img-icon\"/>");
+    obj.find(".icon-select").html("<img src=\"../img/select_confirm.png\" class=\"img-icon\"/>");
 }
 function  hideIcon(obj){
     obj.attr('value','unselect');

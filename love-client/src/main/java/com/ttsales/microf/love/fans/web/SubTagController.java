@@ -48,7 +48,6 @@ public class SubTagController {
         return "fans/subTags";
     }
 
-
     @RequestMapping(value = "/linkPage")
     public String linkPage(HttpServletRequest request,
                            HttpServletResponse response, String type, String url, String tagIds) {
