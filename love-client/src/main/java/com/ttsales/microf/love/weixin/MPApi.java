@@ -90,7 +90,7 @@ public class MPApi {
 
 
     private void validateWeixinResult(JSONObject jsonObject) throws WXApiException {
-        if (jsonObject.containsKey("errcode")){
+        if (jsonObject.containsKey("errcode")&&!"0".equals(jsonObject.getString("errcode"))){
             throw new WXApiException(jsonObject.toString());
         }
     }

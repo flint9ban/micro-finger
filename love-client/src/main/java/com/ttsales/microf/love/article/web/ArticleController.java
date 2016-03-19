@@ -186,7 +186,7 @@ public class ArticleController {
         if (tagIds != null&&tagIds.length()>0) {
             tags = Arrays.asList(tagIds.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
         }
-        articleService.updateArticleTags(articleId,tags);
+        articleService.updateArticleTags(article,tags);
         return new JSONObject();
     }
 

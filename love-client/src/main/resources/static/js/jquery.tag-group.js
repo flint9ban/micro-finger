@@ -72,6 +72,7 @@
 			components.push(id);
 			currTags = [];
 			allTags[components.length-1]=currTags;
+			currentIndex = components.length-1;
 		}else {
 			currTags = allTags[currentIndex];
 		}

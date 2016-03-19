@@ -27,7 +27,7 @@ public class OrgServiceImpl implements OrgService  {
     private BrandRepository brandRepository;
 
    public  List<OrgRegion> findByParentRegionCode(String parentRegionCode){
-      return   regionRepository.findByParentRegionCode(parentRegionCode);
+      return   regionRepository.findByParentRegionCodeOrderByPinyin(parentRegionCode);
    }
 
     public  List<OrgStore> findByCity(String city){

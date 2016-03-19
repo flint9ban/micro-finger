@@ -31,7 +31,7 @@ public interface ArticleService {
 
     Article getArticleByTicket(String qrcodeTicket);
 
-    void updateArticleTags(Long articleId, List<Long> tagIds);
+    void updateArticleTags(Article article, List<Long> tagIds);
 
     List<Article> getAllArricles();
 }
