@@ -80,9 +80,6 @@ public class SubTagController {
     }
 
     private JSONArray getTags(List<Tag> tags, String[] tagIds) {
-        if(tagIds==null){
-            return null;
-        }
         JSONArray array = new JSONArray();
         for (Tag tag : tags) {
             JSONObject json = new JSONObject();
