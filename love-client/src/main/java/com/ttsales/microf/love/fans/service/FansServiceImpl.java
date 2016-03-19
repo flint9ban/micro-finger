@@ -57,13 +57,17 @@ public class FansServiceImpl implements FansService {
             fansInfo.setOpenId(openId);
             fansInfo = fansRepository.save(fansInfo);
         }
-        if (fansInfo != null) {
+        if (fansInfo != null&& tagIds!=null) {
             Long fansId = fansInfo.getId();
             tagIds.forEach(tagId->addFansInfoTag(tagId,fansId));
         }
     }
 
     private void addFansInfoTag(Long tagId,Long fansId){
+        FansInfoTag tag = fansTagRepository.findByFansIdAndTagId(fansId,tagId);
+        if (tag != null) {
+            return;
+        }
         FansInfoTag fansInfoTag = new FansInfoTag();
         fansInfoTag.setFansId(fansId);
         fansInfoTag.setTagId(tagId);

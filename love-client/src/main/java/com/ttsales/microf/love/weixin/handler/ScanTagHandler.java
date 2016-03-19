@@ -11,6 +11,7 @@ import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
 import com.ttsales.microf.love.weixin.web.support.WXCallbackContext;
 import com.ttsales.microf.love.weixin.web.support.WXCallbackHandler;
+import org.apache.catalina.util.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,11 +42,13 @@ public class ScanTagHandler implements WXCallbackHandler {
     public void handle(WXCallbackContext context) {
         String eventKey = context.readChildValue(context.readRoot(),"EventKey");
         String ticket = context.readChildValue(context.readRoot(),"Ticket");
+        ticket = URLEncoder.DEFAULT.encode(ticket);
         String openId = context.readFromUserName();
         List<Long> tags = null;
         if(eventKey.startsWith("qrscene_")){
             eventKey = eventKey.substring("qrscene_".length());
         }
+        System.out.println(eventKey+"--"+ticket+"--"+openId);
         QrCode qrcode = qrcodeService.getQrcode(eventKey);
         if (qrcode != null) {
             if(QrCode.REF_TYPE_ARTICLE.equals(qrcode.getRefType())){

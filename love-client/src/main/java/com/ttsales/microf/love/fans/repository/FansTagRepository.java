@@ -20,5 +20,6 @@ public interface FansTagRepository extends JpaRepository<FansInfoTag,Long>{
     @RestResource(path = "find-tagId")
     List<FansInfoTag> findAllByTagId(@Param("tagId") Long tagId);
 
+    FansInfoTag findByFansIdAndTagId(Long fansId,Long tagId);
 
 }

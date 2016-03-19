@@ -56,11 +56,11 @@ public class MPApi {
     }
 
 
-    public String getQrCodeTicket(Long expireSeconds, QrCodeType actionType, Integer sceneId, String sceneStr) throws WXApiException, HttpException {
+    public String getQrCodeTicket(Long expireSeconds, QrCodeType actionType, Long sceneId, String sceneStr) throws WXApiException, HttpException {
         return createQrCodeTicket(expireSeconds,actionType,sceneId,sceneStr);
     }
 
-    public String createQrCodeTicket(Long expireSeconds,QrCodeType actionType,Integer sceneId,String sceneStr) throws HttpException, WXApiException {
+    public String createQrCodeTicket(Long expireSeconds,QrCodeType actionType,Long sceneId,String sceneStr) throws HttpException, WXApiException {
         String requestWithParam = null;
         if (QrCodeType.QR_SCENE.equals(actionType)){
             String request = "{\"expire_seconds\": %d, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\": %d}}}";
