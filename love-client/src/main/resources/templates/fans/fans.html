@@ -56,12 +56,12 @@
             <tr>
                 <th field="name" width="25" align="center">姓名</th>
                 <th field="mobile" width="25" align="center">手机</th>
-                <th field="orgType" width="25" align="center">类型</th>
+                <th field="orgType" width="15" align="center">类型</th>
                 <th field="orgBrand" width="25" align="center">品牌</th>
                 <th field="orgArea" width="25" align="center">地区</th>
-                <th field="orgStore" width="25" align="center">职位</th>
-                <th field="orgPosition" width="25" align="center">职位</th>
-                <th field="tags" width="25" align="center">兴趣点</th>
+                <th field="orgStore" width="25" align="center">门店</th>
+                <th field="orgPosition" width="15" align="center">职位</th>
+                <th field="tags" width="45" align="center">兴趣点</th>
             </tr>
 
             </thead>
@@ -77,7 +77,7 @@
                 <span class="fansSpan" >品牌：<input id="orgBrand" class="easyui-combobox"/></span>
                 <span class="fansSpan">职位：
                     <input class="easyui-combobox" id ="orgPosition"  data-options="valueField: 'label',  textField: 'value',data:
-                            [{   label: '店长',   value: '店长'  },{label: '销售主管',value: '销售主管' }]"/>
+                            [{   label: '销售顾问',   value: '销售顾问'  },{label: '客服',value: '客服' },{   label: '服务经理',   value: '服务经理'  },{label: '销售经理',value: '销售经理' },{   label: '总经理',   value: '总经理'  },{label: '其他',value: '其他' }]"/>
                 </span>
                 <span class="fansSpan" id="province_span">省：<input id="province" class="easyui-combobox"/></span>
                 <span class="fansSpan" id="city_span">市：<input id="city" class="easyui-combobox"/></span>
@@ -104,8 +104,8 @@
              title="发送文章"
              closed="true" buttons="#dlg-buttons">
             <!--   <div class="dlg-title"> 群发文章</div>-->
-            <table id="articleTb" class="easyui-datagrid" style="width:100%;height:100%" fitColumns="true"
-                   pagination="true" url="getArticles.do" singleSelect="true" pageSize="10">
+            <table id="articleTb" class="easyui-datagrid" style="width:100%;height:100%"
+                 >
                 <thead>
                 <tr>
                     <th field="title" width="100" align="center">标题</th>

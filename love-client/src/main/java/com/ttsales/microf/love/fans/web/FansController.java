@@ -18,6 +18,8 @@ import org.apache.catalina.Session;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -166,11 +168,15 @@ public class FansController {
 
     @RequestMapping(value = "/getArticles", method = RequestMethod.POST)
     @ResponseBody
-    public JSONArray getArticles() {
+    public JSONObject getArticles(Integer page,Integer rows) {
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.setExcludes(new String[]{"sendTime","creatAt","lastUpdateAt","reloadTime"});
-        JSONArray array = JSONArray.fromObject(articleService.getAllArricles(),jsonConfig);
-        return array;
+        PageRequest pageRequest=new PageRequest(page,rows);
+          Page<Article> articlePG=articleService.queryArticle(pageRequest,"",null,null);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("total",articlePG.getTotalElements());
+        jsonObject.put("rows",JSONArray.fromObject(articlePG.getContent(),jsonConfig));
+        return jsonObject;
     }
 
 
