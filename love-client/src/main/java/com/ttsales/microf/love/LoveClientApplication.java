@@ -23,16 +23,12 @@ import java.util.stream.Stream;
 
 @SpringBootApplication
 //@EnableDiscoveryClient
-public class LoveClientApplication extends SpringBootServletInitializer implements WebApplicationInitializer {
+public class LoveClientApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LoveClientApplication.class, args);
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(LoveClientApplication.class);
-	}
 }
 
 //@Component

@@ -12,10 +12,10 @@
     <script type="text/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
     <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"
             th:src="@{/easyui/jquery.easyui.min.js}"></script>
-    <script type="text/javascript" src="../../staticeasyui/easyui-lang-zh_CN.js"
+    <script type="text/javascript" src="../../static/easyui/easyui-lang-zh_CN.js"
             th:src="@{/easyui/easyui-lang-zh_CN.js}"></script>
     <script type="text/javascript" src="../../static/js/jquery.tag-group.js" th:src="@{/js/jquery.tag-group.js}"></script>
-    <script type="text/javascript" src="../../static/js/autocompleted.js" th:src="@{/js/autocompleted.js}"></script>
+    <script type="text/javascript" src="../../static/js/autoCompleted.js" th:src="@{/js/autoCompleted.js}"></script>
     <script type="text/javascript" src="../../static/js/tag/tag.js" th:src="@{/js/tag/tag.js}"></script>
     <style type="text/css">
         .queryDiv {
@@ -29,9 +29,20 @@
 </head>
 <body>
 <div class="easyui-layout" fit="true">
+
+
     <div data-options="region:'south',split:true" style="height: 50px;"></div>
+
     <div data-options="region:'center'">
-        <table id="tagTable" title="文章" class="easyui-datagrid"
+        <!--<div class="easyui-panel" style="padding:5px;margin-bottom: 20px">-->
+            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">兴趣点管理</a>-->
+            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">推送管理</a>-->
+            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">粉丝管理</a>-->
+        <!--</div>-->
+
+        <div th:replace="common/fragment::menu"></div>
+
+        <table id="tagTable" title="兴趣点管理" class="easyui-datagrid"
                toolbar="#toolbar" pagination="true"
                rownumbers="true" fitColumns="true" singleSelect="true" fit="true"
                data-options="onClickCell:onClickCell">

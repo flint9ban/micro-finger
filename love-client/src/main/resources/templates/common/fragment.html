@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css"
+          href="../../static/easyui/themes/default/easyui.css" th:href="@{/easyui/themes/default/easyui.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/easyui/themes/icon.css"
+          th:href="@{/easyui/themes/icon.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/easyui/themes/color.css"
+          th:href="@{/easyui/themes/color.css}"/>
+    <script type="text/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/easyui/jquery.easyui.min.js"
+            th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" src="../../static/easyui/easyui-lang-zh_CN.js"
+            th:src="@{/easyui/easyui-lang-zh_CN.js}"></script>
+    <title>Title</title>
+</head>
+<body>
+<div class="easyui-layout" fit="true">
+    <div data-options="region:'south',split:true" style="height: 50px;"></div>
+    <div data-options="region:'center'">
+        <div  th:fragment="menu" class="easyui-panel" style="padding:5px;margin-bottom: 20px">
+            <a href="../tag/tag.html" th:href="@{/tag/init}" class="easyui-linkbutton" data-options="plain:true">兴趣点管理</a>
+            <a href="../article/article.html" th:href="@{/article/init}" class="easyui-linkbutton" data-options="plain:true">推送管理</a>
+            <a href="../fans/fans.html" th:href="@{/fans/init}" class="easyui-linkbutton" data-options="plain:true">粉丝管理</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

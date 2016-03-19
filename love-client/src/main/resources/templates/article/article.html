@@ -27,7 +27,8 @@
 		<div data-options="region:'south',split:true" style="height: 50px;"></div>
 		<div
 			data-options="region:'center'">
-			<table id="tagTable" title="文章" class="easyui-datagrid"
+			<div th:replace="common/fragment::menu"></div>
+			<table id="tagTable" title="推送管理" class="easyui-datagrid"
 				url="query" toolbar="#toolbar" pagination="true"
 				rownumbers="true" fitColumns="true" singleSelect="true" fit="true"
 				data-options="onClickCell:onClickCell">
