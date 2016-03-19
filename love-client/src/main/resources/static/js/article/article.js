@@ -40,7 +40,7 @@ function getDate(id){
 		if(part.length==3){
 			var date = new Date();
 			date.setYear(part[0]);
-			date.setMonth(part[1]);
+			date.setMonth(parseInt(part[1])-1);
 			date.setDate(part[2]);
 			return date;
 		}

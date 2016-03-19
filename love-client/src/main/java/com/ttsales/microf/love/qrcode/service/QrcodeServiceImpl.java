@@ -33,20 +33,30 @@ public class QrcodeServiceImpl implements QrcodeService {
 
     @Override
     public QrCode createQrCode(QrCodeType qrCodeType, Integer refType) throws WXApiException, HttpException {
-        String sceneId = UUID.randomUUID().toString();
-        String ticketId = null;
+        // limit qrcode use uuid be sceneid
         if(QrCodeType.QR_LIMIT_STR_SCENE.equals(qrCodeType)){
-            ticketId = mpApi.getQrCodeTicket(null,qrCodeType,null,sceneId);
-        }else{
-            ticketId = mpApi.getQrCodeTicket(2592000l,qrCodeType,null,sceneId);
+            String sceneId = UUID.randomUUID().toString();
+            String ticketId = mpApi.getQrCodeTicket(null,qrCodeType,null,sceneId);
+            QrCode qrcode = new QrCode();
+            qrcode.setSceneId(sceneId);
+            qrcode.setTicket(ticketId);
+            qrcode.setQrCodeType(qrCodeType);
+            qrcode.setRefType(refType);
+            qrcode = qrCodeRepository.save(qrcode);
+            return qrcode;
+            //unlimit qrcode use qrcode id be sceneid;
+        }else if(QrCodeType.QR_SCENE.equals(qrCodeType)){
+            QrCode qrcode = new QrCode();
+            qrcode.setQrCodeType(qrCodeType);
+            qrcode.setRefType(refType);
+            qrcode = qrCodeRepository.save(qrcode);
+            String ticketId = mpApi.getQrCodeTicket(2592000l,qrCodeType,qrcode.getId(),null);
+            qrcode.setTicket(ticketId);
+            qrcode.setSceneId(qrcode.getId().toString());
+            qrCodeRepository.save(qrcode);
+            return qrcode;
         }
-        QrCode qrcode = new QrCode();
-        qrcode.setSceneId(sceneId);
-        qrcode.setTicket(ticketId);
-        qrcode.setQrCodeType(qrCodeType);
-        qrcode.setRefType(refType);
-        qrcode = qrCodeRepository.save(qrcode);
-        return qrcode;
+        return null;
     }
 
     @Override

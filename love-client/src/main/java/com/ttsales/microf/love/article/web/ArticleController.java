@@ -7,7 +7,6 @@ import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.service.TagService;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -107,7 +106,7 @@ public class ArticleController {
         json.put("id",article.getId());
         json.put("content",article.getContent());
         json.put("mediaId",article.getMediaId());
-        json.put("qrcodeTicke",article.getQrcodeTicket());
+        json.put("qrcodeTicke", article.getQrcodeTicket());
         json.put("reloadTime",getDate(article.getReloadTime()));
         json.put("sendTime",getDate(article.getSendTime()));
         json.put("tip",article.getTip());

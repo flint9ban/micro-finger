@@ -29,6 +29,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
@@ -75,7 +77,9 @@ public class ArticleServiceImpl implements ArticleService {
                 predicate = builder.like(root.get("title"),"%"+title+"%");
             }
             if (startDate!=null){
-                Predicate predicate1 = builder.greaterThanOrEqualTo(root.<LocalDateTime>get("sendTime"), LocalDateTimeUtil.convertToDateTime(startDate.getTime()));
+                LocalDateTime startDateTime = LocalDateTimeUtil.convertToDateTime(startDate.getTime());
+                startDateTime = clearTime(startDateTime);
+                Predicate predicate1 = builder.greaterThanOrEqualTo(root.<LocalDateTime>get("sendTime"),startDateTime);
                 if (predicate != null) {
                     predicate = builder.and(predicate,predicate1);
                 }else{
@@ -83,7 +87,10 @@ public class ArticleServiceImpl implements ArticleService {
                 }
             }
             if (endTime != null) {
-                Predicate predicate1 = builder.lessThanOrEqualTo(root.<LocalDateTime>get("sendTime"), LocalDateTimeUtil.convertToDateTime(endTime.getTime()));
+                LocalDateTime endDateTime = LocalDateTimeUtil.convertToDateTime(endTime.getTime());
+                endDateTime = endDateTime.plusDays(1);
+                endDateTime = clearTime(endDateTime);
+                Predicate predicate1 = builder.lessThan(root.<LocalDateTime>get("sendTime"), endDateTime);
                 if (predicate != null) {
                     predicate = builder.and(predicate,predicate1);
                 }else{
@@ -94,6 +101,14 @@ public class ArticleServiceImpl implements ArticleService {
         };
         return articleRepository.findAll(specification,pageRequest);
     }
+
+    private static LocalDateTime clearTime(LocalDateTime localDateTime){
+        return localDateTime.withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+    }
+
 
     private void mergeArticle2DB(NewsMaterial material) {
         String mediaId = material.getMediaId();
@@ -112,7 +127,6 @@ public class ArticleServiceImpl implements ArticleService {
             article.setTitle(material.getFirstTitle());
             article.setContent(material.getFirstContent());
             article.setReloadTime(LocalDateTimeUtil.convertToDateTime(material.getUpdateTime()*1000));
-            //for test other properties will be clear
             putArticle(article);
         }
     }
@@ -128,10 +142,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     public static void main(String[] args) {
         LocalDateTime date = LocalDateTime.now();
-        Long time = date.atZone(ZoneId.systemDefault()).toEpochSecond();
-        Long current = System.currentTimeMillis() / 1000;
-        System.out.println(time + ":" + current);
-
+        date = clearTime(date);
+        System.out.println(date);
+        System.out.println(System.currentTimeMillis());
+        System.out.println(date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 
     }
 
