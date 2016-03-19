@@ -78,7 +78,7 @@ public class LeaveInfoController {
         JSONObject json = new JSONObject();
         json.put("fansInfo", fansInfo);
         json.put("brands", orgService.getAllBrands());
-        if (!StringUtils.isEmpty(fansInfo.getOrgCity())) {
+        if (fansInfo!=null&&!StringUtils.isEmpty(fansInfo.getOrgCity())) {
             json.put("stores", orgService.findByCity(fansInfo.getOrgCity()));
         }
         return json;

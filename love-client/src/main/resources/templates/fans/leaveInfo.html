@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -14,8 +14,11 @@
     <meta name="author" content=""/>
     <link rel="stylesheet" type="text/css" href="../../static/fans/css/leaveInfo.css"
           th:href="@{/css/fans/leaveInfo.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/icons.min.css"  th:href="@{/css/icons.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/custom.css"  th:href="@{/css/custom.css}"/>
     <script type="application/javascript" src="../../static/easyui/jquery.min.js"
             th:src="@{/easyui/jquery.min.js}"></script>
+    <script type="application/javascript" src="../../static/js/humane.min.js"  th:src="@{/js/humane.min.js}"></script>
     <script type="application/javascript" src="../../static/js/fans/leaveInfo.js"
             th:src="@{/js/fans/leaveInfo.js}"></script>
     <title>微手指</title>
@@ -24,57 +27,64 @@
 <div class="myInfo">我的资料</div>
 <input type="hidden" id="orgProvince"/>
 <input type="hidden" id="orgCity"/>
-<div class="item">
+<div class="line" style="margin: 0px;"></div>
+<div class="container">
+<div class="item" >
     <div>姓名</div>
     <div class="right_div">
         <input type="text" placeholder="输入" id="name"/>
     </div>
 </div>
-<hr/>
+<div class="line"></div>
 <div class="item">
     <div>手机</div>
     <div class="right_div">
-        <input type="text" placeholder="输入" id="mobile"/>
+        <input type="tel" placeholder="输入" id="mobile"/>
     </div>
 </div>
-<hr/>
+<div class="line"></div>
 <div class="item">
     <div>组织类型</div>
     <select id="orgType" onchange="changeChoice('orgType')">
+        <option value="" >请选择</option>
         <option value="主机厂">主机厂</option>
         <option value="4S店">4S店</option>
     </select>
-    <div class="select-placeholder" id="orgType_div">选择&nbsp;></div>
+    <div class="select-placeholder" ><span  id="orgType_div">选择</span>&nbsp;<span class="icon-rec-jump" ></span></div>
 </div>
-<hr/>
+<div class="line"></div>
 <div class="item">
     <div>职位</div>
     <select id="orgPosition" onchange="changeChoice('orgPosition')">
+        <option value="" >请选择</option>
         <option value="店长">店长</option>
         <option value="销售主管">销售主管</option>
     </select>
-    <div class="select-placeholder" id="orgPosition_div">选择&nbsp;></div>
+    <div class="select-placeholder"><span  id="orgPosition_div">选择</span>&nbsp;<span class="icon-rec-jump" ></span></div>
 </div>
-<hr/>
+<div class="line"></div>
 <div class="item">
     <div>服务品牌</div>
     <select id="orgBrand" onchange="changeChoice('orgBrand')">
+        <option value="" >请选择</option>
     </select>
-    <div class="select-placeholder" id="orgBrand_div">选择&nbsp;></div>
+    <div class="select-placeholder" ><span id="orgBrand_div">选择</span>&nbsp;<span class="icon-rec-jump" ></span></div>
 </div>
-<hr id="area_hr" style="display: none"/>
+<div class="line" id="area_hr" style="display: none"></div>
 <div class="item" id="area_item" style="display: none" onclick="toAreaChoic()">
     <div>地区</div>
     <div class="item-area" id="orgArea">
-        选择&nbsp;>
+        选择&nbsp;<span class="icon-rec-jump" ></span>
     </div>
 </div>
-<hr id="store_hr" style="display: none"/>
+<div class="line" id="store_hr" style="display: none"></div>
 <div class="item" id="store_item" style="display: none">
     <div>门店</div>
     <select id="orgStore" onchange="changeChoice('orgStore')">
+        <option value="" >请选择</option>
     </select>
-    <div class="select-placeholder" id="orgStore_div">选择&nbsp;></div>
+    <div class="select-placeholder" ><span id="orgStore_div">选择</span>&nbsp;<span class="icon-rec-jump" ></span></div>
+</div>
 </div>
 <div class="save-btn" onclick="saveInfo()">保存</div>
 </body>

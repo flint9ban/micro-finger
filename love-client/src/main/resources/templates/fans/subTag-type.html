@@ -12,16 +12,9 @@
 <meta name="format-detection" content="telephone=no"/>
 <meta name="description" content=""/>
 <meta name="author" content=""/>
+	<link rel="stylesheet" type="text/css" href="../../static/css/icons.min.css"  th:href="@{/css/icons.min.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
-	<!--<script type="application/javascript" src="../../static/js/fans/templist.js"></script>-->
-  <!--	<script id="tmpl-tag-group" type="text/tmpl">
-	<div class="item" data-id={% id%} data-state={% state%} data-name={% name%}>
-		<div>{% name%}</div>
-			<div class="icon-select" style={%display%} id={% id%} >√</div>
-	</div>
-	<div class="line"></div>
-	</script>-->
 	<script type="text/javascript" src="../../static/js/fans/subTag-type.js"   th:src="@{/js/fans/subTag-type.js}"></script>
 <title>我要订阅</title>
 </head>
@@ -31,11 +24,11 @@
 	<div  th:each="tag:${tags}" >
 	<div class="item"  th:value="${tag.state}"  th:id="${tag.id}">
 		<div th:text="${tag.name}"></div>
-		<div class="icon-select"   ><span th:if="${tag.state eq 'select'}">√</span></div>
+		<div class="icon-select"   ><span th:if="${tag.state eq 'select'}"><img th:src="@{/img/select_confirm.png}" style="width:15px;height:15px;"/></span></div>
 	</div>
 	<div class="line"></div>
 	</div>
 </div>
-<div class="save-btn" onclick="getSelectValues()">保存</div>
+<div class="save-btn" onclick="getSelectValues()">确定</div>
 </body>
 </html>

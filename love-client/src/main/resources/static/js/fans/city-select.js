@@ -15,7 +15,8 @@ function getCityValue(){
     $('.item').each(function(index) {
         if($(this).attr('value')=="select"){
             sessionStorage.cityId=$(this).attr("id");
-            sessionStorage.cityName=$(this).find("div:first-child").html();
+          //  sessionStorage.cityName=$(this).find("div:first-child").html();
+            sessionStorage.orgArea= sessionStorage.provinceName + "-" + $(this).find("div:first-child").html();
             history.go(-2);
         }
     });

@@ -6,11 +6,13 @@
     justify-content: space-between;
     -webkit-box-pack: justify;
     position: relative;
-    padding:16px 10px;
+    padding:15px 10px;
     font-size:18px;
+    background: #ffffff;
 }
 body{
     color:#4d4d4d;
+    background:#ebebed;
 }
 select {
     position: absolute;
@@ -25,7 +27,7 @@ select {
 
 hr {
     border-color: #f1f0f6;
-    border-top: 1rem;
+    border-top: 1px;
 }
 
 .right_div {
@@ -35,13 +37,15 @@ hr {
     background:#ebebed;
     font-size:18px;
     padding:10px;;
+
 }
 .save-btn{
     background:#4570e6;
     color:#ffffff;
     font-size:18px;
-    padding:30px;
+    padding:20px;
     text-align:center;
+
 }
 input{
     font-size:18px;
@@ -64,4 +68,12 @@ input{
 }
 .show-area{
     display: block;
+}
+.line{
+    height:1px;
+    background:#c2c2c2;
+    margin-left: 10px;
+}
+.container{
+    background: #ffffff;
 }

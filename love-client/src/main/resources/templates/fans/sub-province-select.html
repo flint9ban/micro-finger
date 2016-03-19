@@ -12,6 +12,7 @@
 <meta name="format-detection" content="telephone=no"/>
 <meta name="description" content=""/>
 <meta name="author" content=""/>
+	<link rel="stylesheet" type="text/css" href="../../static/css/icons.min.css"  th:href="@{/css/icons.min.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
 	<script type="application/javascript" src="../../static/js/fans/sub-province-select.js"  th:src="@{/js/fans/sub-province-select.js}"></script>
@@ -23,7 +24,7 @@
 <div  th:each="region:${regions}" >
 	<div class="item" th:value="${region.regionCode}">
 		<div th:text="${region.name}"></div>
-		<div class="icon-select"  style="display: none;" >√</div>
+		<div  class="jump-icon">选择&nbsp;<span class="icon-rec-jump" ></span></div>
 	</div>
 	<div class="line"></div>
 </div>

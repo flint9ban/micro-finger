@@ -94,7 +94,7 @@ function editFansTag(){
         },
         dataType : 'json',
         success : function(data, textStatus, jqXHR) {
-           // alert("保存成功");
+            humane.info('订阅成功');
         }
     });
 

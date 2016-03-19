@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html>
+<html xmlns:th="http://www.springframework.org/schema/jdbc">
 <title>微手指</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -13,8 +13,11 @@
 <meta name="description" content=""/>
 <meta name="author" content=""/>
 <head>
+	<link rel="stylesheet" type="text/css" href="../../static/css/icons.min.css"  th:href="@{/css/icons.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/css/custom.css"  th:href="@{/css/custom.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag.css"  th:href="@{/css/fans/subTag.css}" />
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
+	<script type="application/javascript" src="../../static/js/humane.min.js"  th:src="@{/js/humane.min.js}"></script>
 <script type="text/javascript" src="../../static/js/fans/subTag.js"  th:src="@{/js/fans/subTag.js}"></script>
 </head>
 <body >
@@ -29,22 +32,22 @@
 	<div class="item" onclick="jumpChoosePg('dataType')">
 		<div>数据类型</div>
 		<div class="item-show" id="dataType"></div>
-		<div>&nbsp;></div>
+		<div>&nbsp;<span class="icon-rec-jump" ></span></div>
 	</div>
 	<div class="line"></div>
 	<div class="item" onclick="jumpChoosePg('dataBrand')">
 		<div>汽车品牌</div>
 		<div class="item-show" id="brand"></div>
-		<div>&nbsp;></div>
+		<div>&nbsp;<span class="icon-rec-jump" ></span></div>
 	</div>
 	<div class="line"></div>
 	<div class="item" onclick="jumpChoosePg('dataArea')">
 		<div>关注区域</div>
 		<div class="item-show" id="area"></div>
-		<div>&nbsp;></div>
+		<div>&nbsp;<span class="icon-rec-jump" ></span></div>
 	</div>
 	
 </div>
-<div class="save-btn" onclick="editFansTag()">保存</div>
+<div class="save-btn" onclick="editFansTag()" style="margin-bottom: 20px;">保存</div>
 </body>
 </html>

@@ -106,8 +106,8 @@ public class SubTagController {
     }
 
 
-    private JSONArray getRegion(String paraentCod) {
-        List<OrgRegion> regions = orgService.findByParentRegionCode(paraentCod);
+    private JSONArray getRegion(String parentCod) {
+        List<OrgRegion> regions = orgService.findByParentRegionCode(parentCod);
         return JSONArray.fromObject(regions);
     }
 
@@ -116,9 +116,9 @@ public class SubTagController {
     @RequestMapping(value = "/queryFanTags", method = RequestMethod.POST)
     @ResponseBody
     public JSONArray queryFanTags(String openId) {
+        JSONArray array = new JSONArray();
         FansInfo fansInfo = fansService.getFansInfoByOpenId(openId);
         List<Tag> tags = fansService.getTagsByOpenId(openId);
-        JSONArray array = new JSONArray();
         for (Tag tag : tags) {
             JSONObject json = new JSONObject();
             json.put("id", tag.getId());

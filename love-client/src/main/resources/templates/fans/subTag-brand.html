@@ -12,9 +12,13 @@
 <meta name="format-detection" content="telephone=no"/>
 <meta name="description" content=""/>
 <meta name="author" content=""/>
+	<link rel="stylesheet" type="text/css" href="../../static/css/icons.min.css"  th:href="@{/css/icons.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/css/custom.css"  th:href="@{/css/custom.css}"/>
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
+	<script type="application/javascript" src="../../static/js/humane.min.js"  th:src="@{/js/humane.min.js}"></script>
 	<script type="application/javascript" src="../../static/js/fans/subTag-brand.js"  th:src="@{/js/fans/subTag-brand.js}"></script>
+
 <title>我要订阅</title>
 </head>
 <body >
@@ -23,11 +27,11 @@
 	<div  th:each="tag:${tags}" >
 		<div class="item"  th:value="${tag.state}"  th:id="${tag.id}">
 			<div th:text="${tag.name}"></div>
-			<div class="icon-select"   ><span th:if="${tag.state eq 'select'}">√</span></div>
+			<div class="icon-select"   ><span th:if="${tag.state eq 'select'}"><img th:src="@{/img/select_confirm.png}" class="img-icon"/></span></div>
 		</div>
 		<div class="line"></div>
 	</div>
 </div>
-<div class="save-btn" onclick="getSelectValues()">保存</div>
+<div class="save-btn" onclick="getSelectValues()">确定</div>
 </body>
 </html>

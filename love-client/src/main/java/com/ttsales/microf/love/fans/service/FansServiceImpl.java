@@ -143,7 +143,9 @@ public class FansServiceImpl implements FansService {
     public List<Tag> getTagsByOpenId(String openId){
         FansInfo fansInfo = getFansInfoByOpenId(openId);
         if(fansInfo==null){
-            return null;
+            fansInfo=new FansInfo();
+            fansInfo.setOpenId(openId);
+            fansInfo=fansRepository.save(fansInfo);
         }
         return tagRepository.findByFansId(fansInfo.getId());
     }

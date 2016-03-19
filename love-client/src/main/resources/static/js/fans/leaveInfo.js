@@ -60,7 +60,7 @@ function getSessionData(){
         orgBrand: sessionStorage.orgBrand,
         orgPosition: sessionStorage.orgPosition,
         orgStore: sessionStorage.orgStore,
-        orgArea: sessionStorage.provinceName + "-" + sessionStorage.cityName,
+        orgArea: sessionStorage.orgArea,
         orgProvince: sessionStorage.provinceId,
         orgCity: sessionStorage.cityId
     };
@@ -68,10 +68,6 @@ function getSessionData(){
     setBransSet(brands);
     return data;
 
-}
-function getOrgArea() {
-    if (sessionStorage.provinceName && sessionStorage.cityName)
-        return sessionStorage.provinceName + "-" + sessionStorage.cityName;
 }
 function setBransSet(brands) {
     $('#orgBrand').html("");
@@ -83,6 +79,9 @@ function setBransSet(brands) {
 
 function setStoreSet(store) {
     $('#orgStore').html("");
+    if(!store){
+        return;
+    }
     for (var i = 0; i < store.length; i++) {
         var option = "<option value=\"" + store[i].storeName + "\">" + store[i].storeName + "</option>";
         $('#orgStore').append(option)
@@ -94,7 +93,7 @@ function saveInfo() {
         type: 'POST',
         url: '../leaveInfo/editFanInfo.do',
         data: {
-            'openId': "123",
+            'openId': getParamOfUrl('openId'),
             'name': $("#name").val(),
             'mobile': $("#mobile").val(),
             'orgType': $("#orgType").val(),
@@ -108,8 +107,10 @@ function saveInfo() {
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
             if (data.errMsg) {
-                alert(data.errMsg)
+                humane.info(data.errMsg);
+                return;
             }
+            humane.info('保存成功');
         }
     });
 }
@@ -163,6 +164,10 @@ function hideItems() {
 function showText(item) {
     var div = $('#' + item + '_div');
     var select = $('#' + item);
+    if(!select.val()||select.val()==""){
+        div.css('color', '#a1a1a1').html("选择");
+        return;
+    }
     div.css('color', '#4d4d4d').html(select.find("option:selected").text());
 }
 function changeChoice(item) {
@@ -182,6 +187,9 @@ function toAreaChoic() {
     sessionStorage.orgBrand = $("#orgBrand").val();
     sessionStorage.orgPosition = $("#orgPosition").val();
     sessionStorage.orgStore = $("#orgStore").val();
+    sessionStorage.orgArea=$("#orgArea").html();
+    sessionStorage.orgProvince=$("#orgProvince").val();
+    sessionStorage.orgCity=$("#orgCity").val();
     location.href = "linkPage.do?url=fans/province-select&type=province";
 }
 
