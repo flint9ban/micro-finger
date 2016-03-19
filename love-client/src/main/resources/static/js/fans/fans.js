@@ -1,5 +1,6 @@
 $(function(){
     initQueryParams();
+    initArticles();
 });
 
 function initQueryParams(){
@@ -48,6 +49,19 @@ function hideArea(){
     $('#province_span').hide();
     $('#city_span').hide();
     $('#store_span').hide();
+}
+
+function initArticles(){
+    $('#articleTb').datagrid({
+        fitColumns:true,
+        fitColumns:true,
+        pagination:true,
+        url:"getArticles.do",
+        singleSelect:true,
+        pageNumber:1 ,
+        pageSize:10,
+        pageList:[10,20,30,40,50]
+    });
 }
 
 function queryFans(){
