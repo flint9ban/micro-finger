@@ -29,6 +29,8 @@ public interface TagRepository extends JpaRepository<Tag,Long>{
 
     List<Tag> findByNameContaining(String name);
 
+    List<Tag> findTop5ByNameContainingOrderByName(String name);
+
     @Query(value="select t.* from dat_tag t,dat_fans_tag r where t.id=r.tag_id and r.fans_id=?1",nativeQuery = true)
     List<Tag> findByFansId(Long fansId);
 

@@ -18,12 +18,15 @@
 <body>
 <div class="easyui-layout" fit="true">
     <div data-options="region:'south',split:true" style="height: 50px;"></div>
+    <div th:fragment="menu" data-options="region:'west',split:true" title="导航" style="width: 175px;">
+        <ul>
+            <li style="list-style-type:none;"><a href="../tag/tag.html" th:href="@{/tag/init}" class="easyui-linkbutton" data-options="plain:true">兴趣点管理</a></li>
+            <li style="list-style-type:none;"><a href="../article/article.html" th:href="@{/article/init}" class="easyui-linkbutton" data-options="plain:true">推送管理</a></li>
+            <li style="list-style-type:none;"><a href="../fans/fans.html" th:href="@{/fans/init}" class="easyui-linkbutton" data-options="plain:true">粉丝管理</a></li>
+        </ul>
+    </div>
     <div data-options="region:'center'">
-        <div  th:fragment="menu" class="easyui-panel" style="padding:5px;margin-bottom: 20px">
-            <a href="../tag/tag.html" th:href="@{/tag/init}" class="easyui-linkbutton" data-options="plain:true">兴趣点管理</a>
-            <a href="../article/article.html" th:href="@{/article/init}" class="easyui-linkbutton" data-options="plain:true">推送管理</a>
-            <a href="../fans/fans.html" th:href="@{/fans/init}" class="easyui-linkbutton" data-options="plain:true">粉丝管理</a>
-        </div>
+
     </div>
 </div>
 </body>

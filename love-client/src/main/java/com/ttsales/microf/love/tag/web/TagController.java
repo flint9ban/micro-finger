@@ -1,6 +1,7 @@
 package com.ttsales.microf.love.tag.web;
 
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by liyi on 2016/3/7.
@@ -40,6 +42,7 @@ public class TagController {
         if(tagService.isContainerExist(container)){
             json.put("error","类型已存在！");
         }else{
+            container.setContainerType(ContainerType.DEFINED);
             tagService.createContainer(container);
         }
         return json;
@@ -48,7 +51,8 @@ public class TagController {
     @RequestMapping(value = "/find-type-name",method = RequestMethod.POST)
     @ResponseBody
     public List<JSONObject> findTypeByName(String name){
-        return tagService.findContainerByName("%"+name+"%").stream()
+        List<Container> containers = tagService.findContainerLimit5ByName("%"+name+"%", ContainerType.DEFINED);
+        return containers.stream()
                 .map(this::put2Json)
                 .collect(Collectors.toList());
     }
@@ -62,24 +66,41 @@ public class TagController {
 
     
     //// TODO: 2016/3/15 fenye
-    @RequestMapping(value = "/query",method = RequestMethod.GET)
+    @RequestMapping(value = "/query")
     @ResponseBody
-    public List<JSONObject> query(String tagName,String typeIds){
+    public JSONObject query(Integer page,Integer rows,String tagName,String typeIds){
+        int startRow = 0;
+        int endRow = 0;
+        if(page==null||rows==null){
+            startRow = 0;
+            endRow = 10;
+        }else {
+            startRow = (page-1)*rows;
+            endRow = startRow+rows;
+        }
         List<Long> ids = getTypeIds(typeIds);
-        return tagService.queryTags(tagName,ids).stream().map(this::getTagWithType)
-                .collect(Collectors.toList());
+        List<Tag> tags = tagService.queryTags(tagName,ids);
+        int count = tags.size();
+        if(endRow>count){
+            endRow = count;
+        }
+        List<JSONObject> content = tags.subList(startRow,endRow).stream().map(this::getTagWithType).collect(Collectors.toList());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("total",count);
+        jsonObject.put("rows",content);
+        return jsonObject;
     }
 
     private JSONObject getTagWithType(Tag tag){
-        String[] types = tagService.getTagContainerByTagId(tag.getId()).stream().map(container -> {
+        String[] types = tagService.getTagContainerByTagId(tag.getId(),ContainerType.DEFINED).stream().map(container -> {
                                             return new String[]{container.getId().toString(),container.getName()};})
                 .reduce(
-                        (prePair,pair) -> {
+                        new String[]{"",""},(prePair,pair) -> {
                             prePair[0]+=pair[0]+",";
                             prePair[1]+=pair[1]+",";
                             return  prePair;
                         }
-                ).get();
+                );
         JSONObject json = new JSONObject();
         json.put("id",tag.getId());
         json.put("name",tag.getName());
@@ -151,7 +172,35 @@ public class TagController {
     }
 
 
-
-
+    public static void main(String[] args) {
+        List<String[]> list = new ArrayList<String[]>();
+        IntStream.range(0,1).forEach(i->{
+                String[] s = new String[]{"key"+i,"value"+i};
+            list.add(s);
+        });
+        String[] types =list.stream().reduce(
+                new String[]{"",""},(prePair,pair) -> {
+                    prePair[0]+=pair[0]+",";
+                    prePair[1]+=pair[1]+",";
+                    return  prePair;
+                }
+        );
+        System.out.println(types[0]+"="+types[1]);
+        String typeIds = types[0];
+        String typeNames = types[1];
+        if(types!=null&&types.length==2){
+            String typeIds1 = types[0];
+            String typeNames1= types[1];
+            if (typeIds1 != null&&typeIds1.endsWith(",")) {
+                typeIds = typeIds1.substring(0,typeIds1.length()-1);
+                typeNames = typeNames1.substring(0,typeNames1.length()-1);
+            }else if(typeIds!=null){
+                typeIds = typeIds1;
+                typeNames =typeNames1;
+            }
+        }
+        System.out.println(typeIds);
+        System.out.println(typeNames);
+    }
 }
 

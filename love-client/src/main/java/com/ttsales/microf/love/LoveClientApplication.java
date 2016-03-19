@@ -14,7 +14,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +32,7 @@ public class LoveClientApplication {
 	}
 
 }
+
 
 //@Component
 class DummyAR implements ApplicationRunner {

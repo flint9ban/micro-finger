@@ -25,10 +25,15 @@ public interface ContainerRepository extends JpaRepository<Container,Long>{
     Container findByName(String name);
 
     @RestResource(path = "find-name-like")
-    List<Container> findByNameContaining(String name);
+    List<Container> findByNameContainingAndContainerType(String name,ContainerType containerType);
 
     @Query(value = "select c.* from dat_tag_container c join  dat_tag_container_ref t on c.id=t.container_id where t.tag_id=?1",nativeQuery = true)
     List<Container> findAllByTagId(Long tagId);
 
+    @Query(value = "select c.* from dat_tag_container c join  dat_tag_container_ref t on c.id=t.container_id where t.tag_id=?1 and c.container_type=?2",nativeQuery = true)
+    List<Container> findAllByTagIdAndContainerType(Long tagId,Integer containerType);
+
     List<Container> findAllByContainerType(ContainerType containerType);
+
+    List<Container> findTop5ByNameContaining(String name);
 }

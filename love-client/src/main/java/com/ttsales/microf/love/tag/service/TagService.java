@@ -2,6 +2,7 @@ package com.ttsales.microf.love.tag.service;
 
 
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.util.WXApiException;
@@ -20,7 +21,11 @@ public interface TagService {
 
     List<Container> getTagContainerByTagId(Long tagId);
 
-    List<Container> findContainerByName(String name);
+    List<Container> getTagContainerByTagId(Long tagId,ContainerType containerType);
+
+    List<Container> findContainerByName(String name, ContainerType containerType);
+
+    List<Container> findContainerLimit5ByName(String name, ContainerType containerType);
 
     List<Container> findCommonContainer();
 
@@ -46,5 +51,5 @@ public interface TagService {
 
     Tag getTag(Long tagId);
 
-
+    List<Tag> queryTagLimit5ByNameLike(String name);
 }

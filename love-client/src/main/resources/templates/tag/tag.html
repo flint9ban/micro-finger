@@ -32,18 +32,12 @@
 
 
     <div data-options="region:'south',split:true" style="height: 50px;"></div>
+    <div th:replace="common/fragment::menu"></div>
 
     <div data-options="region:'center'">
-        <!--<div class="easyui-panel" style="padding:5px;margin-bottom: 20px">-->
-            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">兴趣点管理</a>-->
-            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">推送管理</a>-->
-            <!--<a href="#" class="easyui-linkbutton" data-options="plain:true">粉丝管理</a>-->
-        <!--</div>-->
-
-        <div th:replace="common/fragment::menu"></div>
 
         <table id="tagTable" title="兴趣点管理" class="easyui-datagrid"
-               toolbar="#toolbar" pagination="true"
+               toolbar="#toolbar" pagination="true" url ="query"
                rownumbers="true" fitColumns="true" singleSelect="true" fit="true"
                data-options="onClickCell:onClickCell">
             <thead>
