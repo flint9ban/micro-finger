@@ -59,31 +59,42 @@ public class FansController {
     }
 
 
-
-
-    @RequestMapping(value = "/getRegions", method = RequestMethod.POST)
+    @RequestMapping(value = "/findTagByName", method = RequestMethod.POST)
     @ResponseBody
-    public JSONArray getRegions(String parentCode) {
-        return getRegion(parentCode);
+    public  List<JSONObject>  getRegions(String name) {
+        return tagService.queryTags(name,null).stream()
+                .map(tag->{
+                    JSONObject json = new JSONObject();
+                    json.put("text",tag.getName());
+                    json.put("value",tag.getId());
+                    return json;
+                }).collect(Collectors.toList());
     }
 
-    private JSONArray getRegion(String paraentCod) {
-        List<OrgRegion> regions = orgService.findByParentRegionCode(paraentCod);
-        return JSONArray.fromObject(regions);
-    }
 
-
-    @RequestMapping(value = "/getStores", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONArray getStores(String city) {
-        JSONArray jsonArray = new JSONArray();
-        if (StringUtils.isEmpty(city)) {
-            return jsonArray;
-        }
-        List<OrgStore> orgStores = orgService.findByCity(city);
-        jsonArray = JSONArray.fromObject(orgStores);
-        return jsonArray;
-    }
+//    @RequestMapping(value = "/getRegions", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JSONArray getRegions(String parentCode) {
+//        return getRegion(parentCode);
+//    }
+//
+//    private JSONArray getRegion(String paraentCod) {
+//        List<OrgRegion> regions = orgService.findByParentRegionCode(paraentCod);
+//        return JSONArray.fromObject(regions);
+//    }
+//
+//
+//    @RequestMapping(value = "/getStores", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JSONArray getStores(String city) {
+//        JSONArray jsonArray = new JSONArray();
+//        if (StringUtils.isEmpty(city)) {
+//            return jsonArray;
+//        }
+//        List<OrgStore> orgStores = orgService.findByCity(city);
+//        jsonArray = JSONArray.fromObject(orgStores);
+//        return jsonArray;
+//    }
 
 
     @RequestMapping(value = "/getFansQueryParms", method = RequestMethod.POST)

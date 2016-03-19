@@ -7,6 +7,7 @@ import com.ttsales.microf.love.fans.domain.FansInfoTag;
 import com.ttsales.microf.love.fans.domain.FansTagView;
 import com.ttsales.microf.love.fans.repository.FansRepository;
 import com.ttsales.microf.love.fans.repository.FansTagRepository;
+import com.ttsales.microf.love.fans.repository.FansTagViewRepository;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.fans.service.FansService;
@@ -45,7 +46,8 @@ public class FansServiceImpl implements FansService {
     private ContainerRepository containerRepository;
     @Autowired
     private TagContainerRepository tagContainerRepository;
-
+    @Autowired
+    private FansTagViewRepository   fansTagViewRepository;
 
     @Override
     public void createFansTag(String openId, List<Long> tagIds) {
@@ -169,7 +171,7 @@ public class FansServiceImpl implements FansService {
                 StringUtils.isEmpty(fansInfo.getOrgProvince()) &&
                 StringUtils.isEmpty(fansInfo.getOrgCity()) &&
                 StringUtils.isEmpty(fansInfo.getOrgStore()) &&
-                tagIdList == null) {
+                tagIdList.size()==0) {
             return fansRepository.findAll();
 
         }
@@ -177,7 +179,7 @@ public class FansServiceImpl implements FansService {
 
         return fansTagViews.stream().map(this::queryFansByView)
                 .flatMap(fansIds->fansIds.stream())
-                .collect(Collectors.groupingBy(FansInfo::getId,Collectors.summingInt(p->1)))
+                .collect(Collectors.groupingBy(FansTagView::getFansId,Collectors.summingInt(p->1)))
                 .entrySet().stream().filter(entry->entry.getValue().equals(fansTagViews.size()))
                 .map(entry->entry.getKey())
                 .map(this::getFansInfoByFansId)
@@ -187,6 +189,19 @@ public class FansServiceImpl implements FansService {
 
     private List<FansTagView> createParamViews(FansInfo fansInfo ,List<Long> tagIds){
         List<FansTagView> fansTagViews=new ArrayList<FansTagView>();
+        if(tagIds.size()==0){
+            FansTagView fansTagView=new FansTagView();
+            fansTagView.setName(fansInfo.getName());
+            fansTagView.setOrgType(fansInfo.getOrgType());
+            fansTagView.setOrgBrand(fansInfo.getOrgBrand());
+            fansTagView.setMobile(fansInfo.getMobile());
+            fansTagView.setOrgPosition(fansInfo.getOrgPosition());
+            fansTagView.setOrgProvince(fansInfo.getOrgProvince());
+            fansTagView.setOrgCity(fansInfo.getOrgCity());
+            fansTagView.setOrgStore(fansInfo.getOrgStore());
+            fansTagViews.add(fansTagView);
+            return fansTagViews;
+        }
         for (Long tagId:tagIds){
             FansTagView fansTagView=new FansTagView();
             fansTagView.setName(fansInfo.getName());
@@ -202,8 +217,9 @@ public class FansServiceImpl implements FansService {
         }
         return fansTagViews;
     }
-    private List<FansInfo> queryFansByView(FansTagView fansTagView){
-        return fansRepository.findAll(SpecificationBuilder.build(fansTagView));
+    private List<FansTagView> queryFansByView(FansTagView fansTagView){
+        List<FansTagView>  fansTagViews=fansTagViewRepository.findAll(SpecificationBuilder.build(fansTagView));
+        return fansTagViews;
     }
 
     public List<Tag> findbyContainerId(Long containerId){
@@ -212,22 +228,5 @@ public class FansServiceImpl implements FansService {
 
     public List<Tag> findCityTags(String parentRegionCode){
         return tagRepository.findCityTags(parentRegionCode);
-    }
-
-    public void initTestData(){
-        FansInfo currFansInfo=new FansInfo();
-        currFansInfo.setOpenId("123");
-        currFansInfo.setName("张三");
-        currFansInfo.setMobile("18357194946");
-        currFansInfo.setOrgType("4S店");
-        currFansInfo.setOrgBrand("东风日产");
-        currFansInfo.setOrgArea("浙江-杭州");
-        currFansInfo.setOrgProvince("1001");
-        currFansInfo.setOrgCity("100121");
-        currFansInfo.setOrgPosition("店长");
-        currFansInfo.setOrgStore("杭州奥迪4S店");
-        currFansInfo=fansRepository.save(currFansInfo);
-
-
     }
 }

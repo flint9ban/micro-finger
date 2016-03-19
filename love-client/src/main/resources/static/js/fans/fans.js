@@ -3,7 +3,7 @@ $(function(){
 });
 
 function initQueryParams(){
-    $("#search").autocomplete("../tag/findTagByName");
+    $("#search").autocomplete("findTagByName");
     $('#orgType').combobox({
         onSelect: function (rec) {
            if(rec.value=="4S店"){
@@ -70,7 +70,7 @@ function  showAticleDlg(){
 }
 
 function getTagIds(){
-    var tags = $("#search-text").tagGroup('getTags');
+    var tags = $("#search").tagGroup('getTags');
     var typeIds = "";
     if(tags.length>0){
         for(var i=0;i<tags.length;i++){

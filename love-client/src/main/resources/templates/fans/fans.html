@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <title>粉丝管理</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
@@ -44,7 +44,9 @@
 
 </head>
 <body>
+<div th:replace="common/fragment::menu"></div>
 <div class="easyui-layout" fit="true">
+
     <div data-options="region:'south',split:true" style="height: 50px;"></div>
     <div data-options="region:'center'">
         <table id="fansTable" title="粉丝管理" class="easyui-datagrid"
@@ -58,6 +60,7 @@
                 <th field="orgType" width="25" align="center">类型</th>
                 <th field="orgBrand" width="25" align="center">品牌</th>
                 <th field="orgArea" width="25" align="center">地区</th>
+                <th field="orgStore" width="25" align="center">职位</th>
                 <th field="orgPosition" width="25" align="center">职位</th>
                 <th field="tags" width="25" align="center">兴趣点</th>
             </tr>

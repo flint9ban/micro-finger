@@ -18,6 +18,9 @@ public class FansTagView {
     @Id
     private String id;
 
+    @Column(name = "fans_id")
+    private Long fansId;
+
     private String name;
 
     private String mobile;

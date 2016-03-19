@@ -27,7 +27,5 @@ public interface FansService {
 
     List<Tag> findbyContainerId(Long containerId);
 
-    void initTestData();
-
     List<Tag> findCityTags(String parentRegionCode);
 }

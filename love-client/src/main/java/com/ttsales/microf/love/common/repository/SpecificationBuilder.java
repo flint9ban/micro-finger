@@ -40,7 +40,7 @@ public class SpecificationBuilder {
 			field.setAccessible(true);
 			Object value = field.get(params);
 			String name =  field.getName();
-			if(value==null){
+			if(value==null||"".equals(value)){
 				return null;
 			}
 				if(name.equals("mobile")||name.equals("name")){

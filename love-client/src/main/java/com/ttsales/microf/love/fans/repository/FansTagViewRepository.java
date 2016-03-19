@@ -1,6 +1,7 @@
 package com.ttsales.microf.love.fans.repository;
 
 import com.ttsales.microf.love.fans.domain.FansInfo;
+import com.ttsales.microf.love.fans.domain.FansInfoTag;
 import com.ttsales.microf.love.fans.domain.FansTagView;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,12 +14,10 @@ import java.util.List;
 /**
  * Created by liyi on 16/3/6.
  */
-//
 @RepositoryRestResource
-public interface FansRepository extends JpaRepository<FansInfo,Long> {
+public interface FansTagViewRepository extends JpaRepository< FansTagView,String>{
 
-    @RestResource(path = "find-openId")
-    FansInfo findByOpenId(@Param("openId") String openId);
+    List<FansTagView> findAll(Specification<FansTagView> spec);
 
 
 }
