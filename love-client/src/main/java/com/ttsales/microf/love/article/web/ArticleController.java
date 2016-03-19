@@ -94,6 +94,7 @@ public class ArticleController {
         }
         Sort sort = new Sort(Sort.Direction.DESC,"reloadTime");
         PageRequest pageRequest = new PageRequest(page-1,rows,sort);
+
         Page<Article> articles = articleService.queryArticle(pageRequest,title,startDate,endDate);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("total",articles.getTotalElements());
