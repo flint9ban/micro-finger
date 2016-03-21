@@ -21,13 +21,5 @@ public class LongDateTimeAttrConvertor implements AttributeConverter<LocalDateTi
         return LocalDateTimeUtil.convertToDateTime(aLong);
     }
 
-    public static void main(String[] args) {
-        Long value = System.currentTimeMillis();
-        Instant instant = Instant.ofEpochMilli(value);
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant,ZoneId.systemDefault());
-        System.out.println("args = [" +  value+ "]");
-        System.out.println("args = [" +  dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()+ "]");
-        System.out.println(new Date(value));
-        System.out.println(dateTime);
-    }
+
 }

@@ -173,35 +173,5 @@ public class TagController {
     }
 
 
-    public static void main(String[] args) {
-        List<String[]> list = new ArrayList<String[]>();
-        IntStream.range(0,1).forEach(i->{
-                String[] s = new String[]{"key"+i,"value"+i};
-            list.add(s);
-        });
-        String[] types =list.stream().reduce(
-                new String[]{"",""},(prePair,pair) -> {
-                    prePair[0]+=pair[0]+",";
-                    prePair[1]+=pair[1]+",";
-                    return  prePair;
-                }
-        );
-        System.out.println(types[0]+"="+types[1]);
-        String typeIds = types[0];
-        String typeNames = types[1];
-        if(types!=null&&types.length==2){
-            String typeIds1 = types[0];
-            String typeNames1= types[1];
-            if (typeIds1 != null&&typeIds1.endsWith(",")) {
-                typeIds = typeIds1.substring(0,typeIds1.length()-1);
-                typeNames = typeNames1.substring(0,typeNames1.length()-1);
-            }else if(typeIds!=null){
-                typeIds = typeIds1;
-                typeNames =typeNames1;
-            }
-        }
-        System.out.println(typeIds);
-        System.out.println(typeNames);
-    }
 }
 

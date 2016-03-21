@@ -198,8 +198,5 @@ public class ArticleController {
         return new JSONObject();
     }
 
-    public static void main(String[] args) {
-        System.out.println(ContainerType.COMMON.ordinal());
-    }
 
 }

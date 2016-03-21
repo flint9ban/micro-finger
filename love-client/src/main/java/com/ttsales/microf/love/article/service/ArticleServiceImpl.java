@@ -140,14 +140,6 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
-    public static void main(String[] args) {
-        LocalDateTime date = LocalDateTime.now();
-        date = clearTime(date);
-        System.out.println(date);
-        System.out.println(System.currentTimeMillis());
-        System.out.println(date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-
-    }
 
     @Override
     public void sendArticleByTags(Long articleId,String mediaId,List<Long> tags){
