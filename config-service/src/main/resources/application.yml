@@ -1,7 +1,7 @@
 spring:
   cloud:
     config:
-      label: devlop
+      label: master
       server:
         #native:
          # search-locations: file:E:\2016\workspace\micro-finger-config
