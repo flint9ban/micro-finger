@@ -24,10 +24,50 @@ function toggleState(obj){
     var itemValue=obj.attr("value");
     if(itemValue=='select'){
         hideIcon(obj);
+        deleteTags(obj)
     }else{
         showIcon(obj);
+        appendTags(obj);
     }
 }
+function appendTags(obj){
+   // var text=obj.find("div:first-child").html();
+   // var value=obj.attr("id");
+   //$("#taggroup").tagGroup('appendTag', {
+   //     value: value,
+   //     text: text
+   // });
+    $("#taggroup").html("");
+    $("#taggroup").tagGroup({
+        tags:getSelectTags()
+    });
+}
+function deleteTags(obj){
+    var text=obj.find("div:first-child").html();
+    var value=obj.attr("id");
+    $("#taggroup").html("");
+
+    $("#taggroup").tagGroup({
+        tags:getSelectTags()
+    });
+
+}
+
+function getSelectTags(){
+    var items=[];
+    $('.item').each(function(index) {
+        if($(this).attr('value')=="select"){
+            var  name=$(this).find("div:first-child").html();
+            var selectItem={
+                value:$(this).attr('id'),
+                text:name
+            };
+            items.push(selectItem);
+        }
+    });
+    return items;
+}
+
 function  showIcon(obj){
     obj.attr('value','select');
     obj.find(".icon-select").html("<img src=\"../img/select_confirm.png\" class=\"img-icon\"/>");
