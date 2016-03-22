@@ -78,8 +78,5 @@ public class SpecificationBuilder {
 		return Date.from(truncateDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getStartDate(new Date())); 
-	}
 
 }

@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.tag.repository;
 
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,11 +24,16 @@ public interface TagRepository extends JpaRepository<Tag,Long>{
     @Query(value="select t.* from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id=?1 and t.name like ?2",nativeQuery = true)
     List<Tag> findByContainerIdAndName(Long containerId,String name);
 
+    @Query(value="select t.* from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id in (?1) and t.name like ?2",nativeQuery = true)
+    List<Tag> findByContainerIdsAndName(String containerIds,String name);
 
     @Query(value="select t.* from dat_tag t,dat_tag_container_ref r where t.id=r.tag_id and r.container_id=?1",nativeQuery = true)
     List<Tag> findByContainerId(Long containerId);
 
     List<Tag> findByNameContaining(String name);
+
+    @Query(value="select t.* from dat_tag t,dat_tag_container_ref r,dat_tag_container c where t.id=r.tag_id and r.container_id=c.id and t.name like ?1 and c.container_type = ?2",nativeQuery = true)
+    List<Tag> findAllByNameContainingType(String name, Integer containerType);
 
     List<Tag> findTop5ByNameContainingOrderByName(String name);
 

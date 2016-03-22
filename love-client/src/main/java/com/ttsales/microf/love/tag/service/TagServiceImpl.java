@@ -136,16 +136,14 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> queryTags(String tagName, List<Long> containerIds) {
         if (containerIds != null&&containerIds.size()>0) {
-            return containerIds.stream().map(containerId->queryTags(tagName,containerId))
-                    .flatMap(ids->ids.stream())
-                    .collect(Collectors.groupingBy(Tag::getId))
-                    .entrySet().stream().filter(entry->entry.getValue().size()==containerIds.size())
-                    .map(entry->entry.getValue().get(0))
-                    .collect(Collectors.toList());
+            String containerIdsString  = containerIds.stream().map(containerId->containerId.toString())
+                    .reduce("",
+                            (preContainerId,containerId)->{ preContainerId+=containerId+",";
+                                                    return preContainerId;});
+            return tagRepository.findByContainerIdsAndName(containerIdsString.substring(0,containerIdsString.length()-1), "%"+tagName+"%");
+
         }else{
-             return queryTagByNameLike(tagName).stream().filter(tag->{
-                 return containerRepository.findAllByTagIdAndContainerType(tag.getId(),ContainerType.DEFINED.ordinal()).size()>0;
-             }).collect(Collectors.toList());
+             return queryTagByNameLike(tagName);
         }
     }
 
@@ -172,7 +170,7 @@ public class TagServiceImpl implements TagService {
 
 
     private List<Tag> queryTagByNameLike(String tagName){
-        return tagRepository.findByNameContaining("%"+tagName+"%");
+        return tagRepository.findAllByNameContainingType("%"+tagName+"%",ContainerType.DEFINED.ordinal());
     }
 
     @Override
