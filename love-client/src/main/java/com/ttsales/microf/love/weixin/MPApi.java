@@ -25,6 +25,14 @@ public class MPApi {
     @Autowired
     private MPApiConfig mpApiConfig;
 
+    public void sendTemplateMessage(String openId,String tempateId,String url,String data)  throws HttpException,WXApiException {
+        HttpUtil util = new HttpUtil();
+        String requestBody = "{\"touser\":\"%s\",\"template_id\":\"%s\",\"url\":\"%s\",\"data\":%s}";
+        String requestBodyWithParam = String.format(requestBody, openId,tempateId,url,data);
+        String result = util.post(mpApiConfig.getSendTemplateMessageApi(),requestBodyWithParam);
+        validateWeixinResult(JSONObject.fromObject(result));
+    }
+
     public void sendCustomerMessage(String requestBody) throws HttpException,WXApiException {
         HttpUtil util = new HttpUtil();
         String result = util.post(mpApiConfig.getSendCustomerMessageApi(),requestBody);

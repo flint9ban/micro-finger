@@ -20,10 +20,17 @@ public class MPApiConfig {
     @Value("${app.url}")
     private String appUrl;
 
+    @Value("${wx.defaultTmpMsg}")
+    private String defaultTmpMsg;
+
     public static  final String QRCODE_SHOW_URL = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
 
     public String getSendCustomerMessageApi(){
         return apiUrl+"/api/message-custom-send";
+    }
+
+    public String getSendTemplateMessageApi(){
+        return apiUrl+"/api/message-template-send";
     }
 
     public String getMaterialApi(){
@@ -46,5 +53,9 @@ public class MPApiConfig {
 
     public String getAppUrl() {
         return appUrl;
+    }
+
+    public String getDefaultTmpMsg() {
+        return defaultTmpMsg;
     }
 }

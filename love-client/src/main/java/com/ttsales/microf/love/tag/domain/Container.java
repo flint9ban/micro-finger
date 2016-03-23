@@ -15,6 +15,8 @@ import javax.persistence.Table;
 @Table(name="dat_tag_container")
 public class Container extends SuperEntity{
 
+    public static final Long SUBSCRIBE_CONTAINER_DATA_ID=5l;
+
     @Column
     private String name;
 

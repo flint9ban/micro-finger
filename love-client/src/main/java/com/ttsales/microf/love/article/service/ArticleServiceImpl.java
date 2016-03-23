@@ -2,20 +2,26 @@ package com.ttsales.microf.love.article.service;
 
 
 import com.ttsales.microf.love.article.domain.Article;
+import com.ttsales.microf.love.article.domain.ArticleItem;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.article.domain.SendArticleLog;
+import com.ttsales.microf.love.article.repository.ArticleItemRepository;
 import com.ttsales.microf.love.article.repository.ArticleRepository;
 import com.ttsales.microf.love.article.repository.ArticleTagRepository;
 import com.ttsales.microf.love.article.repository.SendArticleLogRepository;
-import com.ttsales.microf.love.domainUtil.LocalDateTimeConvertor;
 import com.ttsales.microf.love.domainUtil.LocalDateTimeUtil;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.domain.QrCodeType;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
+import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.Tag;
+import com.ttsales.microf.love.tag.service.TagService;
 import com.ttsales.microf.love.util.WXApiException;
 import com.ttsales.microf.love.weixin.MPApi;
+import com.ttsales.microf.love.weixin.MPApiConfig;
 import com.ttsales.microf.love.weixin.dto.NewsMaterial;
+import net.sf.json.JSONObject;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +35,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,10 +54,16 @@ public class ArticleServiceImpl implements ArticleService {
     private MPApi mpApi;
 
     @Autowired
+    private MPApiConfig mpApiConfig;
+
+    @Autowired
     private QrcodeService qrcodeService;
 
     @Autowired
     private FansService fansService;
+
+    @Autowired
+    private TagService tagService;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -63,7 +74,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private SendArticleLogRepository sendArticleLogRepository;
 
+    @Autowired
+    private ArticleItemRepository articleItemRepository;
+
     @Override
+    @Transactional
     public void sychnoizeArticle() throws WXApiException, HttpException {
         List<NewsMaterial> materials = mpApi.getNewsMaterials();
         materials.forEach(material -> mergeArticle2DB(material));
@@ -128,6 +143,8 @@ public class ArticleServiceImpl implements ArticleService {
             article.setContent(material.getFirstContent());
             article.setReloadTime(LocalDateTimeUtil.convertToDateTime(material.getUpdateTime()*1000));
             putArticle(article);
+            articleItemRepository.deleteByArticleId(article.getId());
+            addArticleItems(material,article.getId());
         }
     }
 
@@ -137,7 +154,22 @@ public class ArticleServiceImpl implements ArticleService {
         article.setContent(material.getFirstContent());
         article.setMediaId(material.getMediaId());
         article.setReloadTime(LocalDateTimeUtil.convertToDateTime(material.getUpdateTime()*1000));
-        articleRepository.save(article);
+
+        article = articleRepository.save(article);
+        Long articleId = article.getId();
+        addArticleItems(material,articleId);
+    }
+
+    private void addArticleItems(NewsMaterial material,Long articleId){
+        material.getItems().stream().forEach(materialItem -> {
+            ArticleItem item = new ArticleItem();
+            item.setArticleId(articleId);
+            item.setContent(materialItem.getContent());
+            item.setUrl(materialItem.getContentSourceUrl());
+            item.setItemIndex(materialItem.getItemIndex());
+            item.setTitle(materialItem.getTitle());
+            articleItemRepository.save(item);
+        });
     }
 
 
@@ -150,10 +182,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Transactional
     public void sendArticle(Long articleId,String mediaId,List<String> openIds){
+        LocalDate localDate = LocalDate.now();
+        String currentDate = localDate.getYear()+"-"+localDate.getMonthValue()+"-"+localDate.getDayOfMonth();
+        Article article = getArticle(articleId);
         openIds.stream()
                 .filter(openId->!isArticleSended(mediaId,openId))
-                .forEach(openId->sendArticle(mediaId,openId));
-        Article article = getArticle(articleId);
+                .forEach(openId->sendArticle(article,openId,currentDate));
+
         article.setSendTime(LocalDateTime.now());
         putArticle(article);
     }
@@ -207,20 +242,72 @@ public class ArticleServiceImpl implements ArticleService {
         return log!=null;
     }
 
-    private void sendArticle(String mediaId,String openId){
+    private void sendArticle(Article article,String openId,String currentDate){
+        String mediaId = article.getMediaId();
         try{
             mpApi.sendMpnewsMessage(openId,mediaId);
-            SendArticleLog log
-                    = new SendArticleLog();
-            log.setMediaId(mediaId);
-            log.setOpenId(openId);
-            sendArticleLogRepository.save(log);
         }catch (Exception e){
-            logger.error("send article fail:"+e.getMessage());
+            logger.warn("send customer article fail:"+e.getMessage());
+            sendArticleByTmp(openId,currentDate,article);
         }
+        SendArticleLog log
+                = new SendArticleLog();
+        log.setMediaId(mediaId);
+        log.setOpenId(openId);
+        sendArticleLogRepository.save(log);
+    }
+
+    private void sendArticleByTmp(String openId,String currentDate,Article article){
+        List<ArticleItem> items = articleItemRepository.findAllByArticleIdOrderByItemIndex(article.getId());
+        List<Tag> tags = fansService.getTagsByOpenId(openId);
+
+        String tagNames = tags.stream().map(Tag::getName).reduce("",(preName,name)->preName+=name+"、");
+        if(tagNames.length()>0){
+            tagNames = tagNames.substring(0,tagNames.length()-1);
+        }
+        String dataType = tags.stream().filter(tag->{
+            List<Container> containers = tagService.getTagContainerByTagId(tag.getId());
+            return containers.stream().anyMatch(container -> container.getId().equals(Container.SUBSCRIBE_CONTAINER_DATA_ID));
+        }).map(container->container.getName()).findFirst().orElse("");
+        String contentName = tagNames;
+        items.stream().forEach(articleItem -> {
+            JSONObject data = getTmpData(articleItem,contentName,dataType,currentDate);
+            try {
+                mpApi.sendTemplateMessage(openId,mpApiConfig.getDefaultTmpMsg(),articleItem.getUrl(),data.toString());
+            } catch (Exception e) {
+                logger.error("send customer article fail:"+e.getMessage());
+            }
+        });
 
     }
+
+    private JSONObject getTmpData(ArticleItem articleItem,String tagNames,String dataType,String currentDate){
+
+        JSONObject first = setTmpItem(articleItem.getTitle());
+        JSONObject keyword1 = setTmpItem(dataType);
+        JSONObject keyword2 = setTmpItem(tagNames);
+        JSONObject keyword3 = setTmpItem(currentDate);
+        JSONObject remark = setTmpItem("查看具体数据内容！");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("first",first);
+        jsonObject.put("keyword1",keyword1);
+        jsonObject.put("keyword2",keyword2);
+        jsonObject.put("keyword3",keyword3);
+        jsonObject.put("remark",remark);
+        return jsonObject;
+    }
+
+    private JSONObject setTmpItem(String value){
+        JSONObject item = new JSONObject();
+        item.put("value",value);
+        item.put("color","#173177");
+        return item;
+    }
+
     public List<Article> getAllArricles(){
         return articleRepository.findAll();
     }
+
+
+
 }
