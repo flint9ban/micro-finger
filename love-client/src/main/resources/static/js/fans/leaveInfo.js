@@ -42,7 +42,7 @@ function  initSessionData(){
         type: 'POST',
         url: '../leaveInfo/getStores.do',
         data: {
-            'city': sessionStorage.cityId
+            'city': sessionStorage.cityCode
         },
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
