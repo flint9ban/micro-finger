@@ -15,6 +15,8 @@ import javax.persistence.Table;
 @Table(name = "dat_keyword")
 public class Keyword extends SuperEntity {
 
+    public static final Integer SUBSEND_Y=1;
+
     private String name;
 
     private String declare;

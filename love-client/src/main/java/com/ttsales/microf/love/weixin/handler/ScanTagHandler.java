@@ -52,7 +52,6 @@ public class ScanTagHandler implements WXCallbackHandler {
         if(eventKey.startsWith("qrscene_")){
             eventKey = eventKey.substring("qrscene_".length());
         }
-        System.out.println(eventKey+"--"+ticket+"--"+openId);
         QrCode qrcode = qrcodeService.getQrcode(eventKey);
         if (qrcode != null) {
             Article article = articleService.getArticleByTicket(ticket);
