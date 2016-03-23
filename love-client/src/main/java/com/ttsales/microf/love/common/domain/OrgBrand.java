@@ -19,5 +19,5 @@ public class OrgBrand {
 
     private String name;
 
-
+    private String pinyin;
 }

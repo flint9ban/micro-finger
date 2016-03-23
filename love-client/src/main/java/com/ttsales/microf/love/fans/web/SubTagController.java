@@ -7,6 +7,7 @@ import com.ttsales.microf.love.common.service.OrgService;
 import com.ttsales.microf.love.fans.domain.FansInfo;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.tag.domain.Container;
+import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.service.TagService;
 import net.sf.json.JSONArray;
@@ -55,7 +56,8 @@ public class SubTagController {
             request.setAttribute("tags", getTypeTags(tagIds, Long.parseLong("5")));
         }
         if ("brand".equals(type)) {
-            request.setAttribute("tags", getTypeTags(tagIds, Long.parseLong("6")));
+            request.setAttribute("tags", getGroupBrands( tagIds));
+            request.setAttribute("selectTags",getSelectTags( tagIds));
         }
         if ("province".equals(type)) {
             request.setAttribute("regions", getRegion("00"));
@@ -78,6 +80,24 @@ public class SubTagController {
         String[] tagId = tagIds.split(",");
         return getTags(tags, tagId);
     }
+
+    private List<Tag> getSelectTags(String tagIds){
+       return  Arrays.asList(tagIds.split(",")).stream()
+                .map(Long::parseLong).map(this::getTag).collect(Collectors.toList());
+
+    }
+
+
+    private  Tag getTag(Long id){
+        return tagService.getTag(id);
+    }
+
+    private JSONArray getGroupBrands(String tagIds){
+       List<Long> ids=Arrays.asList(tagIds.split(",")).stream()
+                .map(Long::parseLong).collect(Collectors.toList());
+        return  orgService.getGroupBrands(ids);
+    }
+
 
     private JSONArray getTags(List<Tag> tags, String[] tagIds) {
         JSONArray array = new JSONArray();
@@ -116,16 +136,20 @@ public class SubTagController {
     @ResponseBody
     public JSONArray queryFanTags(String openId) {
         JSONArray array = new JSONArray();
-        FansInfo fansInfo = fansService.getFansInfoByOpenId(openId);
+      //  FansInfo fansInfo = fansService.getFansInfoByOpenId(openId);
         List<Tag> tags = fansService.getTagsByOpenId(openId);
         for (Tag tag : tags) {
             JSONObject json = new JSONObject();
             json.put("id", tag.getId());
             json.put("name", tag.getName());
             List<Container> containers = tagService.getTagContainerByTagId(tag.getId());
-            if (containers != null) {
-                json.put("categoryId", containers.get(0).getId());
+            for(Container ct:containers){
+                if(ContainerType.SUBSCRIBE.equals(ct.getContainerType())){
+                    json.put("categoryId", ct.getId());
+                    break;
+                }
             }
+
             array.add(json);
         }
         return array;

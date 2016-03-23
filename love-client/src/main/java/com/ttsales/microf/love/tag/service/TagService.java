@@ -52,4 +52,5 @@ public interface TagService {
     Tag getTag(Long tagId);
 
     List<Tag> queryTagLimit5ByNameLike(String name);
+
 }

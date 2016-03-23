@@ -9,9 +9,13 @@ import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
+import com.ttsales.microf.love.util.WXApiException;
+import com.ttsales.microf.love.weixin.message.PubResponseMessage;
+import com.ttsales.microf.love.weixin.message.TextMsgContent;
 import com.ttsales.microf.love.weixin.web.support.WXCallbackContext;
 import com.ttsales.microf.love.weixin.web.support.WXCallbackHandler;
 import org.apache.catalina.util.URLEncoder;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,17 +55,42 @@ public class ScanTagHandler implements WXCallbackHandler {
         System.out.println(eventKey+"--"+ticket+"--"+openId);
         QrCode qrcode = qrcodeService.getQrcode(eventKey);
         if (qrcode != null) {
+            Article article = articleService.getArticleByTicket(ticket);
             if(QrCode.REF_TYPE_ARTICLE.equals(qrcode.getRefType())){
-                Article article = articleService.getArticleByTicket(ticket);
                 tags = articleService.getArticleTags(article.getId())
-                                .stream().map(ArticleTag::getTagId).collect(Collectors.toList());
+                        .stream().map(ArticleTag::getTagId).collect(Collectors.toList());
 
             }else if(QrCode.REF_TYPE_TAG_CONTAINER.equals(qrcode.getRefType())){
                 tags = tagService.getTagContainer(ticket).stream().map(TagContainer::getTagId)
                         .collect(Collectors.toList());
             }
+            fansService.createFansTag(openId,tags);
+            try {
+                if( !StringUtils.isEmpty(article.getTip())) {
+                    String messageXML = getResponseMessageXML(context, article);
+                    context.writeXML(messageXML);
+                }
+            }catch (Exception e){
+            }
         }
-        fansService.createFansTag(openId,tags);
+
+    }
+
+    private String getResponseMessageXML(WXCallbackContext context ,  Article article ) throws WXApiException {
+        PubResponseMessage message = new PubResponseMessage();
+        message.setFromUserName(context.readToUserName());
+        message.setToUserName(context.readFromUserName());
+        message.setCreateTime(System.currentTimeMillis() / 1000);
+        TextMsgContent textMsgContent=new TextMsgContent();
+        String contextStr="";
+        if(!StringUtils.isEmpty(article.getUrl())){
+            contextStr ="<a href=\"" + article.getUrl() + "\"> "+article.getTip()+"</a>";
+        }else{
+            contextStr=article.getTip();
+        }
+        textMsgContent.setContent(contextStr);
+        message.setContent(textMsgContent);
+        return message.toMsgString();
     }
 
     @Override

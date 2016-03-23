@@ -3,7 +3,9 @@ package com.ttsales.microf.love.common.service;
 import com.ttsales.microf.love.common.domain.OrgBrand;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
+import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.util.WXApiException;
+import net.sf.json.JSONArray;
 import org.apache.http.HttpException;
 
 import java.util.List;
@@ -22,4 +24,8 @@ public interface OrgService {
    List<OrgBrand>   getAllBrands();
 
     List<OrgRegion> findByLevel(Integer level);
+
+    List<Tag> findAllBrandTags();
+
+    JSONArray getGroupBrands( List<Long> ids);
 }

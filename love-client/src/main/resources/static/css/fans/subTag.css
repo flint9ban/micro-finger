@@ -38,7 +38,6 @@ body{
 .context{
     background: #ffffff;
     border-top: 1px solid #c2c2c2;
-    margin-top:80px;
 }
 .head-item{
     line-height:50px;
@@ -77,4 +76,17 @@ body{
     padding:25px;
     text-align:center;
     letter-spacing: 10px;
+}
+.head-div{
+    margin: 50px 0px;
+    padding:20px;
+    background: #ffffff;
+    border-top: 1px solid #c2c2c2;
+    border-bottom: 1px solid #c2c2c2;
+}
+.head-title{
+    margin-bottom: 12px;
+}
+.head-tag{
+    line-height: 40px;
 }
