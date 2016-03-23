@@ -82,6 +82,9 @@ public class SubTagController {
     }
 
     private List<Tag> getSelectTags(String tagIds){
+        if(StringUtils.isEmpty(tagIds)){
+            return  null;
+        }
        return  Arrays.asList(tagIds.split(",")).stream()
                 .map(Long::parseLong).map(this::getTag).collect(Collectors.toList());
 
@@ -93,10 +96,14 @@ public class SubTagController {
     }
 
     private JSONArray getGroupBrands(String tagIds){
-       List<Long> ids=Arrays.asList(tagIds.split(",")).stream()
-                .map(Long::parseLong).collect(Collectors.toList());
+        List<Long> ids=null;
+        if(!StringUtils.isEmpty(tagIds)){
+            ids=Arrays.asList(tagIds.split(",")).stream()
+                    .map(Long::parseLong).collect(Collectors.toList());
+        }
         return  orgService.getGroupBrands(ids);
     }
+
 
 
     private JSONArray getTags(List<Tag> tags, String[] tagIds) {
