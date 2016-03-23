@@ -15,8 +15,8 @@ function getCityValue(){
     $('.item').each(function(index) {
         if($(this).attr('value')=="select"){
             sessionStorage.cityId=$(this).attr("id");
-          //  sessionStorage.cityName=$(this).find("div:first-child").html();
-            sessionStorage.cityCode=$(this).attr("value");
+        //   sessionStorage.cityName=$(this).find("div:first-child").html();
+            sessionStorage.cityCode=$(this).find("input").val()
             sessionStorage.orgArea= sessionStorage.provinceName + "-" + $(this).find("div:first-child").html();
             history.go(-2);
         }

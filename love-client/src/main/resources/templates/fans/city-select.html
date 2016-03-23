@@ -21,8 +21,9 @@
 <div class="title">选择地区</div>
 <div class="context">
 	<div  th:each="region:${regions}" >
-		<div class="item" th:id="${region.id}" th:value="${region.regionCode}" >
+		<div class="item" th:id="${region.id}"  >
 			<div th:text="${region.fullname}"></div>
+			<input type="hidden" th:value="${region.regionCode}"/>
 			<div class="icon-select"  style="display: none;" ><img th:src="@{/img/select_confirm.png}" style="width:15px;height:15px;"/></div>
 		</div>
 		<div class="line"></div>
