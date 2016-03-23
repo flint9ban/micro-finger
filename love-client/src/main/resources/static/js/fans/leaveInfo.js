@@ -62,7 +62,7 @@ function getSessionData(){
         orgStore: sessionStorage.orgStore,
         orgArea: sessionStorage.orgArea,
         orgProvince: sessionStorage.provinceId,
-        orgCity: sessionStorage.cityId
+        orgCity: sessionStorage.cityCode
     };
     var brands=JSON.parse(sessionStorage.brands);
     setBransSet(brands);
