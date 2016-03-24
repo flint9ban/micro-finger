@@ -47,14 +47,14 @@ public class TextMsgHandler implements WXCallbackHandler {
                     logger.error(e);
                 }
             }else{
-                List<Keyword> keywords = keywordRepository.findAllByKeywordContaining(keyword+"_");
+                List<Keyword> keywords = keywordRepository.findAllByKeywordLike(keyword+"_");
                 String content = "回复：\n";
                 content = keywords.stream().reduce(content,
-                        (item,keywordItem)->item+=keywordItem.getKeyword()+"--"+keywordItem.getDeclare(),
-                        (item1,item2)->item1+"\n"+item2);
+                        (item,keywordItem)->item+=keywordItem.getKeyword()+"--"+keywordItem.getName()+"\n",
+                        (item1,item2)->item1);
                 try {
-                    getResponseMessageXML(context,content);
-                } catch (WXApiException e) {
+                    context.writeXML(getResponseMessageXML(context,content));
+                } catch (Exception e) {
                     logger.error(e);
                 }
             }

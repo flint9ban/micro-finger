@@ -19,6 +19,8 @@ public class QrCode extends SuperEntity{
 
     public static final Integer REF_TYPE_TAG_CONTAINER = 2;
 
+    public static final Integer REF_TYPE_QUOTE = 3;
+
     private String sceneId;
 
     private String ticket;

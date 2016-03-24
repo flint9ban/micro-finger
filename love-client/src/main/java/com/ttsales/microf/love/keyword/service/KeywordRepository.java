@@ -15,5 +15,5 @@ public interface KeywordRepository extends JpaRepository<Keyword,Long> {
 
     Keyword findOneByKeyword(String keyword);
 
-    List<Keyword> findAllByKeywordContaining(String keyword);
+    List<Keyword> findAllByKeywordLike(String keyword);
 }

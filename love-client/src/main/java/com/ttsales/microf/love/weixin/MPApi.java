@@ -46,7 +46,9 @@ public class MPApi {
     }
 
     public List<NewsMaterial> getNewsMaterials() throws HttpException,WXApiException{
-        return NewsMaterial.convert(getMaterialsOrginal(MaterialType.news,0,20));
+        List<NewsMaterial> materials =   NewsMaterial.convert(getMaterialsOrginal(MaterialType.news,0,20));
+        materials.addAll(NewsMaterial.convert(getMaterialsOrginal(MaterialType.news,20,20)));
+        return materials;
     }
 
     private JSONObject getMaterialsOrginal(MaterialType type,Integer offSet,Integer count) throws HttpException,WXApiException{
@@ -103,27 +105,6 @@ public class MPApi {
         }
     }
 
-//    private static JSONObject getMaterialsOrginal1(MaterialType type,Integer offSet,Integer count) throws HttpException,WXApiException{
-//        String requestBody = "{\"type\":\"%s\",\"offset\":\"%d\",\"count\":\"%d\"}";
-//        String requestBodyWithParam = String.format(requestBody, type,offSet,count);
-//        HttpUtil util = new HttpUtil();
-//        String result = util.post("http://uu.ttsales.cn/ttsales-wxs/fca2119689dd3e7e5e3ca8b08166733f/api/material-batchget-material",requestBodyWithParam);
-//        JSONObject returnValue = JSONObject.fromObject(result);
-//        return returnValue;
-//    }
-//
-//    public static void main(String[] args) {
-//        try {
-//            JSONObject json = getMaterialsOrginal1(MaterialType.news,40,20);
-//            List<NewsMaterial> materials =  NewsMaterial.convert(json);
-//            materials.stream().forEach(material -> {
-//                        System.out.println(material.getFirstTitle()+","+material.getMediaId());
-//            }
-//            );
-//        } catch (HttpException e) {
-//            e.printStackTrace();
-//        } catch (WXApiException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+
 }

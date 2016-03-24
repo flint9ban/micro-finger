@@ -4,9 +4,12 @@ package com.ttsales.microf.love.weixin.handler;
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.article.service.ArticleService;
+import com.ttsales.microf.love.fans.domain.FansInfo;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
+import com.ttsales.microf.love.quote.domain.QueryInfo;
+import com.ttsales.microf.love.quote.service.QuoteService;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
 import com.ttsales.microf.love.util.WXApiException;
@@ -42,6 +45,9 @@ public class ScanTagHandler implements WXCallbackHandler {
     @Autowired
     private FansService fansService;
 
+    @Autowired
+    private QuoteService quoteService;
+
     @Override
     public void handle(WXCallbackContext context) {
         String eventKey = context.readChildValue(context.readRoot(),"EventKey");
@@ -62,6 +68,10 @@ public class ScanTagHandler implements WXCallbackHandler {
             }else if(QrCode.REF_TYPE_TAG_CONTAINER.equals(qrcode.getRefType())){
                 tags = tagService.getTagContainer(ticket).stream().map(TagContainer::getTagId)
                         .collect(Collectors.toList());
+            }else if(QrCode.REF_TYPE_QUOTE.equals(qrcode.getRefType())){
+                QueryInfo queryInfo = quoteService.queryQueryInfo(openId);
+                queryInfo.getStoreId();
+                FansInfo fansInfo =  fansService.getFansInfoByOpenId(openId);
             }
             fansService.createFansTag(openId,tags);
             try {
