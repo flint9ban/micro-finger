@@ -1,5 +1,6 @@
 package com.ttsales.microf.love.fans.domain;
 
+import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,11 +11,8 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "dat_fans")
-public class FansInfo {
+public class FansInfo extends SuperEntity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Column(name = "open_id")
     private String openId;
