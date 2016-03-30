@@ -27,7 +27,7 @@ import java.util.UUID;
 
 
 @Controller
-@RequestMapping(value="weixin/jsSDK/")
+@RequestMapping(value="weixin/qy/jsSDK/")
 public class GetSignController {
 	
 
@@ -42,7 +42,7 @@ public class GetSignController {
 		if(url.indexOf("#")>0){
 			url = url.substring(0,url.indexOf("#"));
 		}
-		String jsapi_ticket =  mpApi.getJsApiTicket();
+		String jsapi_ticket =  mpApi.getQyJsApiTicket();
         Map<String, String> ret = sign(jsapi_ticket, url);
         JSONObject jsonObject =  JSONObject.fromObject(ret, new JsonConfig());
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -81,7 +81,7 @@ public class GetSignController {
         {
             e.printStackTrace();
         }
-        ret.put("appId", mpApiConfig.getAppid());
+        ret.put("appId", mpApiConfig.getQyAppid());
         ret.put("timestamp", timestamp);
         ret.put("nonceStr", nonce_str);
         ret.put("signature", signature);

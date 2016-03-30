@@ -1,14 +1,18 @@
 package com.ttsales.microf.love.quote.service;
 
 
+import com.ttsales.microf.love.common.repository.BrandRepository;
 import com.ttsales.microf.love.domainUtil.LocalDateTimeUtil;
 import com.ttsales.microf.love.quote.domain.*;
 import com.ttsales.microf.love.quote.repository.*;
+import com.ttsales.microf.love.tag.domain.Tag;
+import com.ttsales.microf.love.tag.service.TagService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,11 @@ public class QuoteServiceImpl implements QuoteService {
     @Autowired
     private StoreCarsRepository storeBrandRepository;
 
+    @Autowired
+    private BrandRepository brandRepository;
+
+    @Autowired
+    private TagService tagService;
 
     public static final Integer QUERY_LIMIT_COUNT=2;
     
@@ -130,6 +139,38 @@ public class QuoteServiceImpl implements QuoteService {
             return convertCX2JSON(cxCityRepository.findAllByProvinceAndCityAndSeriesIdInOrderByPriConDesc(parentRegion,region,competeList));
         }
         return null;
+    }
+
+    @Override
+    public List<Tag> getQuoteTag(String openId) {
+        List<Tag> tags = new ArrayList<Tag>();
+        QueryInfo queryInfo = queryQueryInfo(openId);
+        if(queryInfo!=null){
+            String region = queryInfo.getRegionName();
+            String competeRegion = queryInfo.getCompeteRegionName();
+            String storeId = queryInfo.getStoreId();
+            List<StoreCars> storeBrands = storeBrandRepository.findAllByStoreId(storeId);
+            Tag tag  = tagService.findTagByName("4S店报价情报");
+            Tag regionTag = tagService.findTagByName(region);
+            Tag competeRegionTag = tagService.findTagByName(competeRegion);
+            List<Tag> brandTag = storeBrands.stream()
+                                    .map(storeCar ->brandRepository.findOne(storeCar.getBrandId()))
+                                    .map(brand->tagService.findTagByName(brand.getName()))
+                                    .collect(Collectors.toList());
+            List<Tag> competeTag = queryInfo.getCompleteList().stream().map(tagService::findTagByName).collect(Collectors.toList());
+            tags.addAll(brandTag);
+            tags.addAll(competeTag);
+            if (tag != null) {
+                tags.add(tag);
+            }
+            if (regionTag != null) {
+                tags.add(regionTag);
+            }
+            if (competeRegionTag != null) {
+                tags.add(competeRegionTag);
+            }
+        }
+        return tags;
     }
 
     private List<JSONObject> convertCX2JSON(List<? extends SuperCX> cxs){

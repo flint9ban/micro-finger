@@ -3,6 +3,7 @@ package com.ttsales.microf.love.quote.service;
 import com.ttsales.microf.love.article.domain.Article;
 import com.ttsales.microf.love.article.domain.ArticleTag;
 import com.ttsales.microf.love.quote.domain.QueryInfo;
+import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.util.WXApiException;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpException;
@@ -28,4 +29,6 @@ public interface QuoteService {
     List<JSONObject> querySelfBrand(QueryInfo queryInfo);
 
     List<JSONObject> queryCompetBrand(QueryInfo queryInfo);
+
+    List<Tag> getQuoteTag(String openId);
 }

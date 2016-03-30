@@ -14,6 +14,9 @@ public class MPApiConfig {
     @Value("${wx.apiUrl}")
     private String apiUrl;
 
+    @Value("${wx.qy.apiUrl}")
+    private String qyApiUrl;
+
     @Value("${wx.token}")
     private String token;
 
@@ -23,8 +26,8 @@ public class MPApiConfig {
     @Value("${wx.defaultTmpMsg}")
     private String defaultTmpMsg;
 
-    @Value("${wx.appid}")
-    private String appid;
+    @Value("${wx.qy.appid}")
+    private String qyAppid;
 
     public static  final String QRCODE_SHOW_URL = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
 
@@ -48,6 +51,10 @@ public class MPApiConfig {
         return apiUrl+"/api/ticket-getticket-jsapi";
     }
 
+    public String getQyTicketJsapi(){
+        return qyApiUrl+"/api/ticket-getticket-jsapi";
+    }
+
     public String getToken(){
         return  token;
     }
@@ -66,7 +73,7 @@ public class MPApiConfig {
         return defaultTmpMsg;
     }
 
-    public String getAppid(){
-        return appid;
+    public String getQyAppid(){
+        return qyAppid;
     }
 }
