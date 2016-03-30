@@ -24,4 +24,11 @@ public class LocalDateTimeUtil {
         Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
         return instant.toEpochMilli();
     }
+
+    public static LocalDateTime clearTime(LocalDateTime localDateTime){
+        return localDateTime.withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+    }
 }

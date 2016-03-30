@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "dat_quote_query_log")
+@Table(name = "dat_price_query_log")
 public class QueryLog extends SuperEntity{
 
     @Column(name="open_id")
@@ -23,10 +23,14 @@ public class QueryLog extends SuperEntity{
     private String storeName;
     @Column(name = "compete_region")
     private String competeRegion;
+    @Column(name = "compete_parent_region")
+    private String competeParentRegion;
     @Column(name = "compete_region_name")
     private String competeRegionName;
     @Column(name = "region")
     private String region;
+    @Column(name = "parent_region")
+    private String parentRegion;
     @Column(name = "region_name")
     private String regionName;
 

@@ -14,6 +14,7 @@ public interface FansService {
 
     List<String> getOpenIdsByTags(List<Long> tagIds);
 
+    void updateOrgStore(String openId,String orgStoreId);
 
     FansInfo getFansInfoByOpenId(String openId);
 

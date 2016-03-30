@@ -23,6 +23,9 @@ public class MPApiConfig {
     @Value("${wx.defaultTmpMsg}")
     private String defaultTmpMsg;
 
+    @Value("${wx.appid}")
+    private String appid;
+
     public static  final String QRCODE_SHOW_URL = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
 
     public String getSendCustomerMessageApi(){
@@ -41,6 +44,10 @@ public class MPApiConfig {
         return apiUrl+"/api/qrcode-create";
     }
 
+    public String getTicketJsapi(){
+        return apiUrl+"/api/ticket-getticket-jsapi";
+    }
+
     public String getToken(){
         return  token;
     }
@@ -57,5 +64,9 @@ public class MPApiConfig {
 
     public String getDefaultTmpMsg() {
         return defaultTmpMsg;
+    }
+
+    public String getAppid(){
+        return appid;
     }
 }

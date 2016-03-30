@@ -15,4 +15,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface BrandRepository extends JpaRepository<OrgBrand,String> {
         List<OrgBrand> findAllByOrderByPinyin();
+
 }

@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "dat_quote_query_log_compete")
+@Table(name = "dat_price_query_log_compete")
 public class QueryLogCompete extends SuperEntity{
 
     @Column(name="log_id")

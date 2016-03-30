@@ -93,7 +93,7 @@ public class ArticleServiceImpl implements ArticleService {
             }
             if (startDate!=null){
                 LocalDateTime startDateTime = LocalDateTimeUtil.convertToDateTime(startDate.getTime());
-                startDateTime = clearTime(startDateTime);
+                startDateTime = LocalDateTimeUtil.clearTime(startDateTime);
                 Predicate predicate1 = builder.greaterThanOrEqualTo(root.<LocalDateTime>get("sendTime"),startDateTime);
                 if (predicate != null) {
                     predicate = builder.and(predicate,predicate1);
@@ -104,7 +104,7 @@ public class ArticleServiceImpl implements ArticleService {
             if (endTime != null) {
                 LocalDateTime endDateTime = LocalDateTimeUtil.convertToDateTime(endTime.getTime());
                 endDateTime = endDateTime.plusDays(1);
-                endDateTime = clearTime(endDateTime);
+                endDateTime = LocalDateTimeUtil.clearTime(endDateTime);
                 Predicate predicate1 = builder.lessThan(root.<LocalDateTime>get("sendTime"), endDateTime);
                 if (predicate != null) {
                     predicate = builder.and(predicate,predicate1);
@@ -115,13 +115,6 @@ public class ArticleServiceImpl implements ArticleService {
             return predicate;
         };
         return articleRepository.findAll(specification,pageRequest);
-    }
-
-    private static LocalDateTime clearTime(LocalDateTime localDateTime){
-        return localDateTime.withHour(0)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
     }
 
 
@@ -201,7 +194,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public String createQrcodeTicket(Long articleId) throws WXApiException, HttpException {
-        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_SCENE, QrCode.REF_TYPE_ARTICLE);
+        QrCode qrcode = qrcodeService.createQrCode(QrCodeType.QR_LIMIT_STR_SCENE, QrCode.REF_TYPE_ARTICLE);
         Article article = getArticle(articleId);
         article.setQrcodeTicket(qrcode.getTicket());
         putArticle(article);

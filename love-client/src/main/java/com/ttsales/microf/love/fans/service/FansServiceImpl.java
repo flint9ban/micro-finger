@@ -1,7 +1,8 @@
 package com.ttsales.microf.love.fans.service;
 
+import com.ttsales.microf.love.common.domain.OrgStore;
 import com.ttsales.microf.love.common.repository.SpecificationBuilder;
-import com.ttsales.microf.love.common.service.OrgService;
+import com.ttsales.microf.love.common.repository.StoreRepository;
 import com.ttsales.microf.love.fans.domain.FansInfo;
 import com.ttsales.microf.love.fans.domain.FansInfoTag;
 import com.ttsales.microf.love.fans.domain.FansTagView;
@@ -11,24 +12,15 @@ import com.ttsales.microf.love.fans.repository.FansTagViewRepository;
 import com.ttsales.microf.love.tag.domain.Container;
 import com.ttsales.microf.love.tag.domain.ContainerType;
 import com.ttsales.microf.love.tag.domain.Tag;
-import com.ttsales.microf.love.fans.service.FansService;
-import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.repository.ContainerRepository;
 import com.ttsales.microf.love.tag.repository.TagContainerRepository;
 import com.ttsales.microf.love.tag.repository.TagRepository;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +42,9 @@ public class FansServiceImpl implements FansService {
     private TagContainerRepository tagContainerRepository;
     @Autowired
     private FansTagViewRepository   fansTagViewRepository;
+
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Override
     public void createFansTag(String openId, List<Long> tagIds) {
@@ -87,6 +82,21 @@ public class FansServiceImpl implements FansService {
                 .map(this::getFansInfoByFansId)
                 .map(FansInfo::getOpenId)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateOrgStore(String openId, String orgStoreId) {
+        FansInfo  fansInfo = fansRepository.findByOpenId(openId);
+        OrgStore orgStore  = storeRepository.findOne(orgStoreId);
+        if(fansInfo==null||orgStore!=null){
+            fansInfo = new FansInfo();
+            fansInfo.setOpenId(openId);
+            fansInfo.setOrgProvince(orgStore.getProvince());
+            fansInfo.setOrgCity(orgStore.getCity());
+            fansInfo.setOrgStore(orgStoreId);
+            fansRepository.save(fansInfo);
+        }
     }
 
 

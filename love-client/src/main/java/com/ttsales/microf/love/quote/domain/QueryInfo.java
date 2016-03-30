@@ -15,8 +15,14 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "dat_quote_query_info")
+@Table(name = "dat_price_query_info")
 public class QueryInfo extends SuperEntity {
+
+    public static final Integer REGION_TYPE_COUNTRY = 1;
+
+    public static final Integer REGION_TYPE_PROVINCE = 2;
+
+    public static final Integer REGION_TYPE_CITY = 3;
 
     @Column(name="open_id")
     private String openId;
@@ -26,6 +32,10 @@ public class QueryInfo extends SuperEntity {
     private String storeName;
     @Column(name = "compete_region")
     private String competeRegion;
+    @Column(name = "compete_parent_region")
+    private String competeParentRegion;
+    @Column(name = "compete_region_type")
+    private Integer competeRegionType;
     @Column(name = "compete_region_name")
     private String competeRegionName;
     @Column(name = "compete_ids")
@@ -34,6 +44,10 @@ public class QueryInfo extends SuperEntity {
     private String competeNames;
     @Column(name = "region")
     private String region;
+    @Column(name = "parent_region")
+    private String parentRegion;
+    @Column(name = "region_type")
+    private Integer regionType;
     @Column(name = "region_name")
     private String regionName;
 

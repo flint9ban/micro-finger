@@ -10,6 +10,7 @@ import com.ttsales.microf.love.qrcode.domain.QrCode;
 import com.ttsales.microf.love.qrcode.service.QrcodeService;
 import com.ttsales.microf.love.quote.domain.QueryInfo;
 import com.ttsales.microf.love.quote.service.QuoteService;
+import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.domain.TagContainer;
 import com.ttsales.microf.love.tag.service.TagService;
 import com.ttsales.microf.love.util.WXApiException;
@@ -19,6 +20,7 @@ import com.ttsales.microf.love.weixin.web.support.WXCallbackContext;
 import com.ttsales.microf.love.weixin.web.support.WXCallbackHandler;
 import org.apache.catalina.util.URLEncoder;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +50,8 @@ public class ScanTagHandler implements WXCallbackHandler {
     @Autowired
     private QuoteService quoteService;
 
+    Logger logger =  Logger.getLogger(ScanTagHandler.class);
+
     @Override
     public void handle(WXCallbackContext context) {
         String eventKey = context.readChildValue(context.readRoot(),"EventKey");
@@ -70,8 +74,10 @@ public class ScanTagHandler implements WXCallbackHandler {
                         .collect(Collectors.toList());
             }else if(QrCode.REF_TYPE_QUOTE.equals(qrcode.getRefType())){
                 QueryInfo queryInfo = quoteService.queryQueryInfo(openId);
-                queryInfo.getStoreId();
-                FansInfo fansInfo =  fansService.getFansInfoByOpenId(openId);
+                fansService.updateOrgStore(openId,queryInfo.getStoreId());
+                Tag tag  = tagService.findTagByName("4S店报价情报");
+                tags = queryInfo.getCompleteList().stream().map(tagService::findTagByName).map(Tag::getId).collect(Collectors.toList());
+                tags.add(tag.getId());
             }
             fansService.createFansTag(openId,tags);
             try {
@@ -80,6 +86,7 @@ public class ScanTagHandler implements WXCallbackHandler {
                     context.writeXML(messageXML);
                 }
             }catch (Exception e){
+                logger.error(e);
             }
         }
 

@@ -34,38 +34,38 @@ public class LoveClientApplication {
 }
 
 
-//@Component
-class DummyAR implements ApplicationRunner {
+	//@Component
+	class DummyAR implements ApplicationRunner {
 
-	@Autowired
-	private TagRepository tagRepository;
+		@Autowired
+		private TagRepository tagRepository;
 
-	@Autowired
-	private TagService tagService;
+		@Autowired
+		private TagService tagService;
 
-	@Autowired
-	private ArticleRepository articleRepository;
+		@Autowired
+		private ArticleRepository articleRepository;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		List<Tag> tags = Stream.of("Josh", "Dave", "Stephane", "Mark", "Phil","Kyle","Tyler")
-				.map(x -> {
-					Tag tag = new Tag();
-					tag.setName(x);
-					return tagRepository.save(tag);
-				}).collect(Collectors.toList());
-		IntStream.range(0,4).forEach(i->{
-			Container container = new Container();
-			container.setName("COMMON");
-			container.setContainerType(ContainerType.COMMON);
-			tagService.createCotnainerWithTags(container,tags.subList(i,i+3).stream().map(Tag::getId).collect(Collectors.toList()));
-		});
+		@Override
+		public void run(ApplicationArguments args) throws Exception {
+			List<Tag> tags = Stream.of("Josh", "Dave", "Stephane", "Mark", "Phil","Kyle","Tyler")
+					.map(x -> {
+						Tag tag = new Tag();
+						tag.setName(x);
+						return tagRepository.save(tag);
+					}).collect(Collectors.toList());
+			IntStream.range(0,4).forEach(i->{
+				Container container = new Container();
+				container.setName("COMMON");
+				container.setContainerType(ContainerType.COMMON);
+				tagService.createCotnainerWithTags(container,tags.subList(i,i+3).stream().map(Tag::getId).collect(Collectors.toList()));
+			});
 
-		IntStream.range(0,4).forEach(i->{
-			Article article = new Article();
-			article.setTitle("abc"+i);
-			articleRepository.save(article);
-		});
+			IntStream.range(0,4).forEach(i->{
+				Article article = new Article();
+				article.setTitle("abc"+i);
+				articleRepository.save(article);
+			});
 
-	}
+		}
 }

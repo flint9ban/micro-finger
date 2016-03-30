@@ -105,6 +105,13 @@ public class MPApi {
         }
     }
 
+   public String getJsApiTicket() throws HttpException, WXApiException {
+       HttpUtil util = new HttpUtil();
+       String result = util.get(mpApiConfig.getTicketJsapi());
+       JSONObject returnValue = JSONObject.fromObject(result);
+       validateWeixinResult(returnValue);
+       return returnValue.optString("ticket",null);
+   }
 
 
 }
