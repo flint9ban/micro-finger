@@ -22,7 +22,7 @@
           href="http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/favicon22c41b.ico"/>
 
 
-    <title>全国4S店报价情报</title>
+    <title th:text="|${queryInfo.storeName}：如何从报价上抢占客户|">门店：如何从报价上抢占客户</title>
 
     <link rel="stylesheet" type="text/css"
           href="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/appmsg/page_mp_article_improve2c9cd6.css"/>
@@ -43,9 +43,9 @@
     <link rel="stylesheet" type="text/css"
           href="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/appmsg/page_mp_article_improve_pc2c9cd6.css"/>
     <![endif]-->
-    <script type="text/javascript">
-        document.domain = "qq.com";
-    </script>
+    <!--<script type="text/javascript">-->
+        <!--document.domain = "qq.com";-->
+    <!--</script>-->
 
     <link rel="stylesheet" type="text/css"
           href="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/appmsg/not_in_mm2c9cd6.css"/>
@@ -63,45 +63,14 @@
     <div class="rich_media_inner">
         <div id="page-content">
             <div id="img-content" class="rich_media_area_primary">
-                <h2 class="rich_media_title" id="activity-name">
+                <h2 class="rich_media_title" id="activity-name" th:text="|${queryInfo.storeName}：如何从报价上抢占客户|">
                     全国4S店报价情报
                 </h2>
-                <!--<div class="rich_media_meta_list">-->
-                    <!--<em id="post-date" class="rich_media_meta rich_media_meta_text">2016-03-25</em>-->
-
-                    <!--<a class="rich_media_meta rich_media_meta_link rich_media_meta_nickname"-->
-                       <!--id="post-user">微手指</a>-->
-                    <!--<span class="rich_media_meta rich_media_meta_text rich_media_meta_nickname">微手指</span>-->
-
-                    <!--<div id="js_profile_qrcode" class="profile_container" style="display:none;">-->
-                        <!--<div class="profile_inner">-->
-                            <!--<strong class="profile_nickname">微手指</strong>-->
-                            <!--<img class="profile_avatar" id="js_profile_qrcode_img" src="" alt=""/>-->
-
-                            <!--<p class="profile_meta">-->
-                                <!--<label class="profile_meta_label">微信号</label>-->
-                                <!--<span class="profile_meta_value">weishouzhi8</span>-->
-                            <!--</p>-->
-
-                            <!--<p class="profile_meta">-->
-                                <!--<label class="profile_meta_label">功能介绍</label>-->
-                                <!--<span class="profile_meta_value">由杭州微车信息科技有限公司运行的</span>-->
-                            <!--</p>-->
-
-                        <!--</div>-->
-                            <!--<span class="profile_arrow_wrp" id="js_profile_arrow_wrp">-->
-                                <!--<i class="profile_arrow arrow_out"></i>-->
-                                <!--<i class="profile_arrow arrow_in"></i>-->
-                            <!--</span>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-
 
                 <div class="rich_media_content " id="js_content">
 
                     <p style="text-align: left; text-indent: 2em;"><span
-                        style="font-family: 微软雅黑, sans-serif; text-indent: 32px; line-height: 1.6;">微车平台聚集了全国各家4S店、所有车型最新报价，每周为你定制推送第一手价格情报。你订阅后，可查看到友商4S店或竞品所有车型报价信息。<strong>知己知彼，百战不殆。</strong></span>
+                        style="font-family: 微软雅黑, sans-serif; text-indent: 32px; line-height: 1.6;">微车平台聚集了全国各家4S店、所有车型最新报价，每周为你定制推送第一手价格情报。<strong>关注公众号订阅</strong>，可查看到友商4S店或竞品所有车型报价信息。<strong>知己知彼，百战不殆。</strong>点击<strong>公众号菜单</strong>“我的——Hi，约吗”留下通关暗号，你将获得汽车行业独家制胜秘籍，数量有限，先到先得。</span>
                 </p>
                     <p style="text-align: center;"><span
                             style="border-color: rgb(216, 40, 33); color: rgb(216, 40, 33); font-size: 4em; font-weight: bolder; line-height: 1em; vertical-align: middle;">“</span><span
@@ -220,18 +189,19 @@
 </div>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
-<script src="../../static/js/weixin-sdk.js" th:src="@{/js/weixin-sdk.js}"></script>
+<script src="../../static/js/weixin-qy-sdk.js" th:src="@{/js/weixin-qy-sdk.js}"></script>
 <script src="../../static/js/quote/report.js" th:src="@{/js/quote/report.js}"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
     var context = [[@{/}]];
     var shareLink = [[@{/auth/check?scope=snsapi_base&target_uri=quote%2findex&redirect}]];
+    var storeName = [[${queryInfo.storeName}]];
     /*]]>*/
 
     $(function(){
         var shareData = {
-            title : '全国4S店报价情报1',
-            desc : '全国4S店报价情报1',
+            title : storeName+'：如何从报价上抢占客户',
+            desc : '直击客户心坎的报价技巧，看完这篇就够了',
             link : shareLink,
             img_url : context + '/pages/lottery/images/share.png'
           };

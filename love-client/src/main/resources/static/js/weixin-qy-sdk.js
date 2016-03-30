@@ -22,7 +22,7 @@ var weixin=(function(){
 		var rootUrl=fullUrl.split("#")[0];
 		 $.ajax({
             type: 'POST',
-            url: '../weixin/jsSDK/getSign.do',
+            url: '../weixin/qy/jsSDK/getSign.do',
             data: {
                 url:rootUrl
             },
@@ -36,7 +36,7 @@ var weixin=(function(){
 	
 	function wxConfig(data){
 		wx.config({
-		    debug: false, 
+		    debug: true,
 		    appId: data.appId, 
 		    timestamp: data.timestamp , 
 		    nonceStr: data.nonceStr, 
