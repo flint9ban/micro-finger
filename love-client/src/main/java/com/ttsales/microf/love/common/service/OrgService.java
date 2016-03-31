@@ -1,9 +1,6 @@
 package com.ttsales.microf.love.common.service;
 
-import com.ttsales.microf.love.common.domain.OrgBrand;
-import com.ttsales.microf.love.common.domain.OrgCarType;
-import com.ttsales.microf.love.common.domain.OrgRegion;
-import com.ttsales.microf.love.common.domain.OrgStore;
+import com.ttsales.microf.love.common.domain.*;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.util.WXApiException;
 import net.sf.json.JSONArray;
@@ -35,4 +32,6 @@ public interface OrgService {
     OrgBrand getBrandById(String brandId);
 
    JSONArray covertJson(String competeIds);
+
+    OrgStore findStoreByMemberId(String memberId);
 }

@@ -1,13 +1,7 @@
 package com.ttsales.microf.love.common.service;
 
-import com.ttsales.microf.love.common.domain.OrgBrand;
-import com.ttsales.microf.love.common.domain.OrgCarType;
-import com.ttsales.microf.love.common.domain.OrgRegion;
-import com.ttsales.microf.love.common.domain.OrgStore;
-import com.ttsales.microf.love.common.repository.BrandRepository;
-import com.ttsales.microf.love.common.repository.CarTypeRepository;
-import com.ttsales.microf.love.common.repository.RegionRepository;
-import com.ttsales.microf.love.common.repository.StoreRepository;
+import com.ttsales.microf.love.common.domain.*;
+import com.ttsales.microf.love.common.repository.*;
 import com.ttsales.microf.love.fans.domain.FansInfoTag;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.repository.TagRepository;
@@ -17,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +36,8 @@ public class OrgServiceImpl implements OrgService {
     private TagRepository tagRepository;
     @Autowired
     private CarTypeRepository carTypeRepository;
+    @Autowired
+    private MemberAssRepository memberAssRepository;
 
     public static final Integer BRAND_TYPE_TAG = 1;
     public static final Integer BRAND_TYPE_PRICE = 2;
@@ -166,6 +163,9 @@ public class OrgServiceImpl implements OrgService {
     }
 
     public JSONArray covertJson(String competeIds) {
+        if(StringUtils.isEmpty(competeIds)){
+            return null;
+        }
         String competeId[] = competeIds.split(",");
         JSONArray array = new JSONArray();
         for (String id : competeId) {
@@ -194,5 +194,15 @@ public class OrgServiceImpl implements OrgService {
             }
         }
         return array;
+    }
+    public OrgStore findStoreByMemberId(String memberId){
+        List<OrgMemberAss> orgMemberAsss= memberAssRepository.findByMemberId(memberId);
+
+        if(!CollectionUtils.isEmpty(orgMemberAsss)){
+            OrgMemberAss   orgMemberAss= orgMemberAsss.get(0);
+            System.out.println("orgMemberAss.getOrgId()----"+orgMemberAss.getOrgId());
+            return  storeRepository.findOne(orgMemberAss.getOrgId());
+        }
+        return null;
     }
 }

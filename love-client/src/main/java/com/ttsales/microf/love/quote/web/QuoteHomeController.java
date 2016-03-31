@@ -20,6 +20,7 @@ import net.sf.json.JsonConfig;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * List
@@ -51,41 +51,34 @@ public class QuoteHomeController {
 
     @RequestMapping(value = "/initHomeData" , method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject initHomeData(String openId) {
+    public JSONObject initHomeData(String openId,String userId) {
         JSONObject json=new JSONObject();
-        json.put("quoteInfo",getQueryInfo( openId));
-        json.put("priceInfo",quoteService.queryStorePrice(getStoreByOpenId(openId).getStoreId()));
+        OrgStore orgStore=orgService.findStoreByMemberId(userId);
+
+        json.put("quoteInfo",getQueryInfo( openId,userId));
+        json.put("priceInfo",quoteService.queryStorePrice(orgStore==null?"":orgStore.getStoreId()));
         json.put("queryTimes",quoteService.countQueryTims(openId));
         return json;
     }
 
-    private OrgStore getStoreByOpenId(String openId){
-        //TODO 修改
-        OrgStore orgStore=new OrgStore();
-        orgStore.setStoreId("0012513001");
-        orgStore.setStoreName("大理惠恒丰赢店");
-        orgStore.setAddress("杭州市西湖区文三路34号");
-        return orgStore;
-    }
-
-    private JSONObject getQueryInfo(String openId){
-        OrgStore orgStore= getStoreByOpenId(openId);
 
 
-        String competeIds="01670589da9b11e5a35700155d000e3c,07deda30da9f11e5a35700155d000e3c";
+    private JSONObject getQueryInfo(String openId,String userId){
+        OrgStore orgStore=orgService.findStoreByMemberId(userId);
+       QueryInfo queryInfo=quoteService.queryQueryInfo(openId);
         JSONObject json=new JSONObject();
-        json.put("region","11");
-        json.put("regionName","杭州市");
-        json.put("competeRegion","11");
-        json.put("competeRegionName","杭州市");
-        json.put("competeIds",competeIds);
-        json.put("competeNames","高尔夫A7,帕杰罗");
-        json.put("competeRegion","11");
-        json.put("competeRegionName","杭州市");
-        json.put("storeName",orgStore.getStoreName());
-        json.put("storeId",orgStore.getStoreId());
-        json.put("storeAddr",orgStore.getAddress());
-        json.put("compCarTypeInfo",orgService.covertJson(competeIds));
+        json.put("region",queryInfo==null?"":queryInfo.getRegion());
+        json.put("regionName",queryInfo==null?"":queryInfo.getRegionName());
+        json.put("competeRegion",queryInfo==null?"":queryInfo.getCompeteRegion());
+        json.put("competeRegionName",queryInfo==null?"":queryInfo.getCompeteRegionName());
+        json.put("competeIds",queryInfo==null?"":queryInfo.getCompeteIds());
+        json.put("competeNames",queryInfo==null?"":queryInfo.getCompeteNames());
+        json.put("competeRegion",queryInfo==null?"":queryInfo.getCompeteRegion());
+        json.put("competeRegionName",queryInfo==null?"":queryInfo.getCompeteRegionName());
+        json.put("storeName",orgStore==null?"":orgStore.getStoreName());
+        json.put("storeId",orgStore==null?"":orgStore.getStoreId());
+        json.put("storeAddr",orgStore==null?"":orgStore.getAddress());
+        json.put("compCarTypeInfo",orgService.covertJson(queryInfo==null?"":queryInfo.getCompeteIds()));
         return json;
     }
 

@@ -76,7 +76,12 @@ function getSingleBrandCarTypes() {
 }
 
 function getAllBrandCarTypes(compCarTypeInfo) {
-    var compCarTypeInfos = JSON.parse(sessionStorage.compCarTypeInfo) || [];
+    var compCarTypeInfos;
+    if(sessionStorage.compCarTypeInfo!="undefined"){
+        compCarTypeInfosJSON.parse(sessionStorage.compCarTypeInfo)
+    }else{
+        compCarTypeInfos= [];
+    }
     var exist = false;
     for (var i = 0; i < compCarTypeInfos.length; i++) {
         if (compCarTypeInfos[i].brandId == compCarTypeInfo.brandId) {

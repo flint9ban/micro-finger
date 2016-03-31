@@ -9,6 +9,9 @@ function onItemClick(){
     });
 }
 function getCarTypeIds(id){
+    if(sessionStorage.compCarTypeInfo=="undefined"){
+        return "";
+    }
     var compCarTypeInfo=JSON.parse( sessionStorage.compCarTypeInfo);
     var carTypeIds="";
     for(var i=0;i<compCarTypeInfo.length;i++){
