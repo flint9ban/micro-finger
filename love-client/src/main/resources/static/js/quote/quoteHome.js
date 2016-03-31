@@ -34,7 +34,7 @@ function sessionData() {
     showData(data);
 }
 function ajaxData() {
-   alert("userId------------"+getParamOfUrl("userId"));
+   alert("userId------------"+getParamOfUrl("userId")+"--memberId"+ getParamOfUrl("memberId"));
     $.ajax({
         type: 'POST',
         url: 'initHomeData.do',
