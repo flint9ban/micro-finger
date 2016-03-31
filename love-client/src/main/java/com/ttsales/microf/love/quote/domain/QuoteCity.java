@@ -1,6 +1,5 @@
 package com.ttsales.microf.love.quote.domain;
 
-import com.ttsales.microf.love.domainUtil.SuperEntity;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,14 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by liyi on 2016/3/24.
+ * Created by liyi on 2016/3/25.
  */
 @Data
 @Entity
-@Table(name = "dat_price_province")
-public class QuoteProvince {
-
-    private String province;
+@Table(name = "dat_price_city")
+public class QuoteCity {
 
     @Column
     @Id
@@ -37,4 +34,7 @@ public class QuoteProvince {
     @Column(name="max_model_num")
     private String maxModelNum;
 
+    private String province;
+
+    private String city;
 }

@@ -25,4 +25,5 @@ public class OrgStore {
 
     private String city;
 
+    private String address;
 }
