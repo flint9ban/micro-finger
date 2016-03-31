@@ -31,10 +31,10 @@ function sessionData() {
     }
     data.quoteInfo = quoteInfo;
     data.priceInfo = priceInfo;
-    //  var data=JSON.parse(sessionStorage.quoteData);
     showData(data);
 }
 function ajaxData() {
+   alert("userId------------"+getParamOfUrl("userId"));
     $.ajax({
         type: 'POST',
         url: 'initHomeData.do',
