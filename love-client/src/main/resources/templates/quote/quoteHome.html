@@ -18,9 +18,9 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/quote/quoteHome.css"  th:href="@{/css/quote/quoteHome.css}" />
     <script type="application/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
     <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <!--<script src="../../static/js/weixin-qy-sdk.js" th:src="@{/js/weixin-qy-sdk.js}"></script>-->
+    <script src="../../static/js/weixin-qy-sdk.js" th:src="@{/js/weixin-qy-sdk.js}"></script>
     <script type="application/javascript" src="../../static/js/humane.min.js"  th:src="@{/js/humane.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/quote/quoteHome.js"  th:src="@{/js/quote/quoteHome.js}"></script>
+
 </head>
 <body >
 <div class="head-div">
@@ -75,4 +75,14 @@
 <div class="save-btn" onclick="queryReport()" style="margin-bottom: 20px;">查询</div>
 <div class="qrcode_div"><img th:src="@{/img/qrcode_tip.png}" class="qrcode_img"/></div>
 </body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var userId = [[${userId}]];
+    var memberId = [[${memberId}]];
+    /*]]>*/
+    sessionStorage.userId=userId;
+    sessionStorage.memberId=memberId;
+    </script>
+<script type="text/javascript" src="../../static/js/quote/quoteHome.js"  th:src="@{/js/quote/quoteHome.js}"></script>
 </html>
+

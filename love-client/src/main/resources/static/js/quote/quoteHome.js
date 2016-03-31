@@ -39,8 +39,8 @@ function ajaxData() {
         type: 'POST',
         url: 'initHomeData.do',
         data: {
-            'userId': getParamOfUrl("userId"),
-            'memberId': getParamOfUrl("memberId")
+            'userId':  sessionStorage.userId,
+            'memberId':sessionStorage.memberId
         },
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
@@ -62,6 +62,7 @@ function setSessionData(data) {
     sessionStorage.storeAddr = quoteInfo.storeAddr || "";
     sessionStorage.selfArea = quoteInfo.regionName;
     sessionStorage.compArea = quoteInfo.competeRegionName;
+
     sessionStorage.compCarTypeInfo = JSON.stringify(quoteInfo.compCarTypeInfo);
 
 }
@@ -69,7 +70,7 @@ function setSessionData(data) {
 function showData(data) {
     var quoteInfo = data.quoteInfo;
     var priceInfo = data.priceInfo;
-    //   setShareData(quoteInfo.storeName)
+    setShareData(quoteInfo.storeName)
     $("#storeName").html(quoteInfo.storeName);
     $("#storeAddr").html(quoteInfo.storeAddr);
     $("#cityMaxNum").html(priceInfo.cityMaxNum);
@@ -87,7 +88,7 @@ function setShareData(storeName) {
     var shareData = {
         title: storeName + '：如何从报价上抢占客户',
         desc: '直击客户心坎的报价技巧，看完这篇就够了',
-        link: "/auth/check?scope=snsapi_base&target_uri=quote%2fquoteHome.html%3fuserId%3d" + getParamOfUrl("userId") + "&redirect",
+        link: "/auth/check?scope=snsapi_base&target_uri=quote%2fquoteHome.html%3fuserId%3d" + sessionStorage.memberId + "&redirect",
         img_url: '../img/share.jpg'
     };
     weixin.showOptionMenu();
