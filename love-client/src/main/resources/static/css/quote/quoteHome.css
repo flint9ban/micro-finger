@@ -75,7 +75,9 @@ body{
     margin-top: 10px;
     text-align: center;
     margin: auto;
+    padding: 10px;
 }
 .qrcode_img{
-    max-height: 200px;
+    height: 100px;
+    width:200px ;
 }

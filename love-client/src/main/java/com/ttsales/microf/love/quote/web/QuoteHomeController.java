@@ -51,13 +51,13 @@ public class QuoteHomeController {
 
     @RequestMapping(value = "/initHomeData" , method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject initHomeData(String openId,String userId) {
+    public JSONObject initHomeData(String userId,String memberId) {
         JSONObject json=new JSONObject();
         OrgStore orgStore=orgService.findStoreByMemberId(userId);
 
-        json.put("quoteInfo",getQueryInfo( openId,userId));
+        json.put("quoteInfo",getQueryInfo( userId,memberId));
         json.put("priceInfo",quoteService.queryStorePrice(orgStore==null?"":orgStore.getStoreId()));
-        json.put("queryTimes",quoteService.countQueryTims(openId));
+        json.put("queryTimes",quoteService.countQueryTims(userId));
         return json;
     }
 

@@ -78,7 +78,7 @@ function getSingleBrandCarTypes() {
 function getAllBrandCarTypes(compCarTypeInfo) {
     var compCarTypeInfos;
     if(sessionStorage.compCarTypeInfo!="undefined"){
-        compCarTypeInfosJSON.parse(sessionStorage.compCarTypeInfo)
+        compCarTypeInfos=JSON.parse(sessionStorage.compCarTypeInfo)
     }else{
         compCarTypeInfos= [];
     }
