@@ -20,4 +20,7 @@ public class OrgBrand {
     private String name;
 
     private String pinyin;
+
+    @Column(name="tag_id")
+    private Long tagId;
 }

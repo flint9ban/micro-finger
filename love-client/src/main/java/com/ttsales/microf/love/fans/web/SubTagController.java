@@ -4,6 +4,7 @@ import com.ttsales.microf.love.article.service.ArticleService;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
 import com.ttsales.microf.love.common.service.OrgService;
+import com.ttsales.microf.love.common.service.OrgServiceImpl;
 import com.ttsales.microf.love.fans.domain.FansInfo;
 import com.ttsales.microf.love.fans.service.FansService;
 import com.ttsales.microf.love.tag.domain.Container;
@@ -96,12 +97,8 @@ public class SubTagController {
     }
 
     private JSONArray getGroupBrands(String tagIds){
-        List<Long> ids=null;
-        if(!StringUtils.isEmpty(tagIds)){
-            ids=Arrays.asList(tagIds.split(",")).stream()
-                    .map(Long::parseLong).collect(Collectors.toList());
-        }
-        return  orgService.getGroupBrands(ids);
+
+        return  orgService.getGroupBrands(tagIds, OrgServiceImpl.BRAND_TYPE_TAG);
     }
 
 

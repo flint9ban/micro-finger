@@ -8,6 +8,9 @@ import com.ttsales.microf.love.quote.repository.*;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.service.TagService;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.codehaus.groovy.runtime.ArrayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +51,14 @@ public class QuoteServiceImpl implements QuoteService {
 
     @Autowired
     private TagService tagService;
+    @Autowired
+    private QuoteCityRepository quoteCityRepository;
+
+    @Autowired
+    private QuoteProvinceRepository quoteProvinceRepository;
+
+    @Autowired
+    private QuoteCountryRepository quoteCountryRepository;
 
     public static final Integer QUERY_LIMIT_COUNT=2;
     
@@ -100,6 +111,13 @@ public class QuoteServiceImpl implements QuoteService {
         Long count = queryLogRepository.countByOpenIdAndCreatAtGreaterThan(openId,localDateTime);
         return count<QUERY_LIMIT_COUNT;
     }
+
+    public Long countQueryTims(String openId ){
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime = LocalDateTimeUtil.clearTime(localDateTime);
+        return  queryLogRepository.countByOpenIdAndCreatAtGreaterThan(openId,localDateTime);
+    }
+
 
     @Override
     public JSONObject queryQuote(String storeId) {
@@ -193,4 +211,17 @@ public class QuoteServiceImpl implements QuoteService {
         return null;
     }
 
+    public JSONObject queryStorePrice(String storeId){
+     JSONObject json=new JSONObject();
+        List<QuoteCountry> quoteCountrys=quoteCountryRepository.findByStoreId(storeId);
+        List<QuoteProvince> quoteProvinces=quoteProvinceRepository.findByStoreId(storeId);
+        List<QuoteCity> quoteCitys=quoteCityRepository.findByStoreId(storeId);
+        json.put("countryMinNum", CollectionUtils.isEmpty(quoteCountrys)?"":quoteCountrys.get(0).getMinModelNum());
+        json.put("countryMaxNum", CollectionUtils.isEmpty(quoteCountrys)?"":quoteCountrys.get(0).getMaxModelNum());
+        json.put("provinceMinNum", CollectionUtils.isEmpty(quoteProvinces)?"":quoteProvinces.get(0).getMinModelNum());
+        json.put("provinceMaxNum", CollectionUtils.isEmpty(quoteProvinces)?"":quoteProvinces.get(0).getMaxModelNum());
+        json.put("cityMinNum", CollectionUtils.isEmpty(quoteCitys)?"":quoteCitys.get(0).getMinModelNum());
+        json.put("cityMaxNum", CollectionUtils.isEmpty(quoteCitys)?"":quoteCitys.get(0).getMaxModelNum());
+        return json;
+    }
 }

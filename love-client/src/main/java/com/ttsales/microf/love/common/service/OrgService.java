@@ -1,6 +1,7 @@
 package com.ttsales.microf.love.common.service;
 
 import com.ttsales.microf.love.common.domain.OrgBrand;
+import com.ttsales.microf.love.common.domain.OrgCarType;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
 import com.ttsales.microf.love.tag.domain.Tag;
@@ -27,5 +28,11 @@ public interface OrgService {
 
     List<Tag> findAllBrandTags();
 
-    JSONArray getGroupBrands( List<Long> ids);
+    JSONArray getGroupBrands(String  ids,Integer type);
+
+    List<OrgCarType> queryCarTypesByBrandId(String brandId);
+
+    OrgBrand getBrandById(String brandId);
+
+   JSONArray covertJson(String competeIds);
 }

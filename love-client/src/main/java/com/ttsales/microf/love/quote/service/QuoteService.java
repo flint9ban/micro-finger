@@ -31,4 +31,8 @@ public interface QuoteService {
     List<JSONObject> queryCompetBrand(QueryInfo queryInfo);
 
     List<Tag> getQuoteTag(String openId);
+
+    Long countQueryTims(String openId );
+
+    JSONObject queryStorePrice(String storeId);
 }

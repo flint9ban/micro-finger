@@ -30,6 +30,8 @@ public class QueryInfo extends SuperEntity {
     private String storeId;
     @Column(name = "store_name")
     private String storeName;
+    @Column(name = "store_addr")
+    private String storeAddr;
     @Column(name = "compete_region")
     private String competeRegion;
     @Column(name = "compete_parent_region")

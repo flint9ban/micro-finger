@@ -17,28 +17,27 @@
 	<link rel="stylesheet" type="text/css" href="../../static/css/fans/subTag-select.css"  th:href="@{/css/fans/subTag-select.css}"/>
 	<script type="application/javascript" src="../../static/easyui/jquery.min.js"  th:src="@{/easyui/jquery.min.js}"></script>
 	<script type="application/javascript" src="../../static/js/humane.min.js"  th:src="@{/js/humane.min.js}"></script>
-	<script type="application/javascript" src="../../static/js/jquery.tag-group.js"  th:src="@{/js/jquery.tag-group.js}"></script>
-	<script type="application/javascript" src="../../static/js/fans/subTag-brand.js"  th:src="@{/js/fans/subTag-brand.js}"></script>
+	<script type="application/javascript" src="../../static/js/quote/carType-select.js"  th:src="@{/js/quote/carType-select.js}"></script>
 
-<title>我要订阅</title>
+<title>情报分析</title>
 </head>
 <body >
-<!--<div class="title">服务类型</div>-->
-<div class="select-div" id="taggroup">	<span  th:each="tag:${selectTags}" ><span class="tagSpan" th:text="${tag.name}"></span></span></div>
-<div  id="context" class="group-context">
-	<div  th:each="group:${tags}" >
-		<div th:text="${group.index}" class="title"></div>
+<div class="title">选择车系</div>
+<!--<div class="select-div" id="taggroup">	<span  th:each="tag:${selectTags}" ><span class="tagSpan" th:text="${tag.name}"></span></span></div>-->
+<input type="hidden"  th:value="${brand.name}" id="brandName"/>
+<input type="hidden"  th:value="${brand.id}" id="brandId"/>
+<div  id="context" class="group-context" style="margin-top: 20px">
 		<div class="group">
-		<div  th:each="tag:${group.data}" >
-			<div class="item"  th:value="${tag.state}"  th:id="${tag.tagId}">
-				<div th:text="${tag.name}"></div>
-				<div class="icon-select"   ><span th:if="${tag.state eq 'select'}"><img th:src="@{/img/select_confirm.png}" class="img-icon"/></span></div>
+		<div  th:each="carType:${carTypes}" >
+			<div class="item"  th:value="${carType.state}"  th:id="${carType.id}">
+				<div th:text="${carType.name}"></div>
+				<div class="icon-select"   ><span th:if="${carType.state eq 'select'}"><img th:src="@{/img/select_confirm.png}" class="img-icon"/></span></div>
 			</div>
 			<div class="line"></div>
 		</div>
 		</div>
-		</div>
 </div>
-<div class="save-btn" onclick="getSelectValues()">确定</div>
+<div class="save-btn-green" onclick="getSelectValues()">确定</div>
+<div class="save-btn-green" onclick="history.go(-1)">添加其他品牌车系</div>
 </body>
 </html>
