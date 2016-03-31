@@ -53,7 +53,7 @@ public class QuoteHomeController {
     @ResponseBody
     public JSONObject initHomeData(String userId,String memberId) {
         JSONObject json=new JSONObject();
-        OrgStore orgStore=orgService.findStoreByMemberId(userId);
+        OrgStore orgStore=orgService.findStoreByMemberId(memberId);
 
         json.put("quoteInfo",getQueryInfo( userId,memberId));
         json.put("priceInfo",quoteService.queryStorePrice(orgStore==null?"":orgStore.getStoreId()));
