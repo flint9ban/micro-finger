@@ -38,9 +38,6 @@ public class QuoteController {
 
     @RequestMapping("report")
     public String report(Model model,QueryInfo queryInfo){
-        System.out.print("names--------------------"+queryInfo.getRegion());
-        System.out.print("regionNames--------------------"+queryInfo.getRegionName());
-        System.out.print("getParentRegion--------------------"+queryInfo.getParentRegion());
         JSONObject json = quoteService.query(queryInfo);
         model.addAttribute("selfBrands",json.get("selfBrand"));
         model.addAttribute("competeBrands",json.get("competeBrand"));
