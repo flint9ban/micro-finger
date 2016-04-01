@@ -58,10 +58,6 @@ public class JsonUtil {
 				});
 		return jsonConfig;
 	}
-	
-	
-	public static void main(String[] args){
-		
-	}
+
 }
 

@@ -6,6 +6,7 @@ import com.ttsales.microf.love.common.domain.OrgCarType;
 import com.ttsales.microf.love.common.domain.OrgRegion;
 import com.ttsales.microf.love.common.domain.OrgStore;
 import com.ttsales.microf.love.common.repository.CarTypeRepository;
+import com.ttsales.microf.love.common.repository.RegionRepository;
 import com.ttsales.microf.love.common.service.OrgService;
 import com.ttsales.microf.love.common.service.OrgServiceImpl;
 import com.ttsales.microf.love.fans.domain.FansInfo;
@@ -14,6 +15,7 @@ import com.ttsales.microf.love.quote.domain.QueryInfo;
 import com.ttsales.microf.love.quote.service.QuoteService;
 import com.ttsales.microf.love.tag.domain.Tag;
 import com.ttsales.microf.love.tag.service.TagService;
+import com.ttsales.microf.love.weixin.MPApiConfig;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -47,10 +49,19 @@ public class QuoteHomeController {
     @Autowired
     private QuoteService quoteService;
 
+    @Autowired
+    private MPApiConfig mpApiConfig;
+
+    @Autowired
+    private RegionRepository regionRepository;
+
+
+
     @RequestMapping(value = "/init")
     public String initQuoteHome(Model model, String userId, String memberId ) {
         model.addAttribute("userId",userId);
         model.addAttribute("memberId",memberId);
+        model.addAttribute("appUrl",mpApiConfig.getAppUrl());
         return "quote/quoteHome";
     }
 
@@ -66,14 +77,18 @@ public class QuoteHomeController {
     }
 
 
-
     private JSONObject getQueryInfo(String openId,String userId){
         OrgStore orgStore=orgService.findStoreByMemberId(userId);
+
        QueryInfo queryInfo=quoteService.queryQueryInfo(openId);
         JSONObject json=new JSONObject();
         json.put("region",queryInfo==null?"":queryInfo.getRegion());
         json.put("regionName",queryInfo==null?"":queryInfo.getRegionName());
+        json.put("parentRegion",queryInfo==null?"":queryInfo.getParentRegion());
+        json.put("selfLevel",queryInfo==null?"":queryInfo.getRegionType());
+        json.put("compLevel",queryInfo==null?"":queryInfo.getCompeteRegionType());
         json.put("competeRegion",queryInfo==null?"":queryInfo.getCompeteRegion());
+        json.put("competeParentRegion",queryInfo==null?"":queryInfo.getCompeteParentRegion());
         json.put("competeRegionName",queryInfo==null?"":queryInfo.getCompeteRegionName());
         json.put("competeIds",queryInfo==null?"":queryInfo.getCompeteIds());
         json.put("competeNames",queryInfo==null?"":queryInfo.getCompeteNames());
@@ -83,8 +98,43 @@ public class QuoteHomeController {
         json.put("storeId",orgStore==null?"":orgStore.getStoreId());
         json.put("storeAddr",orgStore==null?"":orgStore.getAddress());
         json.put("compCarTypeInfo",orgService.covertJson(queryInfo==null?"":queryInfo.getCompeteIds()));
+        if(queryInfo==null){
+            setStoreRegion(orgStore,json);
+        }
         return json;
     }
+
+    private void setStoreRegion(OrgStore orgStore,JSONObject json){
+        if(orgStore!=null){
+            String province= orgStore.getProvince();
+            String city = orgStore.getCity();
+            if(province!=null&&!"".equals(province)){
+                if(city!=null&&!"".equals(city)){
+                    OrgRegion region =  regionRepository.findByParentRegionCodeAndRegionCodeAndLevel(province,city,2);
+                    json.put("selfLevel",QueryInfo.REGION_TYPE_CITY);
+                    json.put("region",city);
+                    json.put("regionName",region!=null?region.getName():null);
+                    json.put("parentRegion",province);
+                    json.put("compLevel",QueryInfo.REGION_TYPE_CITY);
+                    json.put("competeRegion",city);
+                    json.put("competeParentRegion",province);
+                    json.put("competeRegionName",region!=null?region.getName():null);
+                }else{
+                    OrgRegion region =  regionRepository.findByParentRegionCodeAndRegionCodeAndLevel("00",province,1);
+                    json.put("selfLevel",QueryInfo.REGION_TYPE_PROVINCE);
+                    json.put("region",province);
+                    json.put("regionName",region!=null?region.getName():null);
+                    json.put("parentRegion","00");
+                    json.put("compLevel",QueryInfo.REGION_TYPE_PROVINCE);
+                    json.put("competeRegion",province);
+                    json.put("competeParentRegion","00");
+                    json.put("competeRegionName",region!=null?region.getName():null);
+                }
+            }
+        }
+    }
+
+
 
     @RequestMapping(value = "/linkPage")
     public String linkPage(HttpServletRequest request,String type,String url,String ids,String id) {

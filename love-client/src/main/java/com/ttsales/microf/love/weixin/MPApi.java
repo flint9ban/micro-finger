@@ -122,4 +122,13 @@ public class MPApi {
     }
 
 
+    public void sendQyMsg(String userId,Integer agentId,String title,String desc,String url,String picUrl) throws HttpException, WXApiException {
+        HttpUtil util = new HttpUtil();
+       String requestBody = "{\"touser\": \"%s\",\"toparty\": \"\",\"totag\": \"\",\"msgtype\": \"news\",\"agentid\": %d,\"news\": {\"articles\":[{\"title\": \"%s\",\"description\": \"%s\",\"url\": \"%s\",\"picurl\": \"%s\"}]},\"safe\":\"0\"}";
+        String requestBodyWithParam = String.format(requestBody,userId,agentId,title,desc,url,picUrl);
+        String result = util.post(mpApiConfig.getQyMsgSend(),requestBodyWithParam);
+        validateWeixinResult(JSONObject.fromObject(result));
+    }
+
+
 }

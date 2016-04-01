@@ -19,4 +19,6 @@ public interface RegionRepository extends JpaRepository<OrgRegion,String> {
     List<OrgRegion> findByParentRegionCodeOrderByPinyin(@Param("parentRegionCode") String parentRegionCode);
 
     List<OrgRegion> findByLevel(@Param("level")  Integer level);
+
+    OrgRegion findByParentRegionCodeAndRegionCodeAndLevel(String parentRegionCode,String regionCode,Integer level);
 }

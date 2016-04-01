@@ -73,6 +73,10 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     private void saveQueryInfo(QueryInfo queryInfo){
+        QueryInfo persitenctQueryInfo =  queryInfoRepository.findByOpenId(queryInfo.getOpenId());
+        if(persitenctQueryInfo!=null){
+            queryInfo.setId(persitenctQueryInfo.getId());
+        }
         queryInfo  = queryInfoRepository.save(queryInfo);
         QueryLog log = new QueryLog();
         log.setRegion(queryInfo.getRegion());

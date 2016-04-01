@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
  */
 //@SpringBootApplication
 public class QuoteApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(QuoteApplication.class, args);
-    }
+//    public static void main(String[] args) {
+//        SpringApplication.run(QuoteApplication.class, args);
+//    }
 }
 @Component
 class DummyAR implements ApplicationRunner {

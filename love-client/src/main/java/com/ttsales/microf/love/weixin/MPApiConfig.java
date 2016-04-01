@@ -73,6 +73,10 @@ public class MPApiConfig {
         return defaultTmpMsg;
     }
 
+    public String getQyMsgSend(){
+        return qyApiUrl+"/api/message-send";
+    }
+
     public String getQyAppid(){
         return qyAppid;
     }
