@@ -147,7 +147,7 @@
                                         style="font-family: 微软雅黑, sans-serif; font-size: 18px;">想查看其它地区品牌的报价，返回设置</span>
                                 </p>
                                 <p style="line-height: 25.6px; text-align: center; white-space: normal;"><span
-                                        style="text-decoration: underline; color: rgb(255, 76, 65);"><strong><a href="index" th:href="@{/quote/index}"
+                                        style="text-decoration: underline; color: rgb(255, 76, 65);"><strong><a href="index" th:href="@{/quoteHome/init}"
                                         style="text-decoration: underline; font-family: 微软雅黑, sans-serif; font-size: 18px;">返回选择地区和品牌</a></strong></span>
                                 </p>
                                 <p style="line-height: 2em; min-height: 1.5em; color: inherit; white-space: normal;">
@@ -191,25 +191,6 @@
 <script type="text/javascript" src="../../static/easyui/jquery.min.js" th:src="@{/easyui/jquery.min.js}"></script>
 <script src="../../static/js/weixin-qy-sdk.js" th:src="@{/js/weixin-qy-sdk.js}"></script>
 <script src="../../static/js/quote/report.js" th:src="@{/js/quote/report.js}"></script>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var context = [[@{/}]];
-    var shareLink = [[@{/auth/check?scope=snsapi_base&target_uri=quote%2findex&redirect}]];
-    var storeName = [[${queryInfo.storeName}]];
-    /*]]>*/
 
-    $(function(){
-        var shareData = {
-            title : storeName+'：如何从报价上抢占客户',
-            desc : '直击客户心坎的报价技巧，看完这篇就够了',
-            link : shareLink,
-            img_url : context + '/img/share.jpg'
-          };
-        weixin.showOptionMenu();
-        weixin.onMenuShareAppMessage(shareData);
-        weixin.onMenuShareTimeline(shareData);
-    });
-
-</script>
 </body>
 </html>

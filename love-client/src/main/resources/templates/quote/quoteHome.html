@@ -79,9 +79,15 @@
     /*<![CDATA[*/
     var userId = [[${userId}]];
     var memberId = [[${memberId}]];
+    var appUrl = [[${appUrl}]];
     /*]]>*/
-    sessionStorage.userId=userId;
-    sessionStorage.memberId=memberId;
+    if(userId!='null'){
+        sessionStorage.userId=userId;
+    }
+    if(memberId){
+        sessionStorage.memberId=memberId;
+    }
+    sessionStorage.appUrl=appUrl;
     </script>
 <script type="text/javascript" src="../../static/js/quote/quoteHome.js"  th:src="@{/js/quote/quoteHome.js}"></script>
 </html>

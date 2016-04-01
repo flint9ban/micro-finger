@@ -34,10 +34,9 @@ function sessionData() {
     showData(data);
 }
 function ajaxData() {
-   alert("userId------------"+getParamOfUrl("userId")+"--memberId"+ getParamOfUrl("memberId"));
     $.ajax({
         type: 'POST',
-        url: 'initHomeData.do',
+        url: sessionStorage.appUrl+'quoteHome/initHomeData.do',
         data: {
             'userId':  sessionStorage.userId,
             'memberId':sessionStorage.memberId
@@ -49,6 +48,9 @@ function ajaxData() {
             }
             setSessionData(data);
             showData(data);
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            alert(textStatus);
         }
     });
 }
@@ -62,6 +64,22 @@ function setSessionData(data) {
     sessionStorage.storeAddr = quoteInfo.storeAddr || "";
     sessionStorage.selfArea = quoteInfo.regionName;
     sessionStorage.compArea = quoteInfo.competeRegionName;
+
+    sessionStorage.compLevel=quoteInfo.compLevel;
+    sessionStorage.selfLevel=quoteInfo.selfLevel;
+    if(quoteInfo.compLevel==2){
+        sessionStorage.compProvinceCode =quoteInfo.competeRegion;
+    }else if(quoteInfo.compLevel==3){
+        sessionStorage.compProvinceCode = quoteInfo.competeParentRegion;
+        sessionStorage.compCityCode = quoteInfo.competeRegion;
+    }
+
+    if(quoteInfo.selfLevel==2){
+        sessionStorage.selfProvinceCode =quoteInfo.region;
+    }else if(quoteInfo.selfLevel==3){
+        sessionStorage.selfProvinceCode = quoteInfo.parentRegion;
+        sessionStorage.selfCityCode = quoteInfo.region;
+    }
 
     sessionStorage.compCarTypeInfo = JSON.stringify(quoteInfo.compCarTypeInfo);
 
@@ -86,10 +104,10 @@ function showData(data) {
 
 function setShareData(storeName) {
     var shareData = {
-        title: storeName + '：如何从报价上抢占客户',
-        desc: '直击客户心坎的报价技巧，看完这篇就够了',
-        link: "/auth/check?scope=snsapi_base&target_uri=quote%2fquoteHome.html%3fuserId%3d" + sessionStorage.memberId + "&redirect",
-        img_url: '../img/share.jpg'
+        title : sessionStorage.storeName+'：如何从报价上抢占客户',
+        desc : '直击客户心坎的报价技巧，看完这篇就够了',
+        link : sessionStorage.appUrl+'/auth/check?scope=snsapi_base&target_uri=quoteHome%2finit%3fmemberId%3d'+sessionStorage.memberId+'&redirect;',
+        img_url : sessionStorage.appUrl + '/img/share.jpg'
     };
     weixin.showOptionMenu();
     weixin.onMenuShareAppMessage(shareData);
@@ -140,13 +158,13 @@ function getCompeleteBrandIds() {
 function jumpChoosePg(type) {
     sessionStorage.cache = true;
     if (type == "selfArea") {
-        location.href = "linkPage.do?url=quote/province-select&type=self-province";
+        location.href = sessionStorage.appUrl+"quoteHome/linkPage.do?url=quote/province-select&type=self-province";
     }
     if (type == "compBrand") {
-        location.href = "linkPage.do?url=quote/brand-select&type=brand&ids=" + getCompeleteBrandIds();
+        location.href = sessionStorage.appUrl+"quoteHome/linkPage.do?url=quote/brand-select&type=brand&ids=" + getCompeleteBrandIds();
     }
     if (type == "compArea") {
-        location.href = "linkPage.do?url=quote/province-select&type=comp-province";
+        location.href = sessionStorage.appUrl+"quoteHome/linkPage.do?url=quote/province-select&type=comp-province";
     }
 }
 
@@ -168,15 +186,19 @@ function queryReport() {
         + "&storeName=" + param.storeName
         + "&storeAddr=" + param.storeAddr
         + "&competeRegion=" + param.competeRegion
-        + "&competeParentRegion=" + param.competeParentRegion
         + "&competeRegionType=" +param.competeRegionType
         + "&competeRegionName=" +param.competeRegionName
         + "&competeIds=" + param.competeIds
         + "&competeNames=" + param.competeNames
         + "&region=" + param.region
-        + "&parentRegion=" + param.parentRegion
         + "&regionType=" + param.regionType
         + "&regionName=" + param.regionName;
+    if(param.competeParentRegion){
+        linkUrl+="&competeParentRegion=" + param.competeParentRegion;
+    }
+    if(param.parentRegion){
+        linkUrl+= "&parentRegion=" + param.parentRegion;
+    }
         location.href=linkUrl;
 
 
@@ -229,7 +251,7 @@ function getQueryParam() {
         parentSelfRegion = sessionStorage.selfProvinceCode;
     }
     return {
-        openId: getParamOfUrl("openId"),
+        openId: sessionStorage.userId,
         storeId: sessionStorage.storeId,
         storeName: sessionStorage.storeName,
         storeAddr: sessionStorage.storeAddr,

@@ -1,15 +1,11 @@
-///**
-// * Created by liyi on 2016/3/29.
-// */
-//$(function(){
-//    var shareData = {
-//        title : '全国4S店报价情报',
-//        desc : '全国4S店报价情报',
-//        link : getRootPath()
-//        + '/auth/check?scope=snsapi_base&target_uri=pages%2flottery%2fshare&redirect',
-//        img_url : getRootPath() + '/pages/lottery/images/share.png'
-//    };
-//    weixin.showOptionMenu();
-//    weixin.onMenuShareAppMessage(shareData);
-//    weixin.onMenuShareTimeline(shareData);
-//});
+    $(function(){
+        var shareData = {
+            title : sessionStorage.storeName+'：如何从报价上抢占客户',
+            desc : '直击客户心坎的报价技巧，看完这篇就够了',
+            link : sessionStorage.appUrl+'/auth/check?scope=snsapi_base&target_uri=quoteHome%2finit%3fmemberId%3d'+sessionStorage.memberId+'&redirect;',
+            img_url : sessionStorage.appUrl + '/img/share.jpg'
+        };
+        weixin.showOptionMenu();
+        weixin.onMenuShareAppMessage(shareData);
+        weixin.onMenuShareTimeline(shareData);
+    });
